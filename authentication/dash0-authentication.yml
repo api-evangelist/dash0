@@ -1,0 +1,41 @@
+generated: '2026-07-18'
+method: searched
+source: https://api-docs.dash0.com/ + live /.well-known/oauth-authorization-server
+docs: https://www.dash0.com/docs/dash0
+summary:
+  types: [http, oauth2]
+  http_schemes: [bearer]
+  oauth2_flows: [authorizationCode, refreshToken]
+  api_key_in: [header]
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  location: 'Authorization: Bearer <DASH0_AUTH_TOKEN>'
+  description: >-
+    Primary API authentication. A Dash0 auth token (created in the org settings)
+    is sent as a bearer token in the Authorization header. Edge collectors and
+    the CLI use the same token model; the token scopes requests to the owning
+    organization.
+- name: OAuth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api.<region>.aws.dash0.com/oauth/authorize
+    tokenUrl: https://api.<region>.aws.dash0.com/oauth/token
+    revocationUrl: https://api.<region>.aws.dash0.com/oauth/revoke
+    registrationUrl: https://api.<region>.aws.dash0.com/oauth/register
+    userinfoUrl: https://api.<region>.aws.dash0.com/oauth/userinfo
+    pkce: S256
+    dynamic_client_registration: true
+    scopes:
+      '*': Full-access wildcard scope (the only scope Dash0 advertises today).
+  description: >-
+    OAuth 2.0 (RFC 6749) with PKCE and dynamic client registration (RFC 7591),
+    used by the CLI browser login and by MCP clients. Token endpoint auth method
+    is `none` (public clients + PKCE). Refresh tokens are supported.
+notes: >-
+  The published OpenAPI does not declare securitySchemes at the document level;
+  auth is documented in the API docs and discoverable via the OAuth
+  Authorization Server / Protected Resource metadata endpoints. Regional hosts:
+  eu-west-1 / eu-central-1 / us-west-2 (AWS), europe-west4 (GCP).
