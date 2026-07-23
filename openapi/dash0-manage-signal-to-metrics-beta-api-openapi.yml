@@ -1,0 +1,871 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Signal To Metrics (BETA) API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Signal To Metrics (BETA)
+paths:
+  /api/signal-to-metrics/{originOrId}:
+    delete:
+      summary: Delete a signal-to-metrics config by origin or ID
+      description: Deletes a specific signal-to-metrics configuration identified by its origin label or UUID.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Signal-to-metrics config origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successfully deleted
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: delete_api-signal-to-metrics-originorid
+    get:
+      summary: Get a specific signal-to-metrics config by origin or ID
+      description: Returns a specific signal-to-metrics configuration identified by its origin label or UUID.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Signal-to-metrics config origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: The requested signal-to-metrics config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalToMetricsDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: get_api-signal-to-metrics-originorid
+    put:
+      summary: Update or create a signal-to-metrics config by origin or ID
+      description: Updates an existing signal-to-metrics configuration or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Signal-to-metrics config origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignalToMetricsDefinition'
+      responses:
+        '200':
+          description: The updated or created signal-to-metrics config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalToMetricsDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: put_api-signal-to-metrics-originorid
+  /api/signal-to-metrics:
+    get:
+      summary: List all signal-to-metrics configs for the organization
+      description: Returns all signal-to-metrics configurations for your organization.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+        required: false
+        description: Maximum number of items to return.
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+        required: false
+        description: Number of items to skip.
+      - in: query
+        name: originPrefix
+        schema:
+          type: string
+        required: false
+        description: Filter by origin prefix.
+      - in: query
+        name: name
+        schema:
+          type: string
+        required: false
+        description: Case-insensitive substring search on the rule name.
+      - in: query
+        name: signal
+        schema:
+          $ref: '#/components/schemas/SignalToMetricsSignalType'
+        required: false
+        description: Filter by signal type.
+      - in: query
+        name: enabled
+        schema:
+          type: boolean
+        required: false
+        description: Filter by enabled state.
+      responses:
+        '200':
+          description: List of signal-to-metrics configs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSignalToMetricsResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: get_api-signal-to-metrics
+    post:
+      summary: Create a new signal-to-metrics config
+      description: Create a new signal-to-metrics configuration for your organization.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignalToMetricsDefinition'
+      responses:
+        '200':
+          description: The created signal-to-metrics config
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalToMetricsDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: post_api-signal-to-metrics
+  /api/signal-to-metrics/test:
+    post:
+      summary: Test a signal-to-metrics config
+      description: 'Validates a signal-to-metrics definition and simulates its match filter
+
+        against real signals in the selected dataset over a recent time window.
+
+        Returns the number of matching signals on success. A 4xx error is returned
+
+        when the definition fails validation or the request is otherwise invalid.
+
+        Nothing is persisted.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignalToMetricsTestRequest'
+      responses:
+        '200':
+          description: The test result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalToMetricsTestResponse'
+        '400':
+          description: 'The request is invalid — either the body is missing/malformed, the
+
+            time range is unparseable or out of range, or the definition fails
+
+            validation. The response payload lists the specific failures.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: post_api-signal-to-metrics-test
+  /api/import/signal-to-metrics:
+    put:
+      summary: Bulk upsert signal-to-metrics configs.
+      description: 'Atomically upserts up to 500 signal-to-metrics configurations at once. If any item
+
+        fails validation or cannot be written, the entire batch is rejected and no
+
+        configurations are changed.
+
+
+        This endpoint is designed for Infrastructure-as-Code (IaC) workflows (Terraform,
+
+        the operator, CLI scripts). Rules are matched by their `origin` values across
+
+        repeated invocations, making the operation idempotent.
+
+
+        This endpoint accepts request bodies up to 2 MB (vs. the 256 KB default for other
+
+        endpoints) to accommodate batched payloads of up to 500 rules per request.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: true
+        description: The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignalToMetricsBulkUpsertRequest'
+      responses:
+        '200':
+          description: All items were successfully upserted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalToMetricsBulkUpsertResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Signal To Metrics (BETA)
+      operationId: put_api-import-signal-to-metrics
+components:
+  schemas:
+    SignalToMetricsMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SignalToMetricsLabels'
+        annotations:
+          $ref: '#/components/schemas/SignalToMetricsGroupAnnotations'
+      required:
+      - name
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    RelativeTime:
+      type: string
+      pattern: ^now.*$
+      description: 'A relative time reference based on the current time ("now").
+
+
+        **Format**: `now[+/-duration]`
+
+
+        **Examples**:
+
+        - `now` - current time
+
+        - `now-30m` - 30 minutes ago
+
+        - `now-1h` - 1 hour ago
+
+        - `now-1d` - 1 day ago
+
+
+        **Duration Units**:
+
+        - `s` - seconds
+
+        - `m` - minutes
+
+        - `h` - hours
+
+        - `d` - days
+
+        - `w` - weeks
+
+        - `M` - months
+
+        '
+    SignalToMetricsTestResponse:
+      properties:
+        executionTime:
+          $ref: '#/components/schemas/FixedTime'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+          description: 'Concrete time window that was evaluated, with relative references resolved.
+
+            '
+        matchedCount:
+          type: integer
+          format: int64
+          description: 'Number of signals (spans or logs) matching `spec.match.filters` over the
+
+            evaluated time window.
+
+            '
+      required:
+      - executionTime
+      - timeRange
+      - matchedCount
+    TimeReferenceRange:
+      description: 'A range of time between two time references.
+
+        '
+      properties:
+        from:
+          $ref: '#/components/schemas/TimeReference'
+        to:
+          $ref: '#/components/schemas/TimeReference'
+      required:
+      - from
+      - to
+      example:
+        from: now-30m
+        to: now
+    SignalToMetricsTestRequest:
+      properties:
+        definition:
+          $ref: '#/components/schemas/SignalToMetricsDefinition'
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+          description: 'Time window over which to simulate the rule. Defaults to the last 15 minutes.
+
+            '
+      required:
+      - definition
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    GetSignalToMetricsResponse:
+      properties:
+        signalToMetrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalToMetricsDefinition'
+        hasMore:
+          type: boolean
+          description: Whether there are more results beyond the current page. Only present when pagination is used.
+        total:
+          type: integer
+          description: Total number of rules matching the request filters, ignoring pagination.
+      required:
+      - signalToMetrics
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    SignalToMetricsBulkUpsertResponse:
+      type: object
+      required:
+      - created
+      - updated
+      properties:
+        created:
+          type: integer
+          description: Number of rules that were newly created.
+        updated:
+          type: integer
+          description: Number of rules that were updated.
+    SignalToMetricsSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/SignalToMetricsDisplay'
+        match:
+          $ref: '#/components/schemas/SignalToMetricsMatch'
+        output:
+          $ref: '#/components/schemas/SignalToMetricsOutput'
+        targetDatasetMode:
+          $ref: '#/components/schemas/SignalToMetricsTargetDatasetMode'
+          description: 'Controls where the generated metric is written.
+
+            Defaults to `original` when absent. Old-format rules omit this field entirely.
+
+            '
+        alternativeDatasetId:
+          type: string
+          description: 'The slug of the target dataset. Required when targetDatasetMode is
+
+            `alternative` or `both`. Must not be set when targetDatasetMode is
+
+            `original` or absent.
+
+            '
+      required:
+      - enabled
+      - display
+      - match
+      - output
+    SignalToMetricsBulkUpsertRequest:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 500
+          items:
+            $ref: '#/components/schemas/SignalToMetricsDefinition'
+    SignalToMetricsDisplay:
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    TimeReference:
+      x-go-type: any
+      oneOf:
+      - $ref: '#/components/schemas/FixedTime'
+      - $ref: '#/components/schemas/FixedTimeUnix'
+      - $ref: '#/components/schemas/RelativeTime'
+    TimeRange:
+      properties:
+        from:
+          $ref: '#/components/schemas/FixedTime'
+        to:
+          $ref: '#/components/schemas/FixedTime'
+      required:
+      - from
+      - to
+    Matcher:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - operator
+    SignalToMetricsGroupAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the rule was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Soft-delete timestamp. Present when the rule has been deleted but not yet purged. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    SignalToMetricsTargetDatasetMode:
+      type: string
+      enum:
+      - original
+      - alternative
+      - both
+      description: 'Controls where the generated metric is written.
+
+        - `original`: Metric lands in the dataset where the rule is defined.
+
+        - `alternative`: Metric lands in the dataset specified by `alternativeDatasetId`.
+
+        - `both`: Metric is produced twice — once for the original dataset, once for the alternative.
+
+        '
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SignalToMetricsOutput:
+      properties:
+        name:
+          type: string
+          description: The name of the resulting metric
+        description:
+          type: string
+          description: Will be used as metadata on the generated metric.
+        interval:
+          $ref: '#/components/schemas/Duration'
+          description: Defines at what interval to output a data point for the matched signals.
+        keepResourceAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matcher'
+          description: 'Key matchers that select which resource attributes from the incoming signal
+
+            are kept as resource attributes on the output metric. An attribute is kept
+
+            if its key matches any matcher in this list. By default, no additional
+
+            resource attributes are kept.
+
+            '
+        keepSignalAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matcher'
+          description: 'Key matchers that select which signal attributes (span attributes for traces,
+
+            log record attributes for logs) from the incoming signal are kept as metric
+
+            attributes (dimensions) on the output metric. An attribute is kept if its
+
+            key matches any matcher in this list. By default, no additional signal
+
+            attributes are kept, except for otel.span.status.code which is always set
+
+            when the signal type is spans.
+
+            '
+      required:
+      - name
+      - interval
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    FixedTimeUnix:
+      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
+      type: string
+    SignalToMetricsLabels:
+      properties:
+        dash0.com/id:
+          description: Unique internal ID of the signal-to-metrics rule. Set by the server on creation; do not set manually.
+          type: string
+        dash0.com/origin:
+          description: External identifier for API-managed resources (e.g. the CRD name from an operator or Terraform resource ID). Empty for user-created rules; non-empty for rules created via the internal API.
+          type: string
+        dash0.com/version:
+          description: Current version of the rule. Needs to be set when updating a rule to prevent conflicting writes.
+          type: string
+        dash0.com/dataset:
+          description: Dataset this rule belongs to. Defaults to the default dataset when absent.
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    SignalToMetricsDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0SignalToMetrics
+        metadata:
+          $ref: '#/components/schemas/SignalToMetricsMetadata'
+        spec:
+          $ref: '#/components/schemas/SignalToMetricsSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    SignalToMetricsMatch:
+      properties:
+        signal:
+          $ref: '#/components/schemas/SignalToMetricsSignalType'
+        filters:
+          $ref: '#/components/schemas/FilterCriteria'
+      required:
+      - signal
+      - filters
+    SignalToMetricsSignalType:
+      type: string
+      enum:
+      - spans
+      - logs

@@ -1,0 +1,656 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Alerting API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Alerting
+paths:
+  /api/alerting/check-rules/{originOrId}:
+    delete:
+      summary: Delete a specific check rule (Prometheus alert rule) by origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successful response in case the check rule was deleted
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: delete_api-alerting-check-rules-originorid
+    get:
+      summary: Retrieve a specific check rule (Prometheus alert rule) by its origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successful response in case the check rule could be retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: get_api-alerting-check-rules-originorid
+    put:
+      summary: Update or insert a specific check rule (Prometheus alert rule) by origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRule'
+      responses:
+        '200':
+          description: Successful response in case the check rule was updated. The response contains the updated rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: put_api-alerting-check-rules-originorid
+  /api/alerting/check-rules:
+    get:
+      summary: Retrieve a list of check rule ids.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      - in: query
+        name: idPrefix
+        deprecated: true
+        schema:
+          type: string
+        description: 'If provided, only check rules for which the origin starts with the given string are returned. (deprecated)
+
+
+          The `originPrefix` query parameter takes precedence over this parameter if both are provided.
+
+          '
+      - in: query
+        name: originPrefix
+        schema:
+          type: string
+        description: If provided, only check rules for which the origin starts with the given string are returned.
+      responses:
+        '200':
+          description: Successful response in case the list of check rules could be retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrometheusAlertRuleApiListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: get_api-alerting-check-rules
+    post:
+      summary: Create a new check rule.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: The associated dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRule'
+      responses:
+        '200':
+          description: Create a new check rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: post_api-alerting-check-rules
+  /api/alerting/check-rules/bulk:
+    post:
+      summary: Bulk create check rules.
+      description: 'Atomically create up to 1000 Prometheus alert rules in a single request.
+
+        Create-only — every item produces a brand-new check rule. The public
+
+        schema uses `id` as the user-defined origin; per-item resolution
+
+        priority mirrors the single-rule POST handler (id → server-generated
+
+        UUID with "api-" prefix). Any item whose resolved origin or id
+
+        collides with an existing rule (including soft-deleted rules whose
+
+        origin is still reserved by the unique constraint) is rejected with a
+
+        per-item diagnostic.
+
+
+        If any item fails validation (PromQL, intervals, summary length,
+
+        template functions, origin/id collision, etc.) the whole batch is
+
+        rejected with a 400 that carries per-item diagnostics in the message;
+
+        nothing is written. On any DB failure the entire batch is rolled back
+
+        and 500 is returned. The endpoint is not idempotent — a successful
+
+        batch retried verbatim will 400 on every item the second time.
+
+
+        This endpoint accepts request bodies up to 2 MB (vs. the 256 KB default
+
+        for other endpoints) to accommodate batched payloads of up to 1000
+
+        rules per request.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: true
+        description: The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRuleBulkCreateRequest'
+      responses:
+        '200':
+          description: All items were successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRuleBulkCreateResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: post_api-alerting-check-rules-bulk
+  /api/import/check-rule:
+    post:
+      summary: Import a check rule.
+      description: 'This endpoint allows you **to import an existing check rule** into your organization. It''s intended for one-time migrations rather than ongoing check rule management.
+
+        Unlike the standard API, this endpoint supports importing check rules **with full editability**, allowing you to modify check rules that were previously created elsewhere.
+
+        **Note:**
+
+        This endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported check rule state.
+
+        Importing a check rule without an id will create a new check rule and return the created asset with a generated id.
+
+        Importing a check rule with an existing id (metadata>dash0Extensions>id) will override the corresponding check rule definition. In case there is no check rule with the given id a new check rule will be created.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: The associated dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRule'
+      responses:
+        '200':
+          description: The imported check rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: post_api-import-check-rule
+  /api/import/check-rules:
+    post:
+      summary: Import multiple check rules in one batch.
+      description: 'Bulk variant of `/api/import/check-rule`. Atomically imports up to 1000
+
+        Prometheus alert rules into your organization with **full editability**
+
+        — the resulting rules behave like UI-created assets, not API-managed
+
+        ones, so they can be modified in the Dash0 UI afterwards. Intended for
+
+        one-time migrations rather than ongoing Infrastructure-as-Code
+
+        management.
+
+
+        Per-item id/origin resolution mirrors the single-rule import handler:
+
+        items without an `id` receive a server-generated UUID; items with an
+
+        `id` reuse it. Generated origins are **not** prefixed with `api-` and
+
+        the rules remain UI-editable.
+
+
+        Behaves like the regular bulk endpoint in every other respect: items
+
+        are validated up-front, the whole batch is rejected on any item
+
+        failure, nothing is written on rollback, and the endpoint is not
+
+        idempotent. This endpoint accepts request bodies up to 2 MB (vs. the
+
+        256 KB default for other endpoints) to accommodate batched payloads of
+
+        up to 1000 rules per request.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: The associated dataset.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRuleBulkCreateRequest'
+      responses:
+        '200':
+          description: All items were successfully imported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRuleBulkCreateResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: post_api-import-check-rules
+components:
+  schemas:
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    PrometheusAlertRuleBulkCreateRequest:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/PrometheusAlertRule'
+    PrometheusAlertRuleApiListItem:
+      description: The ID, origin, dataset, and the name of a check rule.
+      properties:
+        id:
+          type: string
+          description: 'The unique identifier of the check rule.
+
+
+            For backward compatibility, this field is also filled with the origin, if it exists.
+
+            However in a future version, this field will only return the actual check rule ID.
+
+            '
+        origin:
+          type: string
+          description: User defined origin for getting/updating/deleting the alert rule through the API.
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        name:
+          type: string
+          description: Human-readable and templatable name for the check. In Prometheus alerting rules this is called "alert".
+      required:
+      - id
+      - dataset
+    PrometheusAlertRule:
+      description: 'Check rules represent a periodically evaluated expression to determine the health of a resource.
+
+        The result of the evaluation are zero or more CheckEvaluations.
+
+        '
+      properties:
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        metadata:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadata'
+        id:
+          type: string
+          description: User defined id for getting/updating/deleting the alert rule through the API.
+        name:
+          type: string
+          description: Human-readable and templatable name for the check. In Prometheus alerting rules this is called "alert".
+        expression:
+          type: string
+          description: "An editable PromQL expression that can leverage the complete Dash0 Query Language. It furthermore\nsupports a variable called $__threshold.\n\n- `$__threshold` can be used as a placeholder for both the degraded and failed thresholds. The\n  thresholds are defined in the thresholds field. When `$__threshold` is used in the expression,\n  the `thresholds` field is required and at least one of the thresholds must be defined.\n\n  Usage of `$__threshold` implies that the PromQL expression may have to be evaluated up to two\n  times using the degraded threshold and critical threshold respectively.\n\n- Top-level AND statements are treated as enablement conditions that specify when the check should\n  \"be running\", i.e., is active. The use-cases for enablement conditions are several, e.g., requiring\n  a minimum amount of requests being served before triggering due to errors rates,\n  maintenance windows or muted timeframes.\n"
+        thresholds:
+          $ref: '#/components/schemas/CheckThresholds'
+        interval:
+          $ref: '#/components/schemas/Duration'
+          default: 1m
+          description: 'Specifies a check evaluation frequency.
+
+            '
+        for:
+          $ref: '#/components/schemas/Duration'
+          default: 0s
+          description: 'For, also called "pending duration", specifies a time duration for how long the expression must
+
+            have been continuously satisfied before a check evaluation is created. When the check evaluation
+
+            is created, its "start" timestamp is set to the instant the pending duration started elapsing.
+
+
+            This is effectively equivalent to the "for" configuration in Prometheus alerting rules.
+
+
+            Default value is 0s, meaning that the check would transition immediately into one of the degraded
+
+            or critical states at the first failed evaluation.
+
+
+            If for is not set to 0s (or equivalent, like 0m), its value must be larger than or equal to that
+
+            of evaluationFrequency, as it does not make sense to expect the status of a check to change without another
+
+            evaluation having occurred.
+
+            '
+        keep_firing_for:
+          $ref: '#/components/schemas/Duration'
+          default: 0s
+          description: 'Keep firing for, also called "resolution duration", that specifies a time duration for how long
+
+            the evaluation of the expression must be consistently healthy before an critical or degraded check
+
+            enters the healthy state, or de-escalates from critical to degraded.
+
+
+            This is effectively equivalent to the "keep_firing_for" configuration in Prometheus alerting rules.
+
+
+            Default value is 0s, meaning that the check would transition immediately into the healthy state at
+
+            the first successful evaluation.
+
+
+            If keep_firing_for is not set to 0s (or equivalent, like 0m), its value must be larger than or equal
+
+            to that of evaluationFrequency, as it does not make sense to expect the status of a check to change
+
+            without another evaluation having occurred.
+
+            '
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Label are key-value pairs that can be used to add additional metadata to a check. They map
+
+            to Prometheus alerting rules'' "labels" field.
+
+            '
+        annotations:
+          type: object
+          properties:
+            summary:
+              type: string
+              description: 'Human-readable and templatable summary for the check that allows you to customize the way the check
+
+                is textually described in short form in the Dash0 UI, in notifications, etc.
+
+                '
+              maxLength: 255
+            description:
+              type: string
+              description: 'Human-readable and templatable description for the check that allows you to customize the way the
+
+                rationale of the check is textually described in the Dash0 UI, in notifications, etc. This will
+
+                be optimized in the design for long form viewing.
+
+                '
+              maxLength: 2048
+            folderPath:
+              type: string
+              description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+            sharing:
+              type: string
+              description: 'Comma-separated list of principals to grant read and delete access to for API-managed check rules. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          additionalProperties:
+            type: string
+          description: 'Annotations are key-value pairs that can be used to add additional metadata to a check. They map
+
+            to Prometheus alerting rules'' "annotations" field.
+
+
+            The "summary" and "description" annotations are expected and are used as the human-readable
+
+            summary and description of the check rule.
+
+            '
+        enabled:
+          type: boolean
+          description: 'A boolean flag to enable or disable the check rule. When a check rule is disabled, it will not be
+
+            evaluated, and no check evaluations will be created. This field is optional and defaults to true.
+
+            '
+        summary:
+          type: string
+          deprecated: true
+          description: 'Deprecated: use the "summary" annotation instead.'
+          maxLength: 255
+        description:
+          type: string
+          deprecated: true
+          description: 'Deprecated: use the "description" annotation instead.'
+          maxLength: 2048
+        keepFiringFor:
+          type: string
+          deprecated: true
+          description: 'Deprecated: use "keep_firing_for" instead.'
+      required:
+      - name
+      - expression
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    PrometheusAlertRuleMetadata:
+      type: object
+      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
+
+        '
+      properties:
+        labels:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
+    PrometheusAlertRuleMetadataLabels:
+      type: object
+      description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
+
+        emitted alert. Currently includes `dash0.com/source`
+
+        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
+
+        '
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    CheckThresholds:
+      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
+
+        '
+      properties:
+        degraded:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a degraded state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
+        failed:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a failed state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
+    PrometheusAlertRuleBulkCreateResponse:
+      type: object
+      required:
+      - created
+      properties:
+        created:
+          type: integer
+          description: Number of check rules that were newly created.
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

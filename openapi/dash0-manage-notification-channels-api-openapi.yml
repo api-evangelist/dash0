@@ -1,0 +1,634 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Notification Channels API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Notification Channels
+paths:
+  /api/notification-channels/{originOrId}:
+    delete:
+      summary: Delete a notification channel
+      description: Deletes a specific notification channel identified by its UUID or origin.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Notification channel origin or UUID.
+      responses:
+        '200':
+          description: Successfully deleted
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Notification Channels
+      operationId: delete_api-notification-channels-originorid
+    get:
+      summary: Get a specific notification channel
+      description: 'Returns a specific notification channel identified by its UUID or origin.
+
+        '
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Notification channel origin or UUID.
+      responses:
+        '200':
+          description: The requested notification channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationChannelDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Notification Channels
+      operationId: get_api-notification-channels-originorid
+    put:
+      summary: Update a notification channel
+      description: 'Updates an existing notification channel.
+
+        '
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Notification channel origin or UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationChannelDefinition'
+      responses:
+        '200':
+          description: The updated notification channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationChannelDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Notification Channels
+      operationId: put_api-notification-channels-originorid
+  /api/notification-channels:
+    get:
+      summary: List all notification channels for the organization
+      description: 'Returns all notification channels configured for your organization as CRD-enveloped resources.
+
+        '
+      responses:
+        '200':
+          description: List of notification channels
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationChannelDefinitions'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Notification Channels
+      operationId: get_api-notification-channels
+    post:
+      summary: Create a new notification channel
+      description: 'Create a new notification channel for your organization.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationChannelDefinition'
+      responses:
+        '200':
+          description: The created notification channel
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationChannelDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Notification Channels
+      operationId: post_api-notification-channels
+components:
+  schemas:
+    NotificationChannelRouting:
+      properties:
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationChannelRoutingAsset'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterCriteria'
+      required:
+      - assets
+      - filters
+    DiscordWebhookConfig:
+      properties:
+        url:
+          type: string
+          format: url
+      required:
+      - url
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    IncidentIOConfig:
+      properties:
+        url:
+          type: string
+          format: url
+        headers:
+          type: string
+      required:
+      - url
+      - headers
+    NotificationChannelDefinition:
+      description: A notification channel configuration wrapped in a CRD-like envelope. Follows the Dash0 resource convention with kind/metadata/spec structure.
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0NotificationChannel
+        metadata:
+          $ref: '#/components/schemas/NotificationChannelMetadata'
+        spec:
+          $ref: '#/components/schemas/NotificationChannelSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    OpsgenieConfig:
+      properties:
+        instance:
+          type: string
+          enum:
+          - eu
+          - us
+        apiKey:
+          type: string
+      required:
+      - instance
+      - apiKey
+    TeamsWebhookConfig:
+      properties:
+        url:
+          type: string
+          format: url
+      required:
+      - url
+    GoogleChatWebhookConfig:
+      properties:
+        url:
+          type: string
+          format: url
+      required:
+      - url
+    EmailConfig:
+      deprecated: true
+      properties:
+        recipient:
+          type: string
+          format: email
+        plaintext:
+          type: boolean
+      required:
+      - recipient
+    WebhookConfig:
+      properties:
+        url:
+          type: string
+          format: url
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        followRedirects:
+          type: boolean
+          default: false
+        allowInsecure:
+          type: boolean
+          default: false
+      required:
+      - url
+    EmailV2Config:
+      properties:
+        recipients:
+          type: array
+          items:
+            type: string
+            format: email
+        plaintext:
+          type: boolean
+      required:
+      - recipients
+    NotificationChannelRoutingAssetKind:
+      type: string
+      enum:
+      - check_rule
+      - synthetic_check
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    NotificationChannelDefinitions:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationChannelDefinition'
+    SlackBotConfig:
+      properties:
+        teamId:
+          type: string
+        channel:
+          type: string
+      required:
+      - teamId
+      - channel
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    NotificationChannelType:
+      type: string
+      enum:
+      - slack
+      - slack_bot
+      - email
+      - email_v2
+      - webhook
+      - incidentio
+      - prometheus_webhook
+      - betterstack
+      - prometheus_alertmanager
+      - opsgenie
+      - pagerduty
+      - jira_service_management_ops
+      - teams_webhook
+      - discord_webhook
+      - google_chat_webhook
+      - ilert
+      - all_quiet
+      description: 'The type of notification channel integration.
+
+        '
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    NotificationChannelRoutingAsset:
+      properties:
+        kind:
+          $ref: '#/components/schemas/NotificationChannelRoutingAssetKind'
+        id:
+          type: string
+        name:
+          type: string
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+      required:
+      - kind
+      - id
+      - name
+      - dataset
+    PagerDutyConfig:
+      properties:
+        key:
+          type: string
+        url:
+          type: string
+          format: url
+      required:
+      - key
+      - url
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    NotificationChannelSpec:
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/SlackConfig'
+          - $ref: '#/components/schemas/SlackBotConfig'
+          - $ref: '#/components/schemas/EmailConfig'
+          - $ref: '#/components/schemas/EmailV2Config'
+          - $ref: '#/components/schemas/WebhookConfig'
+          - $ref: '#/components/schemas/IncidentIOConfig'
+          - $ref: '#/components/schemas/OpsgenieConfig'
+          - $ref: '#/components/schemas/PagerDutyConfig'
+          - $ref: '#/components/schemas/TeamsWebhookConfig'
+          - $ref: '#/components/schemas/DiscordWebhookConfig'
+          - $ref: '#/components/schemas/GoogleChatWebhookConfig'
+          - $ref: '#/components/schemas/IlertConfig'
+          - $ref: '#/components/schemas/AllQuietConfig'
+        frequency:
+          $ref: '#/components/schemas/Duration'
+          default: 10m
+          description: 'Specifies the channels notification frequency.
+
+            '
+        routing:
+          description: 'Deliberately optional. When this object is null, no routing changes will be made. When this is NOT NULL,
+
+            we will execute routing updates.
+
+            '
+          $ref: '#/components/schemas/NotificationChannelRouting'
+      required:
+      - type
+      - config
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    NotificationChannelMetadata:
+      properties:
+        name:
+          description: Display name of the notification channel.
+          type: string
+        labels:
+          $ref: '#/components/schemas/NotificationChannelLabels'
+        annotations:
+          $ref: '#/components/schemas/NotificationChannelAnnotations'
+      required:
+      - name
+    AllQuietConfig:
+      properties:
+        url:
+          type: string
+          format: url
+      required:
+      - url
+    IlertConfig:
+      properties:
+        url:
+          type: string
+          format: url
+      required:
+      - url
+    NotificationChannelAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the notification channel was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+    NotificationChannelLabels:
+      properties:
+        dash0.com/id:
+          description: Unique internal ID of the notification channel. Set by the server on creation; do not set manually.
+          type: string
+        dash0.com/origin:
+          description: External identifier for API-managed resources (e.g. the CRD name from an operator or Terraform resource ID). Empty for user-created channels; non-empty for channels created via the internal API.
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    SlackConfig:
+      properties:
+        webhookURL:
+          type: string
+          format: url
+        channel:
+          type: string
+      required:
+      - webhookURL
+      - channel

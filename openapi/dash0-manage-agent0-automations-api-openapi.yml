@@ -1,0 +1,1765 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Agent0 Automations API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Agent0 Automations
+paths:
+  /api/agentic-workflows/{originOrId}:
+    delete:
+      summary: Delete an automation by origin or ID
+      description: Deletes a specific automation identified by its origin label or UUID.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Automation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successfully deleted
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Agent0 Automations
+      operationId: delete_api-agentic-workflows-originorid
+    get:
+      summary: Get a specific automation by origin or ID
+      description: Returns a specific automation identified by its origin label or UUID.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Automation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: The requested automation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgenticWorkflowDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Agent0 Automations
+      operationId: get_api-agentic-workflows-originorid
+    put:
+      summary: Update or create an automation by origin or ID
+      description: Updates an existing automation or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Automation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgenticWorkflowDefinition'
+      responses:
+        '200':
+          description: The updated or created automation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgenticWorkflowDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Agent0 Automations
+      operationId: put_api-agentic-workflows-originorid
+  /api/agentic-workflows:
+    get:
+      summary: List all automations for the organization
+      description: Returns all automations configured for your organization.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      - in: query
+        name: folderPath
+        schema:
+          type: string
+        required: false
+        description: Filter by folder path (exact match on dash0.com/folder-path annotation).
+      responses:
+        '200':
+          description: List of automations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAgenticWorkflowsResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Agent0 Automations
+      operationId: get_api-agentic-workflows
+    post:
+      summary: Create a new automation
+      description: Create a new automation for your organization.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AgenticWorkflowDefinition'
+      responses:
+        '200':
+          description: The created automation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgenticWorkflowDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Agent0 Automations
+      operationId: post_api-agentic-workflows
+components:
+  schemas:
+    AgenticWorkflowToolParameterOverride:
+      type: object
+      additionalProperties:
+        type: string
+      description: 'Key-value pairs merged into tool arguments at invocation time. Keys are parameter
+
+        names (use dot notation for nested parameters, e.g. "timeframe.from"), values are
+
+        the enforced parameter values. Values can contain {{variables}} resolved from
+
+        built-in variables, constants, and trigger variables.
+
+        '
+    AgenticWorkflowParent:
+      description: 'Establish as a parent-child hierarchy between automations. You will not want to set this explicitly; instead,
+
+        this is going to be set by the automation engine when one automation is deciding to create another.
+
+        '
+      properties:
+        workflowId:
+          type: string
+          description: The parent automation's ID.
+        runId:
+          type: string
+        version:
+          type: string
+      required:
+      - workflowId
+      - runId
+      - version
+    AgenticWorkflowTriggerDelivery:
+      type: string
+      enum:
+      - spawn
+      - continue
+      description: "How a trigger delivers its event to an agent. An automation is the agent definition;\ntriggers are the pipes into it, and each pipe is configured independently.\n\n- `spawn`: Start a new agent thread for this event. This is today's behavior.\n- `continue`: Route the event into the existing agent thread that owns the matching\n  entity, falling back to spawning a fresh thread when none is active\n  (resume-or-spawn). Only valid on continuation-capable triggers that carry an entity\n  ref to route by; spawn-only triggers (e.g. `schedule`, `webhook`,\n  `failed_check.new`) must not set it.\n"
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    GitHubTriggerVariableName:
+      type: string
+      enum:
+      - github.action
+      - github.account
+      - github.repository
+      - github.installation.id
+      - github.pull_request.number
+      - github.deployment.id
+      - github.deployment.environment
+      - github.deployment_status.state
+      - github.check_run.status
+      - github.release.tag
+      - github.comment.body
+      description: "Variables provided by all GitHub-based triggers.\n\n- `github.action`: The GitHub event action (e.g., `opened`, `created`, `completed`).\n- `github.account`: The GitHub account login (organization or user).\n- `github.repository`: Full repository name (e.g., `owner/repo`).\n- `github.installation.id`: The GitHub App installation id the event came from.\n- `github.pull_request.number`: The pull request number. Present on pull-request, review,\n  review-comment, and issue-comment triggers (when the comment is on a PR; these are the\n  triggers that can continue an agent by PR).\n- `github.deployment.id`: The deployment id. Present on deployment and deployment-status\n  triggers; routes \"continue\" triggers back to the agent thread owning the deployment.\n- `github.deployment.environment`: The deployment environment (e.g., `production`). Present\n  on deployment and deployment-status triggers.\n- `github.deployment_status.state`: The deployment status state (e.g., `success`, `failure`,\n  `pending`). Present on deployment-status triggers only.\n- `github.check_run.status`: The check run status (e.g., `completed`, `in_progress`). Present\n  on deployment-status triggers when a check run accompanies the event.\n- `github.release.tag`: The release tag name (e.g., `v1.2.3`). Present on release triggers;\n  routes \"continue\" triggers back to the agent thread owning the release.\n- `github.comment.body`: The body text of the comment. Present on\n  `github.pull_request_review_comment` and `github.issue_comment` triggers only.\n"
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    AgenticWorkflowMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/AgenticWorkflowLabels'
+        annotations:
+          $ref: '#/components/schemas/AgenticWorkflowAnnotations'
+      required:
+      - name
+    FailedCheckAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - failed_check.new
+        spec:
+          $ref: '#/components/schemas/FailedCheckAgenticWorkflowTriggerSpec'
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    GitHubDeploymentStatusAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.deployment_status
+        spec:
+          $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the
+
+            deployment (the `github.deployment` event that created it).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    ScheduledAgenticWorkflowTriggerSpec:
+      properties:
+        cron:
+          type: string
+          description: 'Crontab-notation to express when the automation is supposed to run.
+
+
+            ```
+
+            {minute} {hour} {day} {month} {weekday}
+
+            ```
+
+
+            For example, `0 12 * * MON-WED,FRI` is every M/Tu/W/F at noon.
+
+
+            Predefined schedules are also supported:
+
+
+            - `@yearly` (or `@annually`): Run once a year at midnight on January 1st.
+
+            - `@monthly`: Run once a month at midnight on the first day.
+
+            - `@weekly`: Run once a week at midnight on Sunday.
+
+            - `@daily` (or `@midnight`): Run once a day at midnight.
+
+            - `@hourly`: Run once an hour at the beginning of the hour.
+
+            - `@every <duration>`: Run at fixed intervals, e.g. `@every 1h30m` or `@every 5m`.
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ScheduleTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+      required:
+      - cron
+    GetAgenticWorkflowsResponse:
+      properties:
+        agenticWorkflows:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgenticWorkflowDefinition'
+      required:
+      - agenticWorkflows
+    AgenticWorkflowSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/AgenticWorkflowDisplay'
+        parent:
+          $ref: '#/components/schemas/AgenticWorkflowParent'
+        triggers:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgenticWorkflowTrigger'
+            minItems: 1
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgenticWorkflowPermission'
+        prompt:
+          $ref: '#/components/schemas/AgenticWorkflowPrompt'
+        guardrails:
+          $ref: '#/components/schemas/AgenticWorkflowGuardrails'
+        constants:
+          type: object
+          additionalProperties:
+            type: string
+          description: 'Static key-value pairs available as {{variable.name}} in the prompt and
+
+            tool parameter overrides. Constants are always available regardless of trigger type.
+
+            Trigger variables take precedence over constants on conflict.
+
+            '
+        notifications:
+          $ref: '#/components/schemas/AgenticWorkflowNotifications'
+          description: 'Optional notification channels to notify when an automation run completes. Channels are
+
+            grouped by outcome, so a run can notify different channels on success and on failure.
+
+            '
+      required:
+      - enabled
+      - display
+      - triggers
+      - prompt
+      - guardrails
+    AgenticWorkflowAction:
+      type: string
+      enum:
+      - agentic_workflow:read
+      - agentic_workflow:write
+      - agentic_workflow:delete
+    SlackBotFailedCheckAgenticWorkflowTriggerSpec:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 'A command or keyword that the Slack message must contain. Evaluated as a
+
+            case-insensitive substring match (e.g., `investigate` matches any message
+
+            containing "investigate").
+
+            '
+        channelNames:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of Slack channel names (e.g., `general`, `alerts`). When
+
+            specified, only failed checks reported in these channels trigger the automation.
+
+            '
+        checkRuleIDs:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of check rule IDs. When specified, only failed checks
+
+            whose rule ID matches one of the listed values trigger the automation.
+
+            '
+        labelFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Optional filters applied to check labels at dispatch time. When defined
+
+            and not empty, only failed checks whose labels satisfy all filter criteria
+
+            trigger this automation (AND semantics). Each criterion specifies a label key
+
+            and a matching operator (e.g., is, contains, starts_with, matches).
+
+            '
+        annotationFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Optional filters applied to check annotations at dispatch time. When defined
+
+            and not empty, only failed checks whose annotations satisfy all filter
+
+            criteria trigger this automation (AND semantics). Each criterion specifies an
+
+            annotation key and a matching operator (e.g., is, contains, starts_with, matches).
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/SlackTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+    SlackBotMessageAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - slack_bot.message
+        spec:
+          $ref: '#/components/schemas/SlackBotMessageAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the Slack
+
+            thread (`slack.thread`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    SlackBotMessageAgenticWorkflowTriggerSpec:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 'A command or keyword that the Slack message must contain. Evaluated as a
+
+            case-insensitive substring match (e.g., `investigate` matches any message
+
+            containing "investigate").
+
+            '
+        channelNames:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of Slack channel names (e.g., `general`, `alerts`). When
+
+            specified, only messages from these channels trigger the automation. When omitted,
+
+            messages from any channel match.
+
+            '
+        userHandles:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of Slack user handles without the @ prefix (e.g., `jane.doe`).
+
+            When specified, only messages from these users trigger the automation. When omitted,
+
+            messages from any user match.
+
+            '
+        threadOnly:
+          type: boolean
+          description: 'When true, only messages within a thread trigger the automation. Defaults to false.
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/SlackTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+      required:
+      - message
+    GitHubAgenticWorkflowTriggerSpec:
+      properties:
+        actions:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of GitHub event actions to filter on.
+
+            When specified, only events with a matching action trigger the workflow.
+
+            When omitted, events with any action match.
+
+
+            Note: `github.deployment` and `github.deployment_status` fire no action field; this filter has no effect for those trigger kinds. `github.deployment_status` filters on `states` instead.
+
+
+            Valid values per trigger kind:
+
+            - `github.pull_request`: `assigned`, `auto_merge_disabled`, `auto_merge_enabled`, `closed`, `converted_to_draft`, `demilestoned`, `dequeued`, `edited`, `enqueued`, `labeled`, `locked`, `milestoned`, `opened`, `ready_for_review`, `reopened`, `review_request_removed`, `review_requested`, `synchronize`, `unassigned`, `unlabeled`, `unlocked`
+
+            - `github.pull_request_review`: `dismissed`, `edited`, `submitted`
+
+            - `github.pull_request_review_comment`: `created`, `deleted`, `edited`
+
+            - `github.issue_comment`: `created`, `deleted`, `edited`, `pinned`, `unpinned`
+
+            - `github.release`: `created`, `deleted`, `edited`, `prereleased`, `published`, `released`, `unpublished`
+
+            '
+        organizations:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of GitHub organization logins to filter on (e.g., `my-org`). An
+
+            "organization" here is the account the Dash0 GitHub App is installed on — usually a
+
+            GitHub organization, but a personal account for personal installations.
+
+            When specified, only events from these organizations trigger the automation.
+
+            When omitted, events from any organization match.
+
+
+            Replaces the deprecated `accounts` field. When both are set, they must carry the
+
+            same values; requests where they contradict each other are rejected.
+
+            '
+        allOrganizations:
+          type: boolean
+          description: 'When true, the automation deliberately matches events from every organization, now and
+
+            in the future. Mutually exclusive with a non-empty `organizations` list. This flag
+
+            exists to distinguish an explicit "all organizations" choice from an unconfigured
+
+            trigger: a GitHub trigger with no `organizations`, no `allOrganizations`, no
+
+            `repositories`, no `allRepositories`, and (for comment kinds) no `keyword` is rejected
+
+            on write as an accidental match-everything catch-all.
+
+
+            `organizations`/`allOrganizations` and `repositories`/`allRepositories` are independent
+
+            alternatives, not nested: an event matching either the organization filter or the
+
+            repository filter triggers the automation.
+
+
+            Replaces the deprecated `allAccounts` field. When both are set, they must carry the
+
+            same value; requests where they contradict each other are rejected.
+
+            '
+        accounts:
+          type: array
+          items:
+            type: string
+          deprecated: true
+          description: 'Deprecated: use `organizations` instead. Kept for backwards compatibility; reads
+
+            mirror the value of `organizations` and writes are folded into it.
+
+            '
+        allAccounts:
+          type: boolean
+          deprecated: true
+          description: 'Deprecated: use `allOrganizations` instead. Kept for backwards compatibility; reads
+
+            mirror the value of `allOrganizations` and writes are folded into it.
+
+            '
+        repositories:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of repository full names to filter on (e.g., `owner/repo`).
+
+            When specified, only events from these repositories trigger the automation.
+
+            When omitted, events from any repository match.
+
+            '
+        allRepositories:
+          type: boolean
+          description: 'When true, the automation deliberately matches events from every repository, now and
+
+            in the future. Mutually exclusive with a non-empty `repositories` list. This flag
+
+            exists to distinguish an explicit "all repositories" choice from an unconfigured
+
+            trigger, mirroring `allOrganizations`.
+
+            '
+        states:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of deployment statuses to filter on. Only `github.deployment_status` uses
+
+            this filter; it has no effect for other trigger kinds. When specified, only
+
+            deployment-status events whose `state` matches trigger the automation. When omitted, any
+
+            status matches.
+
+
+            Valid values: `error`, `failure`, `inactive`, `pending`, `success`, `queued`, `in_progress`.
+
+            '
+        checkRunStatuses:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of check run statuses to filter on. Only `github.deployment_status` uses this
+
+            filter; it has no effect for other trigger kinds. The `deployment_status` event payload may
+
+            carry an associated `check_run`; when specified, only events whose `check_run.status` matches
+
+            trigger the automation. When omitted, any check run status (or none) matches.
+
+
+            Valid values: `queued`, `in_progress`, `completed`, `waiting`, `pending`.
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/GitHubTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    GitHubIssueCommentAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.issue_comment
+        spec:
+          $ref: '#/components/schemas/GitHubCommentAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the pull
+
+            request (`github.pull_request`), keyed by the PR number from the comment''s issue.
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    ScheduleTriggerVariableName:
+      type: string
+      enum:
+      - cron
+      description: 'Variables provided by the `schedule` trigger.
+
+
+        - `cron`: The cron expression that fired.
+
+        '
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SlackReactionTriggerVariableName:
+      type: string
+      enum:
+      - slack.reaction.emoji
+      description: 'Additional variable provided only by the `slack_bot.reaction` trigger.
+
+
+        - `slack.reaction.emoji`: The emoji name (without colons) that was added as a reaction.
+
+        '
+    GitHubPullRequestReviewCommentAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.pull_request_review_comment
+        spec:
+          $ref: '#/components/schemas/GitHubCommentAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the pull
+
+            request (`github.pull_request`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    SlackBotReactionAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - slack_bot.reaction
+        spec:
+          $ref: '#/components/schemas/SlackBotReactionAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the Slack
+
+            thread (`slack.thread`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    ManualAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - manual
+        spec:
+          $ref: '#/components/schemas/EmptyAgenticWorkflowTriggerSpec'
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AgenticWorkflowTrigger:
+      anyOf:
+      - $ref: '#/components/schemas/ScheduledAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/FailedCheckAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/SlackBotFailedCheckAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/SlackBotMessageAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/SlackBotReactionAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubDeploymentAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubDeploymentStatusAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubPullRequestAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubPullRequestReviewAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubPullRequestReviewCommentAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubIssueCommentAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/GitHubReleaseAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/LinearCommentAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/WebhookAgenticWorkflowTrigger'
+      - $ref: '#/components/schemas/ManualAgenticWorkflowTrigger'
+    EmptyAgenticWorkflowTriggerSpec:
+      properties: {}
+      required: []
+    GitHubCommentAgenticWorkflowTriggerSpec:
+      allOf:
+      - $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+      - type: object
+        properties:
+          keyword:
+            type: string
+            description: 'Optional keyword the comment body must contain. Evaluated as a
+
+              case-insensitive substring match (e.g., "investigate" matches any
+
+              comment containing "investigate"). When absent or empty, any comment
+
+              fires the automation.
+
+              '
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    AgenticWorkflowLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        dash0.com/webhook-id:
+          type: string
+    AgenticWorkflowAnnotations:
+      properties:
+        dash0.com/created-at:
+          type: string
+          format: date-time
+          description: The time at which this automation was originally created.
+          readOnly: true
+        dash0.com/created-by:
+          type: string
+          description: The member ID of the user who originally created this automation.
+          readOnly: true
+        dash0.com/last-updated-at:
+          type: string
+          format: date-time
+          description: The time at which the current version of this automation was created.
+          readOnly: true
+        dash0.com/last-updated-by:
+          type: string
+          description: The member ID of the user who created the current version of this automation.
+          readOnly: true
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+        dash0.com/webhook-secret:
+          type: string
+          readOnly: true
+          description: 'The plaintext webhook secret, returned exactly once: immediately after the backend
+
+            auto-provisions it on create or update (the first time a webhook trigger is added).
+
+            Absent on every other response, including subsequent reads of the same workflow — it
+
+            is stored only as an encrypted value and cannot be retrieved again. Use
+
+            `POST .../webhook` (regenerate) to obtain a new one if this value was missed.
+
+            '
+        dash0.com/webhook-trigger-enabled:
+          type: string
+          description: 'Webhook-trigger-scoped feature flag, independent of the workflow''s own `spec.enabled`.
+
+            Client-settable on write (via PUT/upsert), defaults to `"true"`. `"true"` if the
+
+            webhook trigger is active, `"false"` if it is paused. Pausing keeps the secret and
+
+            webhook id intact; incoming requests are silently accepted but not forwarded.
+
+            '
+    GitHubPullRequestAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.pull_request
+        spec:
+          $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the pull
+
+            request (`github.pull_request`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    AgenticWorkflowGuardrails:
+      properties:
+        timeout:
+          $ref: '#/components/schemas/Duration'
+          description: 'Optional timeout after which the Agent0 automation will be aborted. Defaults to ten minutes.
+
+            '
+        allowedTools:
+          type: array
+          items:
+            type: string
+          description: 'Optionally restrict which tools are allowed. By default, all tools are allowed to be used. You can use the
+
+            `*` character to allow all tools matching a pattern.
+
+            '
+        requiredToolCalls:
+          type: array
+          description: 'Optionally enforce that the Agent0 automation has executed these tool calls. If the agent is concluding is
+
+            automation, but hasn''t called these tools, the agent receives a follow-up prompt to call these tools. This
+
+            auto-correction of the LLM behavior is only attempted once.
+
+
+            This is useful if you wanna ensure that the agent makes specific tool calls to external systems, e.g., to
+
+            leave a message on Slack or GitHub.
+
+            '
+          items:
+            type: string
+        concurrency:
+          $ref: '#/components/schemas/AgenticWorkflowConcurrency'
+        debounce:
+          $ref: '#/components/schemas/Duration'
+          description: 'How long to wait before firing if the same trigger fires repeatedly. This is useful to avoid redundant
+
+            automation executions when triggers fire in rapid succession.
+
+            '
+        toolParameterOverrides:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/AgenticWorkflowToolParameterOverride'
+          description: 'Pre-configure tool parameters that are enforced at invocation time. When a listed
+
+            tool is called by the agent, these parameters are merged into the tool''s arguments,
+
+            overriding any values the LLM may have provided.
+
+            Keys can be either fully qualified with namespace (e.g., "dash0.slackSendMessage")
+
+            or bare tool names without namespace (e.g., "slackSendMessage"). Namespaced keys
+
+            take precedence and allow disambiguation when multiple integrations expose tools
+
+            with the same name.
+
+            Values are objects of key-value pairs merged into tool arguments.
+
+            Values support {{variable}} substitution using built-in variables, constants,
+
+            and trigger variables.
+
+            '
+        networkLevel:
+          $ref: '#/components/schemas/NetworkLevel'
+          description: 'Controls outbound network access for the sandbox running the automation.
+
+            '
+        creditBudgetWindow:
+          $ref: '#/components/schemas/AgenticWorkflowCreditBudget'
+          description: 'Optional rolling-window credit budget across all runs of this workflow. A new run is
+
+            not started when the budget is already exhausted, and an in-flight run is aborted the
+
+            moment it would push spend past the budget. Leave unset for no budget.
+
+            '
+        mcpTools:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgenticWorkflowMcpTool'
+          description: 'Per-automation overrides for MCP server tools. Each entry sets whether a specific MCP
+
+            tool is available to this automation, overriding the tool''s enabled/disabled state in
+
+            the organization''s MCP integration settings. Tools not listed here fall back to their
+
+            integration-settings default. This lets an automation enable a tool that is disabled in
+
+            settings, or disable a tool that is enabled there, scoped to this automation only.
+
+            '
+      required:
+      - networkLevel
+    AgenticWorkflowDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0AgenticWorkflow
+        metadata:
+          $ref: '#/components/schemas/AgenticWorkflowMetadata'
+        spec:
+          $ref: '#/components/schemas/AgenticWorkflowSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AgenticWorkflowPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgenticWorkflowAction'
+      required:
+      - actions
+    AgenticWorkflowMcpTool:
+      type: object
+      properties:
+        server:
+          type: string
+          description: The MCP server (integration) display name, kebab-cased — matches the name agent0 uses for the server.
+        tool:
+          type: string
+          description: The tool name as reported by the MCP server.
+        enabled:
+          type: boolean
+          description: Whether this MCP tool is available to this automation, overriding the integration-settings default.
+      required:
+      - server
+      - tool
+      - enabled
+    GitHubReleaseAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.release
+        spec:
+          $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the
+
+            release (keyed by release tag).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    LinearCommentTriggerVariableName:
+      type: string
+      enum:
+      - linear.issue.id
+      - linear.issue.title
+      - linear.issue.url
+      - linear.comment.body
+      - linear.comment.user
+      description: 'Variables provided by the `linear.comment` trigger.
+
+
+        - `linear.issue.id`: The Linear issue identifier (e.g., `ENG-123`).
+
+        - `linear.issue.title`: Title of the Linear issue.
+
+        - `linear.issue.url`: URL of the Linear issue.
+
+        - `linear.comment.body`: Body text of the comment that triggered the automation.
+
+        - `linear.comment.user`: Display name of the user who left the comment.
+
+        '
+    WebhookAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - webhook
+        spec:
+          $ref: '#/components/schemas/EmptyAgenticWorkflowTriggerSpec'
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    AgenticWorkflowTriggerTask:
+      type: string
+      description: 'Optional per-trigger task/instruction prompt. When set, it is rendered with the same
+
+        `{{variable.name}}` substitution as `spec.prompt.user` and used as the task turn for
+
+        invocations from this trigger: the kickoff framing when the trigger spawns a new agent,
+
+        or the event framing when it continues an existing one. When omitted, the
+
+        automation-level `spec.prompt.user` (on spawn) or a connector-default event summary (on
+
+        continue) is used instead. The automation-level standing prompt is injected only once,
+
+        on spawn, and is not re-sent on continue.
+
+        '
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    AgenticWorkflowNotifications:
+      description: 'Notification channels to notify when an automation run completes, grouped by outcome.
+
+        Both lists are optional; omit one to skip notifying on that outcome.
+
+        '
+      properties:
+        onSuccessChannels:
+          description: 'Notification channels to notify when an automation run completes successfully. Each value is an
+
+            opaque channel identifier: either the channel''s UUID or its origin (the stable identifier
+
+            infrastructure-as-code tooling assigns). Identifiers are resolved at dispatch time, so an
+
+            automation authored via Terraform or the operator can reference channels without knowing their
+
+            per-environment UUID. An empty or absent list notifies no channels on success.
+
+            '
+          type: array
+          items:
+            type: string
+        onFailureChannels:
+          description: 'Notification channels to notify when an automation run fails. Each value is an opaque channel
+
+            identifier: either the channel''s UUID or its origin. An empty or absent list notifies no
+
+            channels on failure.
+
+            '
+          type: array
+          items:
+            type: string
+        onBudgetWarningChannels:
+          description: 'Notification channels to notify when this workflow''s rolling credit budget crosses its
+
+            warning threshold (`guardrails.creditBudgetWindow.warningThreshold`). Each value is an opaque channel
+
+            identifier: either the channel''s UUID or its origin. An empty or absent list notifies no
+
+            channels on budget warnings.
+
+            '
+          type: array
+          items:
+            type: string
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    AgenticWorkflowTriggerKind:
+      type: string
+      enum:
+      - schedule
+      - failed_check.new
+      - slack_bot.failed_check.new
+      - slack_bot.message
+      - slack_bot.reaction
+      - github.deployment
+      - github.deployment_status
+      - github.pull_request
+      - github.pull_request_review
+      - github.pull_request_review_comment
+      - github.issue_comment
+      - github.release
+      - linear.comment
+      - webhook
+      - manual
+      description: 'The kind of event that triggers the Agent0 automation.
+
+
+        - `schedule`: Cron-based scheduled trigger.
+
+        - `failed_check.new`: Triggered directly when a new check failure is detected, without requiring Slack configuration.
+
+        - `slack_bot.failed_check.new`: Triggered when a new failed check is detected via Slack bot.
+
+        - `slack_bot.message`: Triggered when a Slack message matches a pattern.
+
+        - `slack_bot.reaction`: Triggered when a specific emoji reaction is added in Slack.
+
+        - `github.deployment`: Triggered when a GitHub deployment event occurs.
+
+        - `github.deployment_status`: Triggered when a GitHub deployment status changes.
+
+        - `github.pull_request`: Triggered when a GitHub pull request event occurs.
+
+        - `github.pull_request_review`: Triggered when a GitHub pull request review event occurs.
+
+        - `github.pull_request_review_comment`: Triggered when a GitHub pull request review comment event occurs.
+
+        - `github.issue_comment`: Triggered when a comment is created, edited, or deleted on a GitHub pull request or issue.
+
+        - `github.release`: Triggered when a GitHub release event occurs.
+
+        - `linear.comment`: Triggered when the Dash0 agent is @mentioned or delegated in a Linear comment whose text contains the configured keyword.
+
+        - `webhook`: Triggered via an external webhook call.
+
+        - `manual`: Triggered manually via the UI. Runtime-only — not valid in `spec.triggers[]`.
+
+        '
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    AgenticWorkflowDisplay:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+      - name
+    SlackTriggerVariableName:
+      type: string
+      enum:
+      - slack.channel.name
+      - slack.channel.id
+      - slack.user.handle
+      - slack.user.id
+      - slack.team.id
+      - slack.message.timestamp
+      - slack.message.text
+      - slack.thread.timestamp
+      description: 'Variables provided by all Slack-based triggers (`slack_bot.message`, `slack_bot.reaction`,
+
+        `slack_bot.failed_check.new`).
+
+
+        - `slack.channel.name`: Name of the Slack channel where the event occurred.
+
+        - `slack.channel.id`: Slack channel ID.
+
+        - `slack.user.handle`: Handle of the user who triggered the event.
+
+        - `slack.user.id`: Slack user ID.
+
+        - `slack.team.id`: Slack workspace (team) ID.
+
+        - `slack.message.timestamp`: Timestamp of the message in Slack''s format.
+
+        - `slack.message.text`: Text content of the message. May be absent for some trigger types.
+
+        - `slack.thread.timestamp`: Thread timestamp. Only present when the event occurred in a thread.
+
+        '
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    LinearCommentAgenticWorkflowTriggerSpec:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: 'A command or keyword that the Linear comment must contain. Evaluated as a
+
+            case-insensitive substring match (e.g., `investigate` matches any comment
+
+            containing "investigate"). The trigger fires only when the Dash0 agent is
+
+            @mentioned or delegated on the issue and the comment contains this keyword;
+
+            mentions without the keyword fall through to the normal Agent0 chat reply.
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/LinearCommentTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+      required:
+      - keyword
+    SlackBotFailedCheckAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - slack_bot.failed_check.new
+        spec:
+          $ref: '#/components/schemas/SlackBotFailedCheckAgenticWorkflowTriggerSpec'
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    FailedCheckAgenticWorkflowTriggerSpec:
+      type: object
+      properties:
+        checkRuleIDs:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of check rule IDs. When specified, only failed checks
+
+            whose rule ID matches one of the listed values trigger the automation.
+
+            '
+        labelFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Optional filters applied to check labels at dispatch time. When defined
+
+            and not empty, only failed checks whose labels satisfy all filter criteria
+
+            trigger this automation (AND semantics). Each criterion specifies a label key
+
+            and a matching operator (e.g., is, contains, starts_with, matches).
+
+            '
+        annotationFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Optional filters applied to check annotations at dispatch time. When defined
+
+            and not empty, only failed checks whose annotations satisfy all filter
+
+            criteria trigger this automation (AND semantics). Each criterion specifies an
+
+            annotation key and a matching operator (e.g., is, contains, starts_with, matches).
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/FailedCheckTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+    GitHubPullRequestReviewAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.pull_request_review
+        spec:
+          $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the pull
+
+            request (`github.pull_request`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    ScheduledAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - schedule
+        spec:
+          $ref: '#/components/schemas/ScheduledAgenticWorkflowTriggerSpec'
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    AgenticWorkflowPrompt:
+      properties:
+        user:
+          type: string
+      required:
+      - user
+    AgenticWorkflowCreditBudget:
+      properties:
+        credits:
+          type: number
+          description: 'The maximum number of credits this workflow may consume within the rolling window.
+
+            '
+        window:
+          $ref: '#/components/schemas/Duration'
+          description: 'The rolling time window over which credit spend is summed (e.g. `24h`, `7d`, `4w`).
+
+            '
+        warningThreshold:
+          type: number
+          minimum: 0
+          maximum: 100
+          description: 'Optional warning threshold, as a percentage (0-100) of `credits`. A `budget_warning`
+
+            notification is dispatched once, to `notifications.onBudgetWarningChannels`, the first time
+
+            a completed run pushes rolling spend across this percentage of the budget. Leave unset to
+
+            disable budget warnings.
+
+            '
+      required:
+      - credits
+      - window
+    GitHubDeploymentAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - github.deployment
+        spec:
+          $ref: '#/components/schemas/GitHubAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the
+
+            deployment, so its `github.deployment_status` events resume the same thread.
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    AgenticWorkflowConcurrency:
+      properties:
+        policy:
+          $ref: '#/components/schemas/AgenticWorkflowConcurrencyPolicy'
+          description: 'Defaults to `parallel`.
+
+            '
+        maxParallel:
+          type: integer
+          minimum: 1
+          description: 'The maximum number of parallel executions allowed. Only meaningful when `policy` is set to `parallel`.
+
+            Defaults to `50`.
+
+            '
+      required:
+      - policy
+    AgenticWorkflowConcurrencyPolicy:
+      type: string
+      enum:
+      - queue
+      - skip
+      - supersede
+      - parallel
+      description: 'The concurrency policy to apply when an automation is triggered while a previous execution is still running.
+
+
+        - `queue`: Queue the new execution and run it after the current one completes.
+
+        - `skip`: Skip the new execution entirely.
+
+        - `supersede`: Cancel the current execution and start the new one.
+
+        - `parallel`: Run executions in parallel, up to `maxParallel`.
+
+        '
+    LinearCommentAgenticWorkflowTrigger:
+      properties:
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/AgenticWorkflowTriggerKind'
+          - enum:
+            - linear.comment
+        spec:
+          $ref: '#/components/schemas/LinearCommentAgenticWorkflowTriggerSpec'
+        delivery:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerDelivery'
+          description: 'Defaults to `spawn`. When `continue`, routes into the agent that owns the Linear
+
+            issue (`linear.issue`).
+
+            '
+        task:
+          $ref: '#/components/schemas/AgenticWorkflowTriggerTask'
+      required:
+      - kind
+      - spec
+    SlackBotReactionAgenticWorkflowTriggerSpec:
+      type: object
+      properties:
+        emojis:
+          type: array
+          items:
+            type: string
+          description: 'List of emoji names (without colons) that trigger the automation. Each is evaluated
+
+            as an exact match. The automation triggers when any of the listed emojis is used.
+
+            '
+        channelNames:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of Slack channel names (e.g., `general`, `alerts`). When
+
+            specified, only reactions in these channels trigger the automation.
+
+            '
+        userHandles:
+          type: array
+          items:
+            type: string
+          description: 'Optional list of Slack user handles without the @ prefix (e.g., `jane.doe`).
+
+            When specified, only reactions from these users trigger the automation.
+
+            '
+        availableVariables:
+          type: array
+          readOnly: true
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/SlackTriggerVariableName'
+            - $ref: '#/components/schemas/SlackReactionTriggerVariableName'
+          description: 'The trigger-specific variables available as `{{variable.name}}` when this trigger fires.
+
+            Includes both the common Slack variables and reaction-specific variables.
+
+            This is in addition to the built-in variables that are always available.
+
+            '
+      required:
+      - emojis
+    FailedCheckTriggerVariableName:
+      type: string
+      enum:
+      - check.id
+      - check.name
+      description: 'Variables provided by the `failed_check.new` trigger.
+
+
+        - `check.id`: The ID of the check rule that failed.
+
+        - `check.name`: The name of the check rule that failed.
+
+        '
+    NetworkLevel:
+      type: string
+      enum:
+      - no_network
+      - trusted_only
+      - full
+      description: 'Controls outbound network access for the sandbox running this thread.
+
+        - `no_network`: Block all outbound network access.
+
+        - `trusted_only`: Allow outbound access only to a curated list of trusted addresses.
+
+        - `full`: No network restrictions.
+
+        '

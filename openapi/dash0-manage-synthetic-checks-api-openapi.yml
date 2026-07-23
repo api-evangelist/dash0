@@ -1,0 +1,1116 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Synthetic Checks API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Synthetic Checks
+paths:
+  /api/synthetic-checks/{originOrId}:
+    delete:
+      summary: Delete a specific synthetic check by origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Synthetic check origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Delete a specific synthetic check.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: delete_api-synthetic-checks-originorid
+    get:
+      summary: Receive a specific synthetic check by its origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Synthetic check origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a specific synthetic check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyntheticCheckDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: get_api-synthetic-checks-originorid
+    put:
+      summary: Update or insert a specific synthetic check by its origin or id.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Synthetic check origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyntheticCheckDefinition'
+      responses:
+        '200':
+          description: Update a specific synthetic check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyntheticCheckDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: put_api-synthetic-checks-originorid
+  /api/synthetic-checks/locations:
+    get:
+      summary: Retrieve list of synthetic check locations
+      description: Retrieves the current list of synthetic check locations.
+      responses:
+        '200':
+          description: Receive a list of synthetic check locations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticCheckLocation'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: get_api-synthetic-checks-locations
+  /api/synthetic-checks:
+    get:
+      summary: Receive a list of synthetic checks
+      description: Receive a list of your organization synthetic checks
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a list of synthetic checks.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SyntheticChecksApiListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: get_api-synthetic-checks
+    post:
+      summary: Create a synthetic check
+      description: Create a synthetic check.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyntheticCheckDefinition'
+      responses:
+        '200':
+          description: The created synthetic check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyntheticCheckDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: post_api-synthetic-checks
+  /api/import/synthetic-check:
+    post:
+      summary: Import a synthetic check
+      description: 'This endpoint allows you **to import an existing synthetic check** into your organization. It''s intended for one-time migrations rather than ongoing synthetic check management.
+
+        Unlike the standard API, this endpoint supports importing synthetic checks **with full editability**, allowing you to modify synthetic checks that were previously created elsewhere.
+
+        **Note:**
+
+        This endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported synthetic check state.
+
+        Importing a synthetic check without an id will create a new synthetic check and return the created asset with a generated id.
+
+        Importing a synthetic check with an existing id (metadata>dash0Extensions>id) will override the corresponding synthetic check definition. In case there is no synthetic check with the given id a new dashboard will be created.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyntheticCheckDefinition'
+      responses:
+        '200':
+          description: The imported synthetic check.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyntheticCheckDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: post_api-import-synthetic-check
+  /api/synthetic-checks/test:
+    post:
+      summary: Trigger a test run of a synthetic check
+      description: Triggers an immediate test execution of a synthetic check.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestSyntheticCheckRequest'
+      responses:
+        '200':
+          description: Receive a list of synthetic check runs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestSyntheticCheckResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Synthetic Checks
+      operationId: post_api-synthetic-checks-test
+components:
+  schemas:
+    TimingType:
+      type: string
+      enum:
+      - total
+      - dns
+      - connection
+      - ssl
+      - request
+      - response
+    HttpResponseStatusCodeAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - status_code
+        spec:
+          $ref: '#/components/schemas/HttpResponseStatusCodeAssertionSpec'
+      required:
+      - kind
+      - spec
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    NameValuePair:
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      - value
+    SslCertificateAssertionSpec:
+      properties:
+        value:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - value
+    SyntheticCheckDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    HttpResponseHeaderAssertionSpec:
+      properties:
+        key:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - key
+      - operator
+      - value
+    TimingAssertionSpec:
+      properties:
+        type:
+          $ref: '#/components/schemas/TimingType'
+        operator:
+          $ref: '#/components/schemas/NumericAssertionOperator'
+        value:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - type
+      - operator
+      - value
+    HttpQueryParameters:
+      type: array
+      items:
+        $ref: '#/components/schemas/NameValuePair'
+    HttpBasicAuthentication:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - username
+      - password
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    HttpResponseHeaderAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - response_header
+        spec:
+          $ref: '#/components/schemas/HttpResponseHeaderAssertionSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckRetriesExponentialSpec:
+      properties:
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 10
+        delay:
+          $ref: '#/components/schemas/Duration'
+        maximumDelay:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - attempts
+      - delay
+      - maximumDelay
+    HttpResponseStatusCodeAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/NumericAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    SyntheticCheckNotifications:
+      properties:
+        channels:
+          description: 'The channel IDs that notifications should be sent to in case the check is critical or degraded after
+
+            executing all the retries.
+
+            '
+          type: array
+          items:
+            type: string
+            format: uuid
+        onlyCriticalChannels:
+          description: 'The channel IDs that should only trigger in case synthetic check status reaches critical state.
+
+            '
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - channels
+    HttpCheckAssertion:
+      anyOf:
+      - $ref: '#/components/schemas/HttpResponseStatusCodeAssertion'
+      - $ref: '#/components/schemas/HttpResponseHeaderAssertion'
+      - $ref: '#/components/schemas/HttpResponseJsonBodyAssertion'
+      - $ref: '#/components/schemas/HttpResponseTextBodyAssertion'
+      - $ref: '#/components/schemas/TimingAssertion'
+      - $ref: '#/components/schemas/ErrorAssertion'
+      - $ref: '#/components/schemas/SslCertificateAssertion'
+    TlsSettings:
+      properties:
+        allowInsecure:
+          type: boolean
+      required:
+      - allowInsecure
+    SyntheticCheckRetriesOffSpec:
+      properties: {}
+    SyntheticCheckRetriesExponential:
+      properties:
+        kind:
+          type: string
+          enum:
+          - exponential
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesExponentialSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckAttempt:
+      properties:
+        syntheticCheckId:
+          type: string
+          description: ID of the synthetic check
+        syntheticCheckVersion:
+          type: string
+          description: Version of the synthetic check
+        runId:
+          type: string
+          description: (Internal) Run ID this attempt belongs to
+          x-internal: true
+        location:
+          $ref: '#/components/schemas/SyntheticCheckLocation'
+          description: The geographic location from which the check was executed.
+        attemptId:
+          type: string
+          description: (Internal) Unique identifier for the attempt
+          x-internal: true
+        isTestRun:
+          type: boolean
+          description: (Internal) Whether this attempt was triggered as a test run
+          x-internal: true
+        traceId:
+          type: string
+          format: byte
+          description: (Internal) Trace ID associated with this attempt
+          x-internal: true
+        spanId:
+          type: string
+          format: byte
+          description: (Internal) Span ID associated with this attempt
+          x-internal: true
+        startTime:
+          $ref: '#/components/schemas/FixedTime'
+        duration:
+          type: integer
+          format: int64
+          description: duration in nanoseconds
+        statusCode:
+          type: integer
+          description: HTTP status code
+        errorType:
+          $ref: '#/components/schemas/SyntheticHttpErrorType'
+          description: Error type of the synthetic check attempt, if any
+        errorMessage:
+          type: string
+          description: Error message of the synthetic check attempt, if any
+        failedCriticalAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedHttpCheckAssertion'
+          description: List of critical assertions that failed
+        failedDegradedAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedHttpCheckAssertion'
+          description: List of degraded assertions that failed
+        passedCriticalAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpCheckAssertion'
+          description: List of critical assertions that passed
+        passedDegradedAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpCheckAssertion'
+          description: List of degraded assertions that passed
+      required:
+      - syntheticCheckId
+      - syntheticCheckVersion
+      - runId
+      - attemptId
+      - isTestRun
+      - location
+      - traceId
+      - spanId
+      - startTime
+      - duration
+      - statusCode
+      - failedCriticalAssertions
+      - failedDegradedAssertions
+      - passedCriticalAssertions
+      - passedDegradedAssertions
+    SyntheticCheckAttemptDetails:
+      allOf:
+      - $ref: '#/components/schemas/SyntheticCheckAttempt'
+      - type: object
+        properties:
+          spanAttributes:
+            type: array
+            items:
+              $ref: '#/components/schemas/KeyValue'
+            description: Span attributes using OTLP KeyValue format
+          events:
+            type: array
+            items:
+              $ref: '#/components/schemas/SpanEvent'
+            description: Span events using OTLP SpanEvent format
+        required:
+        - spanAttributes
+        - events
+    FailedHttpCheckAssertion:
+      description: Information about a failed HTTP check assertion
+      properties:
+        assertion:
+          $ref: '#/components/schemas/HttpCheckAssertion'
+          description: The assertion that
+        actualValue:
+          type: string
+          description: The actual value that was received in the response
+        explanation:
+          type: string
+          description: A human-readable message explaining why the assertion failed
+      required:
+      - assertion
+      - explanation
+    SyntheticCheckLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          deprecated: true
+          additionalProperties:
+            type: string
+    SyntheticHttpCheckPlugin:
+      properties:
+        kind:
+          type: string
+          enum:
+          - http
+        spec:
+          $ref: '#/components/schemas/SyntheticHttpCheckPluginSpec'
+      required:
+      - kind
+      - spec
+    HttpRedirects:
+      type: string
+      enum:
+      - follow
+      - disabled
+    ErrorAssertionSpec:
+      properties:
+        value:
+          $ref: '#/components/schemas/SyntheticHttpErrorType'
+      required:
+      - value
+    SyntheticCheckMetadata:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SyntheticCheckLabels'
+        annotations:
+          $ref: '#/components/schemas/SyntheticCheckAnnotations'
+      required:
+      - name
+    HttpResponseTextBodyAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    SyntheticCheckLocation:
+      type: string
+      description: A geographic location identifier from which synthetic checks can be executed.
+      minLength: 1
+      maxLength: 128
+    SyntheticCheckPlugin:
+      anyOf:
+      - $ref: '#/components/schemas/SyntheticHttpCheckPlugin'
+    SyntheticCheckSchedulingStrategy:
+      type: string
+      description: 'Whether to run checks against all specified locations for every run, or just a single location per run.
+
+        '
+      enum:
+      - all_locations
+      - random_location
+    SyntheticCheckDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0SyntheticCheck
+        metadata:
+          $ref: '#/components/schemas/SyntheticCheckMetadata'
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    SyntheticCheckAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    TestSyntheticCheckRequest:
+      properties:
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        definition:
+          $ref: '#/components/schemas/SyntheticCheckDefinition'
+      required:
+      - definition
+    HttpResponseJsonBodyAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - json_body
+        spec:
+          $ref: '#/components/schemas/HttpResponseJsonBodyAssertionSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckRetriesFixedSpec:
+      properties:
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 10
+        delay:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - attempts
+      - delay
+    TestSyntheticCheckResponse:
+      properties:
+        syntheticCheckAttempt:
+          $ref: '#/components/schemas/SyntheticCheckAttemptDetails'
+      required:
+      - syntheticCheckAttempt
+    HttpHeaders:
+      type: array
+      items:
+        $ref: '#/components/schemas/NameValuePair'
+    SyntheticCheckRetriesLinearSpec:
+      properties:
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 10
+        delay:
+          $ref: '#/components/schemas/Duration'
+        maximumDelay:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - attempts
+      - delay
+      - maximumDelay
+    ErrorAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - error
+        spec:
+          $ref: '#/components/schemas/ErrorAssertionSpec'
+      required:
+      - kind
+      - spec
+    SyntheticHttpCheckPluginSpec:
+      properties:
+        request:
+          $ref: '#/components/schemas/HttpRequestSpec'
+        assertions:
+          $ref: '#/components/schemas/SyntheticHttpCheckAssertions'
+      required:
+      - request
+      - assertions
+    SyntheticHttpCheckAssertions:
+      properties:
+        criticalAssertions:
+          $ref: '#/components/schemas/HttpCheckAssertions'
+        degradedAssertions:
+          $ref: '#/components/schemas/HttpCheckAssertions'
+      required:
+      - criticalAssertions
+      - degradedAssertions
+    SyntheticCheckRetries:
+      anyOf:
+      - $ref: '#/components/schemas/SyntheticCheckRetriesOff'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesFixed'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesLinear'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesExponential'
+    SyntheticChecksApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        dataset:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - dataset
+    StringAssertionOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+    SyntheticCheckRetriesFixed:
+      properties:
+        kind:
+          type: string
+          enum:
+          - fixed
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesFixedSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckRetriesOff:
+      properties:
+        kind:
+          type: string
+          enum:
+          - 'off'
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesOffSpec'
+      required:
+      - kind
+      - spec
+    KeyValue:
+      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+      - key
+      - value
+    SslCertificateAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - ssl_certificate
+        spec:
+          $ref: '#/components/schemas/SslCertificateAssertionSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/SyntheticCheckDisplay'
+        plugin:
+          $ref: '#/components/schemas/SyntheticCheckPlugin'
+        schedule:
+          $ref: '#/components/schemas/SyntheticCheckSchedule'
+        retries:
+          $ref: '#/components/schemas/SyntheticCheckRetries'
+        notifications:
+          $ref: '#/components/schemas/SyntheticCheckNotifications'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticCheckPermission'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        enabled:
+          type: boolean
+      required:
+      - type
+      - plugin
+      - schedule
+      - retries
+      - notifications
+      - enabled
+    HttpRequestBodyKind:
+      type: string
+      enum:
+      - json
+      - graphql
+      - form
+      - raw
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SyntheticCheckRetriesLinear:
+      properties:
+        kind:
+          type: string
+          enum:
+          - linear
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesLinearSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckAction:
+      type: string
+      enum:
+      - synthetic_check:read
+      - synthetic_check:write
+      - synthetic_check:delete
+    HttpRequestSpec:
+      properties:
+        method:
+          $ref: '#/components/schemas/HttpRequestMethod'
+        url:
+          type: string
+        redirects:
+          $ref: '#/components/schemas/HttpRedirects'
+        tls:
+          $ref: '#/components/schemas/TlsSettings'
+        tracing:
+          $ref: '#/components/schemas/TracingSettings'
+        headers:
+          $ref: '#/components/schemas/HttpHeaders'
+        queryParameters:
+          $ref: '#/components/schemas/HttpQueryParameters'
+        basicAuthentication:
+          $ref: '#/components/schemas/HttpBasicAuthentication'
+        body:
+          $ref: '#/components/schemas/HttpRequestBody'
+      required:
+      - method
+      - url
+      - redirects
+      - tls
+      - tracing
+      - headers
+      - queryParameters
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    HttpRequestMethod:
+      type: string
+      enum:
+      - get
+      - post
+      - put
+      - delete
+      - head
+      - patch
+    SyntheticCheckSchedule:
+      properties:
+        strategy:
+          $ref: '#/components/schemas/SyntheticCheckSchedulingStrategy'
+        interval:
+          description: 'Specifies a check evaluation frequency.
+
+            '
+          $ref: '#/components/schemas/Duration'
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticCheckLocation'
+          minItems: 1
+          maxItems: 128
+      required:
+      - strategy
+      - interval
+      - locations
+    HttpResponseJsonBodyAssertionSpec:
+      properties:
+        jsonPath:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - jsonPath
+      - operator
+      - value
+    NumericAssertionOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - gt
+      - lt
+      - gte
+      - lte
+      - is_one_of
+      - is_not_one_of
+    SpanEvent:
+      type: object
+      properties:
+        timeUnixNano:
+          type: string
+          format: uint64
+        name:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+      required:
+      - timeUnixNano
+      - name
+      - attributes
+    HttpRequestBody:
+      properties:
+        kind:
+          $ref: '#/components/schemas/HttpRequestBodyKind'
+        spec:
+          properties:
+            content:
+              type: string
+              maxLength: 2048
+          required:
+          - content
+      required:
+      - kind
+      - spec
+    HttpResponseTextBodyAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - text_body
+        spec:
+          $ref: '#/components/schemas/HttpResponseTextBodyAssertionSpec'
+      required:
+      - kind
+      - spec
+    SyntheticHttpErrorType:
+      type: string
+      enum:
+      - unknown
+      - dns
+      - tcp
+      - tls
+      - timeout
+    SyntheticCheckPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticCheckAction'
+      required:
+      - actions
+    TimingAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - timing
+        spec:
+          $ref: '#/components/schemas/TimingAssertionSpec'
+      required:
+      - kind
+      - spec
+    TracingSettings:
+      properties:
+        addTracingHeaders:
+          type: boolean
+      required:
+      - addTracingHeaders
+    HttpCheckAssertions:
+      type: array
+      items:
+        $ref: '#/components/schemas/HttpCheckAssertion'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error

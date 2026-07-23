@@ -1,0 +1,1605 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Query Telemetry API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Query Telemetry
+paths:
+  /api/logs:
+    post:
+      summary: Returns OTLP logs records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetLogRecordsRequest'
+      responses:
+        '200':
+          description: Returns log records in OTLP format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLogRecordsResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Query Telemetry
+      operationId: post_api-logs
+  /api/spans:
+    post:
+      summary: Returns OTLP spans
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSpansRequest'
+      responses:
+        '200':
+          description: Returns spans in OTLP format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSpansResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Query Telemetry
+      operationId: post_api-spans
+  /api/trace/details:
+    post:
+      summary: Returns the OTLP spans and log records (if any) associated with the trace ID.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTraceRequest'
+      responses:
+        '200':
+          description: Returns spans and log records (if any) in OTLP format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTraceResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Query Telemetry
+      operationId: post_api-trace-details
+  /api/trace/ids:
+    post:
+      summary: Returns unique trace IDs matching the given filters.
+      description: 'Lightweight endpoint that returns only the unique trace IDs of traces containing
+
+        at least one span matching the request filters. Useful for two-step workflows: first
+
+        find matching trace IDs, then fetch full trace details via `GetTrace`
+
+        (`POST /api/trace/details`). Significantly faster and lighter-weight than
+
+        `GetSpans` (`POST /api/spans`) when only trace IDs are needed.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetTraceIdsRequest'
+      responses:
+        '200':
+          description: Returns unique trace IDs as hex-encoded strings.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTraceIdsResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Query Telemetry
+      operationId: post_api-trace-ids
+components:
+  schemas:
+    HttpResponseStatusCodeAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - status_code
+        spec:
+          $ref: '#/components/schemas/HttpResponseStatusCodeAssertionSpec'
+      required:
+      - kind
+      - spec
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    SpanLink:
+      type: object
+      properties:
+        traceId:
+          type: string
+          format: byte
+        spanId:
+          type: string
+          format: byte
+        traceState:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+        flags:
+          type: integer
+          format: int64
+      required:
+      - traceId
+      - spanId
+      - attributes
+    ScopeLogs:
+      type: object
+      properties:
+        scope:
+          $ref: '#/components/schemas/InstrumentationScope'
+        logRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogRecord'
+          minItems: 1
+        schemaUrl:
+          type: string
+      required:
+      - logRecords
+    HttpCheckAssertion:
+      anyOf:
+      - $ref: '#/components/schemas/HttpResponseStatusCodeAssertion'
+      - $ref: '#/components/schemas/HttpResponseHeaderAssertion'
+      - $ref: '#/components/schemas/HttpResponseJsonBodyAssertion'
+      - $ref: '#/components/schemas/HttpResponseTextBodyAssertion'
+      - $ref: '#/components/schemas/TimingAssertion'
+      - $ref: '#/components/schemas/ErrorAssertion'
+      - $ref: '#/components/schemas/SslCertificateAssertion'
+    GetSpansResponse:
+      description: 'Response for the `GetSpans` API. The response contains the spans that match the request.
+
+
+        This API deliberately reuses the full OTLP JSON format for spans. This is done to aid compatibility
+
+        with existing OTLP consumers.
+
+        '
+      properties:
+        executionTime:
+          $ref: '#/components/schemas/FixedTime'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        cursors:
+          $ref: '#/components/schemas/NextCursors'
+          description: 'The cursors for the next sets of results. This property is included
+
+            to support pagination through the result set when additional pages are available.
+
+            '
+        resourceSpans:
+          description: 'There is one `ResourceSpan` per resource. This is aligned to the data most OTLP batching algorithms would
+
+            produce, where there is one `ResourceSpan` per resource. This is done to aid compatibility with existing
+
+            OTLP consumers.
+
+
+            `Spans` nested in `ResourceSpans` are **ONLY** sorted if an explicit ordering has been defined. However,
+
+            it is guaranteed that all data is sorted across paged requests.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceSpans'
+      required:
+      - resourceSpans
+    ResourceLanguages:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceLanguage'
+    ErrorAssertionSpec:
+      properties:
+        value:
+          $ref: '#/components/schemas/SyntheticHttpErrorType'
+      required:
+      - value
+    HttpResponseTextBodyAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    Resource:
+      type: object
+      properties:
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+        firstSeenUnixNano:
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+          type: string
+          format: uint64
+        lastSeenUnixNano:
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+          type: string
+          format: uint64
+        operationTypes:
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+          type: array
+          items:
+            type: string
+        deploymentEnvironments:
+          $ref: '#/components/schemas/ResourceDeploymentEnvironments'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        languages:
+          $ref: '#/components/schemas/ResourceLanguages'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        orchestrations:
+          $ref: '#/components/schemas/ResourceOrchestrations'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        clouds:
+          $ref: '#/components/schemas/ResourceClouds'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+      required:
+      - attributes
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    Span:
+      type: object
+      properties:
+        traceId:
+          type: string
+          format: byte
+        spanId:
+          type: string
+          format: byte
+        traceState:
+          type: string
+        parentSpanId:
+          type: string
+          format: byte
+        hasChildren:
+          type: boolean
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        flags:
+          type: integer
+          format: int64
+        name:
+          type: string
+        dash0Name:
+          type: string
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        dash0TraceOriginType:
+          type: string
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        dash0TraceOriginParentSpanId:
+          type: string
+          format: byte
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        dash0ForwardLinks:
+          type: array
+          description: 'Forward links pointing to spans in other traces.
+
+            The property is only included when `includeOTLPSchemaExtensions` is `true`.
+
+            '
+          items:
+            $ref: '#/components/schemas/SpanLink'
+        kind:
+          $ref: '#/components/schemas/SpanKind'
+        startTimeUnixNano:
+          type: string
+          format: uint64
+        endTimeUnixNano:
+          type: string
+          format: uint64
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpanEvent'
+        droppedEventsCount:
+          type: integer
+          format: int64
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpanLink'
+        droppedLinksCount:
+          type: integer
+          format: int64
+        status:
+          $ref: '#/components/schemas/SpanStatus'
+      required:
+      - traceId
+      - spanId
+      - name
+      - attributes
+      - events
+      - links
+      - status
+      - startTimeUnixNano
+      - endTimeUnixNano
+      - kind
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    GetTraceRequest:
+      properties:
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        traceId:
+          type: string
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+          description: 'Optional time range hint to bound the trace metadata lookup. When provided, the backend
+
+            restricts the `AggregatedTraceMetadata` query to this window (with a small buffer) and
+
+            will not fall back to a full-table scan. When absent, the backend uses a default short
+
+            window with a full-scan fallback for backward compatibility — this fallback can be
+
+            expensive on large datasets. API consumers are strongly encouraged to provide a
+
+            `timeRange` covering when the trace occurred.
+
+            '
+        includeLinkedTraces:
+          type: boolean
+          description: 'If true, recursively fetches all traces referenced via forward links (dash0ForwardLinks)
+
+            and returns them in `additionalResourceSpans`. Implies includeOTLPSchemaExtensions=true.
+
+            '
+          default: false
+      required:
+      - traceId
+    SslCertificateAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - ssl_certificate
+        spec:
+          $ref: '#/components/schemas/SslCertificateAssertionSpec'
+      required:
+      - kind
+      - spec
+    ResourceOrchestrations:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceOrchestration'
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    HttpResponseJsonBodyAssertionSpec:
+      properties:
+        jsonPath:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - jsonPath
+      - operator
+      - value
+    ScopeSpans:
+      type: object
+      properties:
+        scope:
+          $ref: '#/components/schemas/InstrumentationScope'
+        spans:
+          type: array
+          items:
+            $ref: '#/components/schemas/Span'
+          minItems: 1
+        schemaUrl:
+          type: string
+      required:
+      - spans
+    SpanEvent:
+      type: object
+      properties:
+        timeUnixNano:
+          type: string
+          format: uint64
+        name:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+      required:
+      - timeUnixNano
+      - name
+      - attributes
+    ResourceLanguage:
+      type: string
+      description: 'Resource language identified based on the `telemetry.sdk.language` resource attribute. Some sample values:
+
+        - cpp
+
+        - dotnet
+
+        - erlang
+
+        - go
+
+        - java
+
+        - nodejs
+
+        - php
+
+        - python
+
+        - ruby
+
+        - rust
+
+        - swift
+
+        - webjs
+
+        '
+    SyntheticCheckAttempt:
+      properties:
+        syntheticCheckId:
+          type: string
+          description: ID of the synthetic check
+        syntheticCheckVersion:
+          type: string
+          description: Version of the synthetic check
+        runId:
+          type: string
+          description: (Internal) Run ID this attempt belongs to
+          x-internal: true
+        location:
+          $ref: '#/components/schemas/SyntheticCheckLocation'
+          description: The geographic location from which the check was executed.
+        attemptId:
+          type: string
+          description: (Internal) Unique identifier for the attempt
+          x-internal: true
+        isTestRun:
+          type: boolean
+          description: (Internal) Whether this attempt was triggered as a test run
+          x-internal: true
+        traceId:
+          type: string
+          format: byte
+          description: (Internal) Trace ID associated with this attempt
+          x-internal: true
+        spanId:
+          type: string
+          format: byte
+          description: (Internal) Span ID associated with this attempt
+          x-internal: true
+        startTime:
+          $ref: '#/components/schemas/FixedTime'
+        duration:
+          type: integer
+          format: int64
+          description: duration in nanoseconds
+        statusCode:
+          type: integer
+          description: HTTP status code
+        errorType:
+          $ref: '#/components/schemas/SyntheticHttpErrorType'
+          description: Error type of the synthetic check attempt, if any
+        errorMessage:
+          type: string
+          description: Error message of the synthetic check attempt, if any
+        failedCriticalAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedHttpCheckAssertion'
+          description: List of critical assertions that failed
+        failedDegradedAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedHttpCheckAssertion'
+          description: List of degraded assertions that failed
+        passedCriticalAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpCheckAssertion'
+          description: List of critical assertions that passed
+        passedDegradedAssertions:
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpCheckAssertion'
+          description: List of degraded assertions that passed
+      required:
+      - syntheticCheckId
+      - syntheticCheckVersion
+      - runId
+      - attemptId
+      - isTestRun
+      - location
+      - traceId
+      - spanId
+      - startTime
+      - duration
+      - statusCode
+      - failedCriticalAssertions
+      - failedDegradedAssertions
+      - passedCriticalAssertions
+      - passedDegradedAssertions
+    ResourceDeploymentEnvironments:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceDeploymentEnvironment'
+    NextCursors:
+      properties:
+        before:
+          $ref: '#/components/schemas/Cursor'
+          description: 'The cursor for the previous set of results. If there are no more results before, this will be null.
+
+            '
+        after:
+          $ref: '#/components/schemas/Cursor'
+          description: 'The cursor for the next set of results. If there are no more results after, this will be null.
+
+            '
+    HttpResponseHeaderAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - response_header
+        spec:
+          $ref: '#/components/schemas/HttpResponseHeaderAssertionSpec'
+      required:
+      - kind
+      - spec
+    OrderingDirection:
+      type: string
+      enum:
+      - ascending
+      - descending
+      default: ascending
+    OrderingKey:
+      type: string
+      description: Any attribute key to order by.
+    SeverityNumber:
+      type: integer
+      format: int32
+      description: 'SEVERITY_NUMBER_UNSPECIFIED = 0;
+
+        SEVERITY_NUMBER_TRACE  = 1;
+
+        SEVERITY_NUMBER_TRACE2 = 2;
+
+        SEVERITY_NUMBER_TRACE3 = 3;
+
+        SEVERITY_NUMBER_TRACE4 = 4;
+
+        SEVERITY_NUMBER_DEBUG  = 5;
+
+        SEVERITY_NUMBER_DEBUG2 = 6;
+
+        SEVERITY_NUMBER_DEBUG3 = 7;
+
+        SEVERITY_NUMBER_DEBUG4 = 8;
+
+        SEVERITY_NUMBER_INFO   = 9;
+
+        SEVERITY_NUMBER_INFO2  = 10;
+
+        SEVERITY_NUMBER_INFO3  = 11;
+
+        SEVERITY_NUMBER_INFO4  = 12;
+
+        SEVERITY_NUMBER_WARN   = 13;
+
+        SEVERITY_NUMBER_WARN2  = 14;
+
+        SEVERITY_NUMBER_WARN3  = 15;
+
+        SEVERITY_NUMBER_WARN4  = 16;
+
+        SEVERITY_NUMBER_ERROR  = 17;
+
+        SEVERITY_NUMBER_ERROR2 = 18;
+
+        SEVERITY_NUMBER_ERROR3 = 19;
+
+        SEVERITY_NUMBER_ERROR4 = 20;
+
+        SEVERITY_NUMBER_FATAL  = 21;
+
+        SEVERITY_NUMBER_FATAL2 = 22;
+
+        SEVERITY_NUMBER_FATAL3 = 23;
+
+        SEVERITY_NUMBER_FATAL4 = 24;
+
+        '
+      default: 0
+    GetTraceIdsResponse:
+      description: 'Response for the `GetTraceIds` API. Contains an array of unique trace IDs that match the
+
+        request filters, ordered by the timestamp of their earliest matching span (descending).
+
+        '
+      properties:
+        traceIds:
+          description: 'Array of unique trace IDs as hex-encoded strings, ordered by the timestamp of each
+
+            trace''s earliest matching span (descending).
+
+            '
+          type: array
+          items:
+            type: string
+        cursors:
+          $ref: '#/components/schemas/NextCursors'
+          description: 'The cursors for the next sets of results. This property is included to support
+
+            pagination through the result set when additional pages are available.
+
+            '
+      required:
+      - traceIds
+    TimeReference:
+      x-go-type: any
+      oneOf:
+      - $ref: '#/components/schemas/FixedTime'
+      - $ref: '#/components/schemas/FixedTimeUnix'
+      - $ref: '#/components/schemas/RelativeTime'
+    TimeRange:
+      properties:
+        from:
+          $ref: '#/components/schemas/FixedTime'
+        to:
+          $ref: '#/components/schemas/FixedTime'
+      required:
+      - from
+      - to
+    ResourceSpans:
+      type: object
+      properties:
+        resource:
+          $ref: '#/components/schemas/Resource'
+        scopeSpans:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScopeSpans'
+          minItems: 1
+        schemaUrl:
+          type: string
+      required:
+      - resource
+      - scopeSpans
+    KeyValue:
+      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+      - key
+      - value
+    OrderingCriterion:
+      description: Any combination of a supported key to order by and a direction.
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderingKey'
+        direction:
+          $ref: '#/components/schemas/OrderingDirection'
+      required:
+      - key
+      - direction
+    ResourceOrchestration:
+      type: string
+      description: 'Resource orchestration identified based on orchestration related resource attributes, e.g., existence
+
+        of `k8s.*` resource attribute.
+
+        '
+      enum:
+      - kubernetes
+    ResourceLogs:
+      type: object
+      properties:
+        resource:
+          $ref: '#/components/schemas/Resource'
+        scopeLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScopeLogs'
+          minItems: 1
+        schemaUrl:
+          type: string
+      required:
+      - resource
+      - scopeLogs
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    OrderingCriteria:
+      type: array
+      description: Any supported attribute keys to order by.
+      items:
+        $ref: '#/components/schemas/OrderingCriterion'
+    FixedTimeUnix:
+      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
+      type: string
+    SyntheticHttpErrorType:
+      type: string
+      enum:
+      - unknown
+      - dns
+      - tcp
+      - tls
+      - timeout
+    TimingAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - timing
+        spec:
+          $ref: '#/components/schemas/TimingAssertionSpec'
+      required:
+      - kind
+      - spec
+    InstrumentationScope:
+      description: InstrumentationScope is a message representing the instrumentation scope information such as the fully qualified name and version.
+      type: object
+      properties:
+        name:
+          type: string
+          description: An empty instrumentation scope name means the name is unknown.
+        version:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+          description: Additional attributes that describe the scope. [Optional]. Attribute keys MUST be unique (it is not allowed to have more than one attribute with the same key).
+        droppedAttributesCount:
+          type: integer
+          format: int64
+      required:
+      - attributes
+    TimingType:
+      type: string
+      enum:
+      - total
+      - dns
+      - connection
+      - ssl
+      - request
+      - response
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    GetLogRecordsResponse:
+      description: 'Response for the `GetLogRecords` API. The response contains the log records that match the request.
+
+
+        This API deliberately reuses the full OTLP JSON format for logs. This is done to aid compatibility
+
+        with existing OTLP consumers.
+
+        '
+      properties:
+        executionTime:
+          $ref: '#/components/schemas/FixedTime'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+          description: The property is only included when `includeOTLPSchemaExtensions` is `true`.
+        cursors:
+          $ref: '#/components/schemas/NextCursors'
+          description: 'The cursors for the next sets of results. This property is included
+
+            to support pagination through the result set when additional pages are available.
+
+            '
+        resourceLogs:
+          description: 'There is one `ResourceLogs` per resource. This is aligned to the data most OTLP batching algorithms would
+
+            produce, where there is one `ResourceLogs` per resource. This is done to aid compatibility with existing
+
+            OTLP consumers.
+
+
+            `ResourceLogs` are **NOT** sorted. There is no guarantee that `ResourceLogs` are sorted or that
+
+            `LogRecord`s within them are sorted. However, it is guaranteed that all data is sorted across paged
+
+            requests.
+
+
+            Clients are advised to implement sorting within a page descending by the `LogRecord`''s `timeUnixNano`,
+
+            `observedTimeUnixNano` and then `id`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLogs'
+      required:
+      - resourceLogs
+    SslCertificateAssertionSpec:
+      properties:
+        value:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - value
+    HttpResponseHeaderAssertionSpec:
+      properties:
+        key:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - key
+      - operator
+      - value
+    TimingAssertionSpec:
+      properties:
+        type:
+          $ref: '#/components/schemas/TimingType'
+        operator:
+          $ref: '#/components/schemas/NumericAssertionOperator'
+        value:
+          $ref: '#/components/schemas/Duration'
+      required:
+      - type
+      - operator
+      - value
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    SyntheticCheckAttemptDetails:
+      allOf:
+      - $ref: '#/components/schemas/SyntheticCheckAttempt'
+      - type: object
+        properties:
+          spanAttributes:
+            type: array
+            items:
+              $ref: '#/components/schemas/KeyValue'
+            description: Span attributes using OTLP KeyValue format
+          events:
+            type: array
+            items:
+              $ref: '#/components/schemas/SpanEvent'
+            description: Span events using OTLP SpanEvent format
+        required:
+        - spanAttributes
+        - events
+    FailedHttpCheckAssertion:
+      description: Information about a failed HTTP check assertion
+      properties:
+        assertion:
+          $ref: '#/components/schemas/HttpCheckAssertion'
+          description: The assertion that
+        actualValue:
+          type: string
+          description: The actual value that was received in the response
+        explanation:
+          type: string
+          description: A human-readable message explaining why the assertion failed
+      required:
+      - assertion
+      - explanation
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    HttpResponseJsonBodyAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - json_body
+        spec:
+          $ref: '#/components/schemas/HttpResponseJsonBodyAssertionSpec'
+      required:
+      - kind
+      - spec
+    ErrorAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - error
+        spec:
+          $ref: '#/components/schemas/ErrorAssertionSpec'
+      required:
+      - kind
+      - spec
+    Sampling:
+      properties:
+        mode:
+          $ref: '#/components/schemas/SamplingMode'
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+          description: 'The global time range. We need this to differentiate between a local time selection, e.g., in the heat map, and the global
+
+            time selection that is defining the sampling decision. We do this so that a selection in the heat map (which is based off
+
+            the global time range) and the span list (which is based on the heat map selected time range) show consistent results.
+
+
+            Without this, it could be that an a selection of an empty area in the heat map produces results in the span list.
+
+            '
+      required:
+      - mode
+      - timeRange
+    StringAssertionOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+    ResourceCloud:
+      type: string
+      description: 'Resource cloud identified based on the `cloud.provider` resource attribute. Some sample values:
+
+        - alibaba_cloud
+
+        - aws
+
+        - azure
+
+        - gcp
+
+        - heroku
+
+        - ibm_cloud
+
+        - tencent_cloud
+
+        '
+    GetTraceResponse:
+      description: 'Response for the `GetTrace` API. The response contains the spans and logs that match the request.
+
+
+        This API deliberately reuses the full OTLP JSON format for spans and logs. This is done to aid compatibility
+
+        with existing OTLP consumers.
+
+        '
+      properties:
+        resourceSpans:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceSpans'
+        resourceLogs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLogs'
+        webEvents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceLogs'
+          minItems: 0
+          maxItems: 1
+        syntheticCheckAttemptDetails:
+          $ref: '#/components/schemas/SyntheticCheckAttemptDetails'
+        additionalResourceSpans:
+          type: array
+          description: 'Resource spans from linked traces. Only populated when includeLinkedTraces=true.
+
+            '
+          items:
+            $ref: '#/components/schemas/ResourceSpans'
+      required:
+      - resourceSpans
+      - resourceLogs
+      - webEvents
+    GetTraceIdsRequest:
+      description: 'Request to retrieve unique trace IDs of traces that contain at least one span matching the
+
+        given filters. This is a lightweight alternative to `GetSpans` for two-step workflows where
+
+        only trace IDs are needed first, and full trace details are subsequently retrieved via
+
+        `GetTrace` (`POST /api/trace/details`).
+
+        '
+      properties:
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        sampling:
+          $ref: '#/components/schemas/Sampling'
+        ordering:
+          $ref: '#/components/schemas/OrderingCriteria'
+          description: 'The ordering criteria for the returned trace IDs. Only `otel.trace.start_time` descending
+
+            is supported (this is also the default when omitted). Any other key, ascending direction,
+
+            or multiple criteria will be rejected with a 400 response. A trace''s start time is the
+
+            timestamp of its earliest matching span; trace IDs are returned ordered by that value.
+
+            '
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+          description: 'Cursor pagination for trace IDs.
+
+            - Maximum and default limit: 5000 elements per page
+
+            - Multiple pages may be required to retrieve all matching trace IDs
+
+            '
+      required:
+      - timeRange
+    SpanStatus:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A developer-facing human readable error message.
+        code:
+          $ref: '#/components/schemas/SpanStatusCode'
+      required:
+      - code
+    NumericAssertionOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - gt
+      - lt
+      - gte
+      - lte
+      - is_one_of
+      - is_not_one_of
+    GetLogRecordsRequest:
+      properties:
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        sampling:
+          $ref: '#/components/schemas/Sampling'
+        ordering:
+          $ref: '#/components/schemas/OrderingCriteria'
+          description: 'The ordering criteria for the returned logs.
+
+            Supported ordering key: `otel.log.time` (log timestamp, defaults to descending)
+
+            '
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+          description: 'Cursor pagination for log records.
+
+            - Maximum and default limit: 200 elements per page
+
+            - We do not guarantee that the requested number of elements will be returned per page
+
+            - Multiple pages may be required to retrieve the requested number of signals
+
+            '
+      required:
+      - timeRange
+    HttpResponseTextBodyAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - text_body
+        spec:
+          $ref: '#/components/schemas/HttpResponseTextBodyAssertionSpec'
+      required:
+      - kind
+      - spec
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    RelativeTime:
+      type: string
+      pattern: ^now.*$
+      description: 'A relative time reference based on the current time ("now").
+
+
+        **Format**: `now[+/-duration]`
+
+
+        **Examples**:
+
+        - `now` - current time
+
+        - `now-30m` - 30 minutes ago
+
+        - `now-1h` - 1 hour ago
+
+        - `now-1d` - 1 day ago
+
+
+        **Duration Units**:
+
+        - `s` - seconds
+
+        - `m` - minutes
+
+        - `h` - hours
+
+        - `d` - days
+
+        - `w` - weeks
+
+        - `M` - months
+
+        '
+    HttpResponseStatusCodeAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/NumericAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    ResourceDeploymentEnvironment:
+      type: string
+      description: The value of the `deployment.environment.name` (or `deployment.environment` pre v1.27 semconvs)
+    TimeReferenceRange:
+      description: 'A range of time between two time references.
+
+        '
+      properties:
+        from:
+          $ref: '#/components/schemas/TimeReference'
+        to:
+          $ref: '#/components/schemas/TimeReference'
+      required:
+      - from
+      - to
+      example:
+        from: now-30m
+        to: now
+    SyntheticCheckLocation:
+      type: string
+      description: A geographic location identifier from which synthetic checks can be executed.
+      minLength: 1
+      maxLength: 128
+    CursorPagination:
+      description: 'Cursor pagination is a technique for paging through a result set using a cursor. It is
+
+        similar to offset pagination except that the cursor is an opaque value that encodes the
+
+        position within the result set. This allows for fetching the next page of results from
+
+        the current position without having to skip over a potentially large number of rows.
+
+
+        It is also more resilient against late-arriving data which otherwise would cause issues
+
+        with offset pagination. For example, if a row is inserted between two pages of results
+
+        then the second page would contain a duplicate row and the third page would be missing.
+
+        '
+      properties:
+        cursor:
+          $ref: '#/components/schemas/Cursor'
+        limit:
+          type: integer
+          format: int64
+          description: 'The maximum number of results to return. If not set, there is a default limit to the number of results returned.
+
+            '
+          example: 10
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    Cursor:
+      type: string
+      description: 'The cursor to another set of results. The value of this field is opaque to the
+
+        client and may be used as a parameter to the next request to get the another set of results.
+
+        Cursors do not implement any ordering.
+
+        '
+    SpanKind:
+      type: integer
+      format: int32
+      description: '// Unspecified. Do NOT use as default.
+
+        // Implementations MAY assume SpanKind to be INTERNAL when receiving UNSPECIFIED.
+
+        SPAN_KIND_UNSPECIFIED = 0;
+
+
+        // Indicates that the span represents an internal operation within an application,
+
+        // as opposed to an operation happening at the boundaries. Default value.
+
+        SPAN_KIND_INTERNAL = 1;
+
+
+        // Indicates that the span covers server-side handling of an RPC or other
+
+        // remote network request.
+
+        SPAN_KIND_SERVER = 2;
+
+
+        // Indicates that the span describes a request to some remote service.
+
+        SPAN_KIND_CLIENT = 3;
+
+
+        // Indicates that the span describes a producer sending a message to a broker.
+
+        // Unlike CLIENT and SERVER, there is often no direct critical path latency relationship
+
+        // between producer and consumer spans. A PRODUCER span ends when the message was accepted
+
+        // by the broker while the logical processing of the message might span a much longer time.
+
+        SPAN_KIND_PRODUCER = 4;
+
+
+        // Indicates that the span describes consumer receiving a message from a broker.
+
+        // Like the PRODUCER kind, there is often no direct critical path latency relationship
+
+        // between producer and consumer spans.
+
+        SPAN_KIND_CONSUMER = 5;
+
+        '
+      default: 0
+    GetSpansRequest:
+      properties:
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        sampling:
+          $ref: '#/components/schemas/Sampling'
+        ordering:
+          $ref: '#/components/schemas/OrderingCriteria'
+          description: 'The ordering criteria for the returned spans.
+
+            Supported ordering key: `otel.span.start_time` (span start timestamp, defaults to descending)
+
+            '
+        pagination:
+          $ref: '#/components/schemas/CursorPagination'
+          description: 'Cursor pagination for spans.
+
+            - Maximum and default limit: 200 elements per page
+
+            - We do not guarantee that the requested number of elements will be returned per page
+
+            - Multiple pages may be required to retrieve the requested number of signals
+
+            '
+      required:
+      - timeRange
+    LogRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'The ID of the log record. This is a non-standard OTLP field. The property is only included when
+
+            `includeOTLPSchemaExtensions` is `true`.
+
+            '
+        timeUnixNano:
+          type: string
+          format: uint64
+        observedTimeUnixNano:
+          type: string
+          format: uint64
+        eventName:
+          type: string
+        dash0EventId:
+          type: string
+          description: 'The ID of the log record. This is a non-standard OTLP field. The property is only included when
+
+            `includeOTLPSchemaExtensions` is `true`.
+
+            '
+        severityNumber:
+          $ref: '#/components/schemas/SeverityNumber'
+        severityText:
+          type: string
+        body:
+          $ref: '#/components/schemas/AnyValue'
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+        flags:
+          type: integer
+          format: int64
+        traceId:
+          type: string
+          format: byte
+        spanId:
+          type: string
+          format: byte
+      required:
+      - timeUnixNano
+      - observedTimeUnixNano
+      - attributes
+    SpanStatusCode:
+      type: integer
+      format: int32
+      description: '// The default status.
+
+        STATUS_CODE_UNSET               = 0;
+
+        // The Span has been validated by an Application developer or Operator to
+
+        // have completed successfully.
+
+        STATUS_CODE_OK                  = 1;
+
+        // The Span contains an error.
+
+        STATUS_CODE_ERROR               = 2;
+
+        '
+      default: 0
+    SamplingMode:
+      type: string
+      enum:
+      - adaptive
+      - disabled
+    ResourceClouds:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourceCloud'

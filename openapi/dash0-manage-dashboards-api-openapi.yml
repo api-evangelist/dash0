@@ -1,0 +1,368 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Dashboards API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Dashboards
+paths:
+  /api/dashboards/{originOrId}:
+    delete:
+      summary: Delete a specific dashboard by its origin or id.
+      description: Delete a specific dashboard by its **origin** or **id**.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the dashboard.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: The specific dashboard was deleted.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: delete_api-dashboards-originorid
+    get:
+      summary: Receive a specific dashboard by its origin or id.
+      description: Receive a specific dashboard by its **origin** or **id**.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the dashboard.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a specific dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: get_api-dashboards-originorid
+    put:
+      summary: Update or insert a specific dashboard by its origin or id.
+      description: Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the dashboard.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardDefinition'
+      responses:
+        '200':
+          description: The updated or created dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: put_api-dashboards-originorid
+  /api/dashboards:
+    get:
+      summary: Receive a list of dashboards
+      description: Receive a list of your organization dashboards
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a list of dashboards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DashboardApiListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: get_api-dashboards
+    post:
+      summary: Create a dashboard
+      description: Create a dashboard.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardDefinition'
+      responses:
+        '200':
+          description: The created dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: post_api-dashboards
+  /api/import/dashboard:
+    post:
+      summary: Import a dashboard
+      description: 'This endpoint allows you **to import an existing dashboard** into your organization. It''s intended for one-time migrations rather than ongoing dashboard management.
+
+        Unlike the standard API, this endpoint supports importing dashboards **with full editability**, allowing you to modify dashboards that were previously created elsewhere.
+
+        **Note:**
+
+        This endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported dashboard state.
+
+        Importing a dashboard without an id will create a new dashboard and return the created asset with a generated id.
+
+        Importing a dashboard with an existing id (metadata>dash0Extensions>id) will override the corresponding dashboard definition. In case there is no dashboard with the given id a new dashboard will be created.
+
+        '
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardDefinition'
+      responses:
+        '200':
+          description: The imported dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: post_api-import-dashboard
+components:
+  schemas:
+    DashboardMetadata:
+      properties:
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+        project:
+          type: string
+        dash0Extensions:
+          $ref: '#/components/schemas/DashboardMetadataExtensions'
+        labels:
+          $ref: '#/components/schemas/DashboardLabels'
+        annotations:
+          $ref: '#/components/schemas/DashboardAnnotations'
+      required:
+      - name
+    DashboardAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
+      required:
+      - kind
+      - metadata
+      - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    DashboardLabels:
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    DashboardMetadataExtensions:
+      properties:
+        tags:
+          type: array
+          items:
+            type: string
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        id:
+          type: string
+          description: 'An immutable id field to support automatic dashboard creation based on Kubernetes CRDs. This
+
+            field essentially acts as an external ID for the dashboard. We support a way to upsert dashboards based
+
+            on this field.
+
+            '
+        origin:
+          type: string
+          deprecated: true
+          description: 'This field is deprecated and is replaced by id field.
+
+            '
+        createdBy:
+          type: string
+          description: The member ID of the user who created this dashboard or dashboard version.
+    DashboardApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+      - dataset
+      - tags

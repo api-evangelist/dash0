@@ -1,0 +1,563 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Teams and Members API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Teams and Members
+paths:
+  /api/members/{memberID}:
+    delete:
+      summary: Remove a member from the organization.
+      description: Removes the given member from the organization.
+      parameters:
+      - in: path
+        name: memberID
+        schema:
+          type: string
+        required: true
+        description: The Clerk user ID of the member to remove.
+      responses:
+        '200':
+          description: Successfully removed the member.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: delete_api-members-memberid
+  /api/teams/{originOrId}/members/{memberID}:
+    delete:
+      summary: Remove a member from a team.
+      description: Removes the given member from the team.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the team.
+      - in: path
+        name: memberID
+        schema:
+          type: string
+        required: true
+        description: The **id** of the member.
+      responses:
+        '204':
+          description: The member is removed.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: delete_api-teams-originorid-members-memberid
+  /api/teams/{originOrId}:
+    delete:
+      summary: Delete a specific team by its origin or id.
+      description: Delete a specific team by its **origin** or **id**.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the team.
+      responses:
+        '200':
+          description: Team deleted successfully.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: delete_api-teams-originorid
+    get:
+      summary: Receive a specific team by its origin or id.
+      description: Receive a specific team by its **origin** or **id**.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the team.
+      responses:
+        '200':
+          description: Receive a specific team.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTeamResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: get_api-teams-originorid
+  /api/members:
+    get:
+      summary: Receive a list of organization members.
+      description: Receive a list of all members in your organization.
+      responses:
+        '200':
+          description: Receive a list of members.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MemberDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: get_api-members
+    post:
+      summary: Invite a member to the organization.
+      description: Sends an invitation to join the organization to the given email address.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteMemberRequest'
+      responses:
+        '200':
+          description: Successfully invited the member.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: post_api-members
+  /api/teams:
+    get:
+      summary: Receive a list of teams
+      description: Receive a list of your organization teams
+      responses:
+        '200':
+          description: Receive a list of teams.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamsListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: get_api-teams
+    post:
+      summary: Create a new team
+      description: Create a new team in the organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamDefinition'
+      responses:
+        '200':
+          description: Successfully created the team.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: post_api-teams
+  /api/teams/{originOrId}/members:
+    post:
+      summary: Add members to a team.
+      description: Adds the given members to the team.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the team.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTeamMembersRequest'
+      responses:
+        '201':
+          description: The members are added.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: post_api-teams-originorid-members
+  /api/teams/{originOrId}/display:
+    put:
+      summary: Update a specific team display option.
+      description: Update the display name, description, and color of a team.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: The **origin** or **id** of the team.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamDisplay'
+      responses:
+        '204':
+          description: Successfully updated team display.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Teams and Members
+      operationId: put_api-teams-originorid-display
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    InviteMemberRequest:
+      properties:
+        emailAddress:
+          type: string
+        role:
+          type: string
+      required:
+      - emailAddress
+      - role
+    MemberDisplay:
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        imageUrl:
+          type: string
+    TeamMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TeamLabels'
+      required:
+      - name
+    TeamLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    TeamSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/TeamDisplay'
+        members:
+          type: array
+          items:
+            type: string
+      required:
+      - display
+      - members
+    Action:
+      type: string
+      description: 'Not defined as an enum, because we will eventually support wildcards like `ingest:*`.
+
+        '
+    AddTeamMembersRequest:
+      properties:
+        memberIds:
+          description: 'Add an existing organization member to this team.
+
+            '
+          type: array
+          items:
+            type: string
+      required:
+      - memberIds
+    TeamsListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/Gradient'
+        members:
+          description: 'A sample of five members. You can inspect the total member count via `totalMemberCount`. This array
+
+            is restricted to at most five members, because this could otherwise be too much data.
+
+            '
+          type: array
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/MemberDefinition'
+        totalMemberCount:
+          type: integer
+      required:
+      - id
+      - name
+      - color
+      - members
+      - totalMemberCount
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    TeamDisplay:
+      properties:
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/Gradient'
+      required:
+      - name
+      - color
+    MemberLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/joinedAt:
+          type: string
+          format: date-time
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    Gradient:
+      description: A color gradient from one color to another.
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      required:
+      - from
+      - to
+    MemberMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/MemberLabels'
+      required:
+      - name
+    MemberDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Member
+        metadata:
+          $ref: '#/components/schemas/MemberMetadata'
+        spec:
+          $ref: '#/components/schemas/MemberSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    GetTeamResponse:
+      properties:
+        team:
+          $ref: '#/components/schemas/TeamDefinition'
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/MemberDefinition'
+        dashboards:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessibleAsset'
+        checkRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessibleAsset'
+        syntheticChecks:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessibleAsset'
+        views:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessibleAsset'
+        datasets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessibleAsset'
+      required:
+      - team
+      - members
+      - dashboards
+      - checkRules
+      - syntheticChecks
+      - views
+      - datasets
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    MemberSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/MemberDisplay'
+      required:
+      - display
+    TeamDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Team
+        metadata:
+          $ref: '#/components/schemas/TeamMetadata'
+        spec:
+          $ref: '#/components/schemas/TeamSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AccessibleAsset:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          description: returns for views the information which type of view it is
+          type: string
+        permittedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        createdAt:
+          $ref: '#/components/schemas/FixedTime'
+        creator:
+          $ref: '#/components/schemas/MemberDefinition'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        hasAccess:
+          description: returns the information if the logged-in user has access to this asset
+          type: boolean
+      required:
+      - id
+      - name
+      - permittedActions
+      - createdAt
+      - dataset
+      - hasAccess

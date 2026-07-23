@@ -1,0 +1,491 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Recording Rules API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Recording Rules
+paths:
+  /api/recording-rules/{originOrId}:
+    delete:
+      summary: Delete a specific recording rule.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Recording rule origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+      responses:
+        '200':
+          description: The recording rule was deleted.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: delete_api-recording-rules-originorid
+    get:
+      summary: Retrieve the latest version of a specific recording rule.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Recording rule origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+      responses:
+        '200':
+          description: The requested recording rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: get_api-recording-rules-originorid
+    put:
+      summary: Update a specific recording rule.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Recording rule origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusRule'
+      responses:
+        '200':
+          description: The recording rule was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: put_api-recording-rules-originorid
+  /api/recording-rules:
+    get:
+      summary: Retrieve a list of recording rules.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Filter by dataset.
+      - in: query
+        name: originPrefix
+        schema:
+          type: string
+        required: false
+        description: Filter by origin prefix.
+      responses:
+        '200':
+          description: List of recording rules.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: get_api-recording-rules
+    post:
+      summary: Create a recording rule.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusRule'
+      responses:
+        '200':
+          description: The recording rule was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: post_api-recording-rules
+components:
+  schemas:
+    PrometheusRuleGroup:
+      description: 'A group of rules evaluated together at a common interval. Follows the Prometheus
+
+        rule group concept (https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/).
+
+
+        Note: The upstream RuleGroup fields `partial_response_strategy` and `limit` are
+
+        intentionally omitted as they are not supported by the Dash0 evaluation engine.
+
+
+        Caveat for synthetic metrics: when a rule reads from a synthetic metric (one
+
+        computed on demand from underlying signals at query time, rather than pre-computed
+
+        during ingestion), evaluation near the leading edge of available data may
+
+        under-count, since late-arriving signals may not yet have been processed. Two
+
+        rules within the same group can therefore disagree even when their queries share
+
+        a strict subset/superset relationship — a ratio of the two values may briefly
+
+        exceed 1.0 at some timestamps. Use `query_offset` to delay evaluation enough for
+
+        the underlying data to settle.
+
+        '
+      properties:
+        name:
+          description: Display name for the rule group.
+          type: string
+        interval:
+          description: 'Evaluation interval for all rules in the group.
+
+            Applies to every rule in the group; individual rules cannot override it.
+
+            Defaults to "1m" if not specified.
+
+
+            For **recording rules**, the minimum interval depends on the longest
+
+            matrix-selector range in the rule''s PromQL expression (the "query window"):
+
+
+            | Query window           | Minimum interval                                                     |
+
+            |------------------------|----------------------------------------------------------------------|
+
+            | ≤ 1h+10m               | 1m (absolute floor)                                                  |
+
+            | (1h+10m, 8h+10m]       | 5m                                                                   |
+
+            | (8h+10m, 24h+10m]      | 10m — relaxed to **5m** for RR-over-RR                               |
+
+            | (24h+10m, 30d+15m]     | 1h — relaxed to **5m** for RR-over-RR                                |
+
+            | > 30d+15m              | rejected                                                             |
+
+
+            "RR-over-RR" means every metric referenced by the recording rule''s
+
+            expression is itself an active recording-rule output in the same
+
+            (organization, dataset). In that case the relaxed 5m floor applies for
+
+            query windows above 8h+10m — the inner recording rule''s own validation
+
+            already bounded the per-eval cost.
+
+
+            Alerting rules are not subject to these interval constraints.
+
+            '
+          type: string
+        query_offset:
+          description: 'Shifts the timestamp at which rules in the group query their data backwards
+
+            by this duration (e.g. "5m"). Output series points are stamped at the shifted
+
+            moment, allowing late-arriving data to settle before being counted.
+
+            Maximum 1h. Defaults to 0 if omitted (no shift).
+
+            '
+          type: string
+        labels:
+          description: 'Labels to apply to all rules in the group. These are merged with rule-level labels;
+
+            rule-level labels take precedence in case of conflict.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+        rules:
+          description: List of rules in this group.
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusRuleDefinition'
+          minItems: 1
+      required:
+      - name
+      - rules
+    PrometheusRule:
+      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
+
+        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
+
+        Groups may contain recording rules, alerting rules, or both.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/PrometheusRuleApiVersion'
+        kind:
+          $ref: '#/components/schemas/PrometheusRuleKind'
+        metadata:
+          $ref: '#/components/schemas/PrometheusRuleMetadata'
+        spec:
+          $ref: '#/components/schemas/PrometheusRuleSpec'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    PrometheusRuleDefinition:
+      description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
+
+        an alerting rule (has `alert`). Exactly one of `record` or `alert` must be set.
+
+
+        Recording rules pre-compute a PromQL expression and store the result as a new metric.
+
+        Alerting rules evaluate a PromQL expression and fire alerts when the result is non-empty.
+
+        '
+      properties:
+        record:
+          description: 'Name of the output metric for a recording rule. Must be a valid Prometheus metric name.
+
+            Mutually exclusive with `alert`.
+
+            '
+          type: string
+          pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
+        alert:
+          description: 'Name of the alert for an alerting rule.
+
+            Mutually exclusive with `record`.
+
+            '
+          type: string
+        expr:
+          description: "PromQL expression to evaluate.\n\nFor **recording rules**, the expression must satisfy these constraints\n(alerting rules are not subject to them):\n- **Maximum query window**: the longest matrix-selector range (or subquery\n  range, plus `lookbackDelta`) may not exceed 30 days + 15 minutes.\n- **Minimum evaluation interval** depends on the query window — see the\n  band table on the group's `interval` field, including the RR-over-RR carve-out.\n- **At most 7 distinct metric names** may be referenced (only enforced when\n  the query window exceeds 1h+10m).\n- **Each matrix selector** must be bounded — at least one non-`__name__`\n  label matcher, an enclosing range function (`rate`, `*_over_time`, …),\n  an enclosing `by`/`without` aggregation, or the inner metric must itself\n  be an active recording-rule output in the same (organization, dataset).\n- **At most 10 `or` arms** (only enforced when the query window exceeds 1h+10m).\n- **Self-reference is rejected**: the rule's own `record` may not appear\n  in its own expression.\n- **Vector matching must resolve to a clean, aligned match**: a binary\n  operation matched with `on()` and an empty label set is rejected when the\n  one-side operand is not statically a single series (an unaggregated selector\n  there fails at evaluation with a duplicate-series error). Aggregate the\n  one-side to a single series (e.g. `sum(...)`) or match on explicit labels\n  with `on(<labels>)`.\n"
+          type: string
+        for:
+          description: 'Duration for which the expression must be continuously satisfied before an alert fires.
+
+            Only applicable to alerting rules (e.g., "5m", "10m").
+
+            '
+          type: string
+        keep_firing_for:
+          description: 'Duration for which an alert continues firing after the expression is no longer satisfied.
+
+            Only applicable to alerting rules (e.g., "5m").
+
+            '
+          type: string
+        labels:
+          description: Additional labels to attach to the resulting metrics or alerts.
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Annotations to attach to alerts. Only applicable to alerting rules.
+
+            Commonly used keys include `summary` and `description`.
+
+
+            Dash0 also recognizes:
+
+            - `dash0.com/notification-channel-ids`: Comma-separated list of notification channel UUIDs to notify when the alert fires.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - expr
+    PrometheusRuleApiVersion:
+      description: 'API version of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - monitoring.coreos.com/v1
+    PrometheusRuleMetadata:
+      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
+
+        '
+      properties:
+        name:
+          description: Resource name.
+          type: string
+        labels:
+          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
+
+
+            - `dash0.com/id`: Internal ID (read-only, server-set).
+
+            - `dash0.com/origin`: External identifier for API-managed resources.
+
+            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
+
+            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
+
+            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
+
+
+            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
+
+            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
+
+            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
+
+            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
+
+            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
+
+            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
+
+            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
+
+            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
+
+            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - name
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    PrometheusRuleSpec:
+      description: 'Spec of the PrometheusRule resource containing rule groups.
+
+        '
+      properties:
+        groups:
+          description: 'Rule groups. Each group is evaluated independently at its own interval.
+
+            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusRuleGroup'
+          minItems: 1
+          maxItems: 1
+      required:
+      - groups
+    PrometheusRuleKind:
+      description: 'Kind of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - PrometheusRule
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

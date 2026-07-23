@@ -1,0 +1,700 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage SLOs (Private BETA) API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage SLOs (Private BETA)
+paths:
+  /api/slos/{originOrId}:
+    delete:
+      summary: Delete a specific SLO.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: SLO origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+      responses:
+        '200':
+          description: The SLO was deleted.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage SLOs (Private BETA)
+      operationId: delete_api-slos-originorid
+    get:
+      summary: Retrieve the latest version of a specific SLO.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: SLO origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+      responses:
+        '200':
+          description: The requested SLO.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SloDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage SLOs (Private BETA)
+      operationId: get_api-slos-originorid
+    put:
+      summary: Update a specific SLO.
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: SLO origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SloDefinition'
+      responses:
+        '200':
+          description: The SLO was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SloDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage SLOs (Private BETA)
+      operationId: put_api-slos-originorid
+  /api/slos:
+    get:
+      summary: Retrieve a list of SLOs.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Filter by dataset.
+      - in: query
+        name: originPrefix
+        schema:
+          type: string
+        required: false
+        description: Filter by origin prefix.
+      responses:
+        '200':
+          description: List of SLOs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SloDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage SLOs (Private BETA)
+      operationId: get_api-slos
+    post:
+      summary: Create an SLO.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SloDefinition'
+      responses:
+        '200':
+          description: The SLO was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SloDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage SLOs (Private BETA)
+      operationId: post_api-slos
+components:
+  schemas:
+    SloCalendarWindow:
+      description: Calendar alignment configuration for a time window.
+      properties:
+        startTime:
+          description: Start time in 24h format without time zone (e.g. '2020-01-21 12:30:00').
+          type: string
+        timeZone:
+          description: IANA Time Zone Database name (e.g. 'America/New_York').
+          type: string
+      required:
+      - startTime
+      - timeZone
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    SloTimeWindow:
+      description: A time window for the SLO. Only a rolling `4w`/`28d` window is currently supported.
+      properties:
+        duration:
+          description: Duration of the window. Only '4w' or '28d' is currently supported; other durations are rejected with a 400.
+          $ref: '#/components/schemas/Duration'
+        isRolling:
+          description: Whether this is a rolling time window. Must be true — only rolling windows are currently supported.
+          type: boolean
+        calendar:
+          description: Calendar alignment details. Calendar-aligned windows are not currently supported and are rejected with a 400.
+          $ref: '#/components/schemas/SloCalendarWindow'
+      required:
+      - duration
+    SloIndicatorSpec:
+      description: SLI specification. A ratioMetric must be provided; thresholdMetric is not currently supported.
+      properties:
+        description:
+          description: Optional description of the SLI, up to 1050 characters.
+          type: string
+          maxLength: 1050
+        ratioMetric:
+          $ref: '#/components/schemas/SloRatioMetric'
+        thresholdMetric:
+          description: Not currently supported — use a ratioMetric instead. Requests with a thresholdMetric SLI are rejected with a 400.
+          $ref: '#/components/schemas/SloThresholdMetric'
+    SloLabels:
+      description: 'Resource labels. Keys prefixed with `dash0.com/` are reserved for Dash0-managed
+
+        metadata (id, version, dataset, origin, source); reserved or blank keys supplied by
+
+        the caller are ignored. Use any other key for user-defined labels, which are stored
+
+        and returned on read. At most 50 user-defined labels are allowed.
+
+        '
+      additionalProperties:
+        type: string
+      properties:
+        dash0.com/id:
+          description: Unique internal ID of the SLO. Set by the server on creation; do not set manually.
+          type: string
+        dash0.com/origin:
+          description: External identifier for API-managed resources (e.g. the CRD name from an operator or Terraform resource ID). Empty for user-created SLOs; non-empty for SLOs created via the internal API. SLOs with a non-empty origin have write access controlled exclusively through explicit permission entries rather than by the admin role.
+          type: string
+        dash0.com/version:
+          description: Current version of the SLO. Needs to be set when updating an SLO to prevent conflicting writes.
+          type: string
+        dash0.com/dataset:
+          description: Dataset this SLO belongs to. Defaults to the default dataset when absent.
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    SloAlertConditionMetadata:
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+    SloAlertPolicyMetadata:
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+    SloMetricSourceWrapper:
+      description: Wraps a metric source for use in ratio metric numerator/denominator/raw.
+      properties:
+        metricSource:
+          $ref: '#/components/schemas/SloMetricSource'
+      required:
+      - metricSource
+    SloAlertPolicy:
+      description: 'An alert policy following the OpenSLO AlertPolicy structure. Can contain inline conditions and notification targets, or reference an external policy via alertPolicyRef.
+
+        Not supported by Dash0: alert policies on SLOs are accepted for OpenSLO compatibility but ignored. See the alertPolicies field on SloSpec.'
+      properties:
+        alertPolicyRef:
+          description: Reference to an external AlertPolicy by name.
+          type: string
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/SloAlertPolicyMetadata'
+        spec:
+          $ref: '#/components/schemas/SloAlertPolicySpec'
+    SloAlertNotificationTarget:
+      description: An alert notification target. Can be inline or a reference to an external AlertNotificationTarget via targetRef.
+      properties:
+        targetRef:
+          description: Reference to an external AlertNotificationTarget by name.
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        spec:
+          type: object
+          additionalProperties: true
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SloMetricSource:
+      description: 'Connection and query details for a metric data source. Only the Prometheus data source is currently supported: provide `spec.query` as a bare PromQL vector selector (e.g. `http_requests_total{status="500"}`) — function calls and aggregations are not accepted.'
+      properties:
+        metricSourceRef:
+          description: Reference to an existing DataSource object by name. Not currently supported — provide an inline `spec.query` instead. Requests that set metricSourceRef are rejected with a 400.
+          type: string
+        type:
+          description: Predefined data source type. Only 'Prometheus' is currently supported (the default when omitted); other types are rejected with a 400.
+          type: string
+        spec:
+          description: 'Data-source-specific query parameters. For Prometheus this is `{ query: "<bare PromQL vector selector>" }`.'
+          type: object
+          additionalProperties: true
+      required:
+      - spec
+    SloIndicator:
+      description: Inline Service Level Indicator (SLI) following the OpenSLO SLI structure.
+      properties:
+        metadata:
+          $ref: '#/components/schemas/SloIndicatorMetadata'
+        spec:
+          $ref: '#/components/schemas/SloIndicatorSpec'
+      required:
+      - spec
+    SloObjective:
+      description: An objective threshold for the SLO. Defines tolerance levels for the SLI metrics.
+      properties:
+        displayName:
+          description: Human-readable name for this objective.
+          type: string
+        op:
+          description: Comparison operator used to compare the SLI against the value (for thresholdMetric SLIs). Not currently supported — requests that set it are rejected with a 400.
+          $ref: '#/components/schemas/SloComparisonOperator'
+        value:
+          description: Threshold value to compare against (for thresholdMetric SLIs). Not currently supported — requests that set it are rejected with a 400.
+          type: number
+        target:
+          description: Budget target for this objective as a fraction [0.0, 1.0). Mutually exclusive with targetPercent; one of the two must be provided.
+          type: number
+        targetPercent:
+          description: Budget target for this objective as a percentage [0.0, 100). Mutually exclusive with target; one of the two must be provided.
+          type: number
+        timeSliceTarget:
+          description: Target for the ratio of good time slices to total time slices (0.0, 1.0] (for Timeslices budgeting). Not currently supported — requests that set it are rejected with a 400.
+          type: number
+        timeSliceWindow:
+          description: Size of a time slice for evaluation (for Timeslices/RatioTimeslices budgeting). Not currently supported — requests that set it are rejected with a 400.
+          $ref: '#/components/schemas/Duration'
+        indicator:
+          description: Inline SLI for composite SLOs. Composite SLOs are not currently supported — requests that set a per-objective indicator are rejected with a 400. Use the SLO's top-level indicator.
+          $ref: '#/components/schemas/SloIndicator'
+        indicatorRef:
+          description: Reference to an external SLI for composite SLOs. Composite SLOs are not currently supported — requests that set it are rejected with a 400.
+          type: string
+        compositeWeight:
+          description: Weight multiplier for composite SLOs. Composite SLOs are not currently supported — requests that set it are rejected with a 400.
+          type: number
+    SloIndicatorMetadata:
+      description: Metadata for the inline SLI.
+      properties:
+        name:
+          description: Name of the SLI.
+          type: string
+        displayName:
+          description: Human-readable display name for the SLI.
+          type: string
+    SloDefinition:
+      description: 'A Service Level Objective (SLO) that defines a target value or range of values for a
+
+        service level, described by a Service Level Indicator (SLI).
+
+        Implements a subset of the OpenSLO v1 specification (https://openslo.com/) with
+
+        Dash0-specific extensions for access control, dataset scoping, and UI organization.
+
+
+        Currently supported: a single objective with an inline `ratioMetric` indicator,
+
+        `Occurrences` budgeting, and a rolling `4w` (28d) time window.
+
+
+        Not currently supported — requests using any of these are rejected with a 400 (the one
+
+        exception is `alertPolicies`, see below): `thresholdMetric` SLIs; `indicatorRef`;
+
+        `metricSource.metricSourceRef`; multiple or composite objectives (`compositeWeight`,
+
+        per-objective `indicator`/`indicatorRef`); threshold objective fields (`op`/`value`);
+
+        time-slice objective fields (`timeSliceTarget`/`timeSliceWindow`); `Timeslices` and
+
+        `RatioTimeslices` budgeting; and calendar-aligned time windows.
+
+
+        Alerting on SLOs (spec.alertPolicies) is not supported. Unlike the other unsupported
+
+        fields, `alertPolicies` is accepted for OpenSLO compatibility but silently ignored — it
+
+        is not stored, evaluated, or returned on read; see spec.alertPolicies for details.
+
+
+        SLOs evaluate with a fixed 5-minute settling delay applied automatically: at any
+
+        moment, the SLI reflects telemetry that arrived at least 5 minutes ago. This
+
+        ensures late-arriving signals are included in the SLI computation, at the cost of a
+
+        small, fixed lag between live behavior and SLO state.
+
+        '
+      properties:
+        apiVersion:
+          type: string
+          enum:
+          - openslo/v1
+        kind:
+          type: string
+          enum:
+          - SLO
+        metadata:
+          $ref: '#/components/schemas/SloMetadata'
+        spec:
+          $ref: '#/components/schemas/SloSpec'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SloComparisonOperator:
+      description: Conditional operator used to compare the SLI against a threshold value.
+      type: string
+      enum:
+      - lte
+      - gte
+      - lt
+      - gt
+    SloSpec:
+      properties:
+        description:
+          description: Optional description of the SLO, up to 1050 characters.
+          type: string
+          maxLength: 1050
+        service:
+          description: The service this SLO is associated with. A `/` separates the service namespace from the service name, so `payments/eu` resolves to namespace `payments` and name `eu`, and a value without a slash is just the service name. If a service name itself contains a `/`, prefix the value with a leading `/` to treat the rest as a literal name with no namespace; for example `/payments/eu` resolves to the name `payments/eu`. If nothing matches, the SLO is simply not linked to a service.
+          type: string
+        indicator:
+          description: Inline Service Level Indicator (SLI). An inline indicator is required (indicatorRef is not currently supported).
+          $ref: '#/components/schemas/SloIndicator'
+        indicatorRef:
+          description: Name of an external SLI. Not currently supported — provide an inline indicator instead. Requests that set indicatorRef are rejected with a 400.
+          type: string
+        timeWindow:
+          description: Optional. A single rolling time window with a `4w` (28d) duration. Only rolling `4w`/`28d` windows are currently supported; calendar-aligned windows and other durations are rejected with a 400. When omitted, a rolling 28d window is used. Note the evaluation window is currently fixed at 28d regardless of the value provided.
+          type: array
+          items:
+            $ref: '#/components/schemas/SloTimeWindow'
+          minItems: 1
+          maxItems: 1
+        budgetingMethod:
+          description: Only `Occurrences` is currently supported. `Timeslices` and `RatioTimeslices` are not currently supported and requests using them are rejected with a 400.
+          $ref: '#/components/schemas/SloBudgetingMethod'
+        objectives:
+          description: Thresholds for the SLO. Exactly one objective is supported; multiple or composite objectives are not currently supported and requests declaring more than one objective are rejected with a 400.
+          type: array
+          items:
+            $ref: '#/components/schemas/SloObjective'
+          minItems: 1
+        alertPolicies:
+          description: 'Alert policies for this SLO, following the OpenSLO v1 specification.
+
+            Not supported by Dash0. This field is accepted for OpenSLO compatibility, but any alert policies are ignored: they are not stored, not evaluated, and not returned when reading the SLO back.'
+          type: array
+          items:
+            $ref: '#/components/schemas/SloAlertPolicy'
+      required:
+      - budgetingMethod
+      - objectives
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    SloAlertCondition:
+      description: An alert condition that defines when an alert should fire. Can be inline or a reference to an external AlertCondition.
+      properties:
+        conditionRef:
+          description: Reference to an external AlertCondition by name.
+          type: string
+        kind:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/SloAlertConditionMetadata'
+        spec:
+          $ref: '#/components/schemas/SloAlertConditionSpec'
+    SloMetadata:
+      properties:
+        name:
+          description: Display name of the SLO.
+          type: string
+        labels:
+          $ref: '#/components/schemas/SloLabels'
+        annotations:
+          $ref: '#/components/schemas/SloAnnotations'
+      required:
+      - name
+    SloAnnotations:
+      description: 'Resource annotations. Keys prefixed with `dash0.com/` are reserved for Dash0-managed
+
+        metadata (timestamps, enabled, folder path, sharing); reserved or blank keys supplied
+
+        by the caller are ignored. Use any other key for user-defined annotations, which are
+
+        stored and returned on read. At most 50 user-defined annotations are allowed.
+
+        '
+      additionalProperties:
+        type: string
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the SLO was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Soft-delete timestamp. Present when the SLO has been deleted but not yet purged. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising SLOs (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+        dash0.com/enabled:
+          description: Whether the SLO is actively tracked. Dash0 extension. Stored as a string; valid values are 'true' and 'false'. Defaults to 'true'.
+          type: string
+    SloAlertConditionSpec:
+      properties:
+        description:
+          description: Description of the alert condition, up to 1050 characters.
+          type: string
+          maxLength: 1050
+        severity:
+          description: Severity level of the alert (e.g. 'page', 'warning', 'critical').
+          type: string
+        condition:
+          $ref: '#/components/schemas/SloAlertConditionDetails'
+      required:
+      - severity
+      - condition
+    SloAlertConditionDetails:
+      description: Details of the alert condition. Defaults to burnrate kind.
+      properties:
+        kind:
+          description: Kind of alerting condition. Defaults to 'burnrate'.
+          type: string
+        op:
+          description: Comparison operator used to compare against the threshold.
+          $ref: '#/components/schemas/SloComparisonOperator'
+        threshold:
+          description: Threshold value for the condition.
+          type: number
+        lookbackWindow:
+          description: Time frame for calculating the threshold (e.g. '1h', '5m').
+          $ref: '#/components/schemas/Duration'
+        alertAfter:
+          description: Duration the condition must be valid before alerting. Defaults to 0m.
+          $ref: '#/components/schemas/Duration'
+      required:
+      - op
+      - threshold
+      - lookbackWindow
+    SloRatioMetric:
+      description: Ratio-based SLI metric. Provide either good+total, bad+total, or raw with rawType.
+      properties:
+        counter:
+          description: True if the metric is a monotonically increasing counter, false if it is a single number that can arbitrarily go up or down. Ignored when using raw.
+          type: boolean
+        good:
+          description: The numerator representing good events. Either good or bad must be provided when using total.
+          $ref: '#/components/schemas/SloMetricSourceWrapper'
+        bad:
+          description: The numerator representing bad events. Either good or bad must be provided when using total.
+          $ref: '#/components/schemas/SloMetricSourceWrapper'
+        total:
+          description: The denominator representing total events. Used with either good or bad.
+          $ref: '#/components/schemas/SloMetricSourceWrapper'
+        raw:
+          description: A precomputed ratio stored as a metric. Cannot be used together with good/bad/total.
+          $ref: '#/components/schemas/SloMetricSourceWrapper'
+        rawType:
+          $ref: '#/components/schemas/SloRawType'
+    SloRawType:
+      description: 'Required with raw. Indicates how the stored ratio was calculated:
+
+        - `success`: good/total
+
+        - `failure`: bad/total
+
+        '
+      type: string
+      enum:
+      - success
+      - failure
+    SloAlertPolicySpec:
+      properties:
+        description:
+          description: Description of the alert policy, up to 1050 characters.
+          type: string
+          maxLength: 1050
+        alertWhenBreaching:
+          description: Whether to trigger the alert when the condition is breaching.
+          type: boolean
+        alertWhenResolved:
+          description: Whether to trigger the alert when the condition is resolved.
+          type: boolean
+        alertWhenNoData:
+          description: Whether to trigger the alert when no data is available.
+          type: boolean
+        conditions:
+          description: Alert conditions (max one condition per OpenSLO v1).
+          type: array
+          items:
+            $ref: '#/components/schemas/SloAlertCondition'
+        notificationTargets:
+          description: Notification targets for this alert policy.
+          type: array
+          items:
+            $ref: '#/components/schemas/SloAlertNotificationTarget'
+      required:
+      - alertWhenBreaching
+      - alertWhenResolved
+      - alertWhenNoData
+      - conditions
+      - notificationTargets
+    SloThresholdMetric:
+      description: Threshold-based SLI metric. Raw data from the metric source is compared against objective thresholds (op and value on the objective, not here). Not currently supported — use a ratioMetric instead.
+      properties:
+        metricSource:
+          $ref: '#/components/schemas/SloMetricSource'
+      required:
+      - metricSource
+    SloBudgetingMethod:
+      description: '- `Occurrences`: Ratio of counts of good events to total events.
+
+        - `Timeslices`: Ratio of good time slices to total time slices.
+
+        - `RatioTimeslices`: Average of all time slices'' success ratios.
+
+        '
+      type: string
+      enum:
+      - Occurrences
+      - Timeslices
+      - RatioTimeslices

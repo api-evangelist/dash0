@@ -1,0 +1,1406 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Edge Collectors
+paths:
+  /api/edge/settings:
+    get:
+      summary: Retrieve settings for the organization identified by the provided Dash0 auth token
+      description: 'Returns the aggregate settings payload (dataset settings, signal-to-metrics rules,
+
+        telemetry transformation rules, observed patterns, etc.) for the organization that
+
+        owns the provided bearer token. Designed for edge collectors running in customer
+
+        environments that need their full configuration in one request.
+
+        '
+      tags:
+      - Edge Collectors
+      responses:
+        '200':
+          description: Settings for the organization identified by the auth token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsPerOrganizationAndDatasetInfo'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get_api-edge-settings
+components:
+  schemas:
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    SecretRef:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Opaque identifier of the encrypted secret.
+        hash:
+          type: string
+          description: 'The hash is computed as follows:
+
+            1. Parse the secrets JSON into a generic structure
+
+            2. Recursively sort all object keys alphabetically (Unicode code point order)
+
+            3. Re-serialize to compact JSON (no whitespace between tokens)
+
+            4. Compute SHA-256 hash of the UTF-8 encoded JSON bytes
+
+            5. Encode the hash as lowercase hexadecimal string
+
+
+            This ensures the hash is stable and reproducible across different implementations.
+
+            '
+      required:
+      - id
+      - hash
+    DatasetMetricsSettings:
+      type: object
+      properties:
+        retention:
+          $ref: '#/components/schemas/RetentionClass'
+      required:
+      - retention
+    SamplingCondition:
+      anyOf:
+      - $ref: '#/components/schemas/SamplingConditionAnd'
+      - $ref: '#/components/schemas/SamplingConditionOttl'
+      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
+      - $ref: '#/components/schemas/SamplingConditionError'
+    TelemetryTransformationRuleAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the rule was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Soft-delete timestamp. Present when the rule has been deleted but not yet purged. Set by the server; read-only.
+          type: string
+          format: date-time
+    OTTLStatement:
+      type: string
+      description: "The OpenTelemetry Transformation Language (OTTL) is a small, domain-specific programming language intended to\nprocess data with OpenTelemetry-native concepts and constructs. An OTTL *Statement* is an expression that\nperforms an action on telemetry data, such as setting, deleting, or transforming attributes.\n\nOTTL statements are used by the OpenTelemetry Transform Processor to modify telemetry data as it passes\nthrough the collector pipeline:\nhttps://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/transformprocessor/README.md\n\nStatements are only valid for specific evaluation contexts:\nhttps://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/ottl/README.md#getting-started\n\nExamples:\n - `set(attributes[\"http.request.method\"], \"GET\")` sets an attribute value.\n - `delete_key(attributes, \"http.request.header.authorization\")` removes a sensitive attribute.\n - `truncate_all(attributes, 100)` truncates all attribute values to 100 characters.\n"
+    TimeSeriesAggregationMetricNameMatch:
+      properties:
+        metricNameMatcher:
+          $ref: '#/components/schemas/Matcher'
+        otherFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          x-go-type-skip-optional-pointer: true
+      required:
+      - metricNameMatcher
+    TelemetryFilterContext:
+      type: string
+      enum:
+      - datapoint
+      - span
+      - log
+      - web_event
+    SamplingConditionAnd:
+      properties:
+        kind:
+          type: string
+          enum:
+          - and
+        spec:
+          $ref: '#/components/schemas/SamplingConditionAndSpec'
+      required:
+      - kind
+      - spec
+    TimeSeriesAggregationAttributeModificationContext:
+      type: string
+      enum:
+      - resource
+      - scope
+      - datapoint
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SamplingConditionOttlSpec:
+      properties:
+        ottl:
+          type: string
+      required:
+      - ottl
+    SettingsPerOrganizationAndDatasetInfo:
+      type: object
+      properties:
+        technicalID:
+          type: string
+        signalControlEdge:
+          $ref: '#/components/schemas/SignalControlEdgeSettings'
+          description: 'SignalControl configuration for the organization. When `enabled` is false,
+
+            edge components switch to passthrough mode (no spam filtering, RED metrics,
+
+            signal-to-metrics, tail sampling, or barker processing).
+
+            '
+        datasetSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetSettings'
+        timeSeriesAggregationSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+        samplingSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SamplingDefinition'
+        sourceMapSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceMapIntegration'
+        signalToMetricsSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalToMetricsDefinition'
+        telemetryTransformationRuleSettings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryTransformationRuleDefinition'
+        observedPatterns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObservedPatternEntry'
+      required:
+      - technicalID
+      - signalControlEdge
+      - datasetSettings
+      - timeSeriesAggregationSettings
+      - samplingSettings
+      - sourceMapSettings
+      - signalToMetricsSettings
+      - telemetryTransformationRuleSettings
+    TelemetryTransformationRuleLabels:
+      properties:
+        dash0.com/id:
+          description: Unique internal ID of the telemetry transformation rule. Set by the server on creation; do not set manually.
+          type: string
+        dash0.com/origin:
+          description: External identifier for API-managed resources (e.g. the CRD name from an operator or Terraform resource ID). Empty for user-created rules; non-empty for rules created via the internal API.
+          type: string
+        dash0.com/version:
+          description: Current version of the rule. Needs to be set when updating a rule to prevent conflicting writes.
+          type: string
+        dash0.com/dataset:
+          description: Dataset this rule belongs to. Defaults to the default dataset when absent.
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    GeoLocationStorageStrategy:
+      description: What kind of geolocation information we are allowed to derive and store.
+      type: string
+      enum:
+      - up_to_city
+      - up_to_country
+      - do_not_store
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    SourceMapIntegration:
+      properties:
+        kind:
+          type: string
+          enum:
+          - source_map
+        spec:
+          $ref: '#/components/schemas/SourceMapIntegrationSpec'
+      required:
+      - kind
+      - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    SignalToMetricsTargetDatasetMode:
+      type: string
+      enum:
+      - original
+      - alternative
+      - both
+      description: 'Controls where the generated metric is written.
+
+        - `original`: Metric lands in the dataset where the rule is defined.
+
+        - `alternative`: Metric lands in the dataset specified by `alternativeDatasetId`.
+
+        - `both`: Metric is produced twice — once for the original dataset, once for the alternative.
+
+        '
+    TimeSeriesAggregationSample:
+      properties:
+        interval:
+          description: 'The frequency at which metric data points are aggregated via these rules. This is a required parameter.
+
+            If you don''t which to downsample your metrics, then set this to the scrape/export interval of your
+
+            metrics. Otherwise, use a larger number to reduce the granularity of your metrics.
+
+            '
+          $ref: '#/components/schemas/Duration'
+        delay:
+          description: 'The amount of time to account for delays in scraping, exporting, and data arrival. We suggest to always
+
+            add a little bit of a delay to account for this. But you can increase it in case you have larger delays in
+
+            your scrape and export processes.
+
+            '
+          $ref: '#/components/schemas/Duration'
+          default: 20s
+        staleAfter:
+          description: 'Duration after which a time series with no new data is considered stale and removed from memory.
+
+            When a stale time series is removed and new data arrives later, it is treated as a fresh start:
+
+            for cumulative metrics, no delta is computed against the old baseline, and the new value is
+
+            exported as-is. This prevents incorrect delta calculations after long gaps in data.
+
+            Default is 5 times the interval.
+
+            '
+          $ref: '#/components/schemas/Duration'
+      required:
+      - interval
+    ObservedPatternEntry:
+      type: object
+      required:
+      - dataset
+      - extractorType
+      - scopeKey
+      - template
+      properties:
+        dataset:
+          type: string
+        extractorType:
+          type: string
+        scopeKey:
+          type: string
+        template:
+          type: string
+    SignalToMetricsLabels:
+      properties:
+        dash0.com/id:
+          description: Unique internal ID of the signal-to-metrics rule. Set by the server on creation; do not set manually.
+          type: string
+        dash0.com/origin:
+          description: External identifier for API-managed resources (e.g. the CRD name from an operator or Terraform resource ID). Empty for user-created rules; non-empty for rules created via the internal API.
+          type: string
+        dash0.com/version:
+          description: Current version of the rule. Needs to be set when updating a rule to prevent conflicting writes.
+          type: string
+        dash0.com/dataset:
+          description: Dataset this rule belongs to. Defaults to the default dataset when absent.
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    TimeSeriesAggregationAttributeModificationSpec:
+      properties:
+        context:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationContext'
+        keyMatcher:
+          $ref: '#/components/schemas/Matcher'
+      required:
+      - keyMatcher
+    SignalToMetricsDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0SignalToMetrics
+        metadata:
+          $ref: '#/components/schemas/SignalToMetricsMetadata'
+        spec:
+          $ref: '#/components/schemas/SignalToMetricsSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    IpAddressesSettings:
+      properties:
+        endUserIpAddressStorageStrategy:
+          description: 'When we derive IP addresses from X-FORWARDED-FOR/X-REAL-IP HTTP headers, we will apply these rules.
+
+            '
+          $ref: '#/components/schemas/IpAddressStorageStrategy'
+      required:
+      - endUserIpAddressStorageStrategy
+    DatasetPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetAction'
+      required:
+      - actions
+    SamplingConditionError:
+      description: 'Matches spans that have the have `otel.span.status.code=ERROR`
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - error
+        spec:
+          $ref: '#/components/schemas/SamplingConditionErrorSpec'
+      required:
+      - kind
+      - spec
+    DatasetAction:
+      type: string
+      enum:
+      - dataset:read
+      - dataset:write
+      - dataset:delete
+      - dataset:createSyntheticCheck
+      - dataset:createCheckRule
+      - dataset:createRecordingRuleGroup
+      - dataset:createSLO
+      - dataset:createAgent0Automation
+    SourceMapIntegrationSecrets:
+      properties:
+        password:
+          type: string
+          description: Basic auth password
+        bearerToken:
+          type: string
+          description: Bearer token for authorization
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Secret header values keyed by header name
+    TelemetryTransformationRuleSignalType:
+      type: string
+      enum:
+      - traces
+      - metrics
+      - logs
+      - profiles
+      description: 'The signal type that this transformation rule applies to.
+
+        - `traces`: Apply transformations to trace data (spans and span events).
+
+        - `metrics`: Apply transformations to metric data (metrics and data points).
+
+        - `logs`: Apply transformations to log data (log records).
+
+        - `profiles`: Apply transformations to profile data.
+
+        '
+    TelemetryFilter:
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/SpamFilterApiVersion'
+          description: 'The CRD API version used when this filter was created or last updated.
+
+            Determines which spec shape the server returns on read.
+
+            Defaults to `v1alpha1` when absent.
+
+            '
+        id:
+          type: string
+          format: uuid
+          description: 'Unique identifier for this spam filter. Server-generated on creation.
+
+            For existing filters without an ID, a deterministic UUID is derived
+
+            from a hash of the filter specification or of the condition.
+
+            '
+        origin:
+          type: string
+          description: 'Immutable external identifier for this spam filter, used by
+
+            Infrastructure-as-Code tools (Terraform, Kubernetes operator).
+
+            When set, the filter is read-only in the UI.
+
+            '
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        enabled:
+          type: boolean
+          description: 'Whether this telemetry filter is active. When absent or true, the filter
+
+            is applied. When explicitly set to false, the filter is skipped.
+
+            '
+        name:
+          type: string
+          description: An optional human-readable name for this telemetry filter.
+        context:
+          $ref: '#/components/schemas/TelemetryFilterContext'
+          description: 'The signal type this telemetry filter applies to.
+
+            '
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Structured filter criteria in human-readable form. When provided, the
+
+            server compiles this into an OTTL condition. Mutually exclusive with
+
+            `condition`.
+
+            '
+        condition:
+          description: 'Raw OTTL condition expression. Mutually exclusive with `filter`. Use this
+
+            for advanced filtering that cannot be expressed via structured
+
+            `FilterCriteria`. If the condition resolves to true, the data will be
+
+            dropped. Supports `and`, `or`, and `()`.
+
+            '
+          $ref: '#/components/schemas/OTTLCondition'
+      required:
+      - context
+      - condition
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    SamplingConditionAndSpec:
+      properties:
+        conditions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SamplingCondition'
+      required:
+      - conditions
+    TelemetryTransformationRuleContext:
+      type: string
+      enum:
+      - resource
+      - scope
+      - span
+      - spanevent
+      - metric
+      - datapoint
+      - log
+      - profile
+      description: 'The OTTL evaluation context that determines which telemetry fields are accessible to the statements.
+
+        Not all contexts are valid for all signal types:
+
+
+        For `traces`:
+
+        - `resource`: Transform resource-level attributes.
+
+        - `scope`: Transform instrumentation scope-level attributes.
+
+        - `span`: Transform individual span properties and attributes.
+
+        - `spanevent`: Transform individual span event properties and attributes.
+
+
+        For `metrics`:
+
+        - `resource`: Transform resource-level attributes.
+
+        - `scope`: Transform instrumentation scope-level attributes.
+
+        - `metric`: Transform metric-level properties (name, description, type).
+
+        - `datapoint`: Transform individual metric data point attributes.
+
+
+        For `logs`:
+
+        - `resource`: Transform resource-level attributes.
+
+        - `scope`: Transform instrumentation scope-level attributes.
+
+        - `log`: Transform individual log record properties (body, severity, attributes).
+
+
+        For `profiles`:
+
+        - `resource`: Transform resource-level attributes.
+
+        - `scope`: Transform instrumentation scope-level attributes.
+
+        - `profile`: Transform individual profile properties and attributes.
+
+
+        Contexts never supply access to items lower in the protobuf hierarchy, but always supply access to
+
+        items higher in the hierarchy. For example, a `datapoint` context can access its metric, scope, and
+
+        resource, but a `metric` context cannot access individual data points.
+
+        '
+    SourceMapIntegrationSpec:
+      properties:
+        urlPrefixes:
+          type: array
+          items:
+            type: string
+          description: URL prefixes for source map matching
+        username:
+          type: string
+          description: Basic auth username
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Custom HTTP headers to include in requests
+        secrets:
+          description: Note, this field will be stripped out before the config is exposed via the API
+          $ref: '#/components/schemas/SourceMapIntegrationSecrets'
+        secretsRef:
+          $ref: '#/components/schemas/SecretRef'
+      required:
+      - urlPrefixes
+    TimeSeriesAggregationSpec:
+      properties:
+        enabled:
+          type: boolean
+        priority:
+          description: 'Precedence when more than one rule matches a metric. Lower values are evaluated first
+
+            (higher precedence). Defaults to 0. Rules with equal priority are ordered deterministically
+
+            by creation time, then by id.
+
+            '
+          type: integer
+        display:
+          $ref: '#/components/schemas/TimeSeriesAggregationDisplay'
+        match:
+          $ref: '#/components/schemas/TimeSeriesAggregationMetricNameMatch'
+        sample:
+          $ref: '#/components/schemas/TimeSeriesAggregationSample'
+        attributeModifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationAttributeModification'
+      required:
+      - enabled
+      - match
+      - sample
+    TimeSeriesAggregationLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    SamplingConditionProbabilisticSpec:
+      properties:
+        rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: 'A value between 0 and 1 reflecting the percentage of traces that should be sampled probabilistically.
+
+            This sampling decision is made deterministically by inspecting the trace ID.
+
+            '
+      required:
+      - rate
+    SpamFilterApiVersion:
+      type: string
+      description: 'API version of the spam filter CRD.
+
+        - `v1alpha1`: spec uses `contexts` (array, single element).
+
+        - `v1alpha2`: spec uses `context` (scalar).
+
+        '
+      enum:
+      - v1alpha1
+      - v1alpha2
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    SignalToMetricsMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SignalToMetricsLabels'
+        annotations:
+          $ref: '#/components/schemas/SignalToMetricsGroupAnnotations'
+      required:
+      - name
+    DatasetProfilingSettings:
+      type: object
+      properties:
+        retention:
+          $ref: '#/components/schemas/RetentionClass'
+      required:
+      - retention
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    TelemetryTransformationRuleMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TelemetryTransformationRuleLabels'
+        annotations:
+          $ref: '#/components/schemas/TelemetryTransformationRuleAnnotations'
+      required:
+      - name
+    SignalToMetricsSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/SignalToMetricsDisplay'
+        match:
+          $ref: '#/components/schemas/SignalToMetricsMatch'
+        output:
+          $ref: '#/components/schemas/SignalToMetricsOutput'
+        targetDatasetMode:
+          $ref: '#/components/schemas/SignalToMetricsTargetDatasetMode'
+          description: 'Controls where the generated metric is written.
+
+            Defaults to `original` when absent. Old-format rules omit this field entirely.
+
+            '
+        alternativeDatasetId:
+          type: string
+          description: 'The slug of the target dataset. Required when targetDatasetMode is
+
+            `alternative` or `both`. Must not be set when targetDatasetMode is
+
+            `original` or absent.
+
+            '
+      required:
+      - enabled
+      - display
+      - match
+      - output
+    TelemetryTransformationRuleDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    RetentionClass:
+      type: string
+      description: 'The retention class selected for a signal, per dataset. The value is the
+
+        total retention in days, not an increase on top of a baseline.
+
+        Customer-selectable signals (logs, spans, web events) expose the full
+
+        set; non-selectable signals (metrics, profiling) keep their platform
+
+        defaults.
+
+
+        - `30d`: 30 days total (the included baseline).
+
+        - `60d`: 60 days total.
+
+        - `90d`: 90 days total.
+
+        - `120d`: 120 days total.
+
+        - `210d`: 210 days total.
+
+        - `390d`: 390 days total.
+
+        '
+      enum:
+      - 30d
+      - 60d
+      - 90d
+      - 120d
+      - 210d
+      - 390d
+    SamplingDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    DatasetLoggingSettings:
+      type: object
+      properties:
+        retention:
+          $ref: '#/components/schemas/RetentionClass'
+      required:
+      - retention
+    TimeSeriesAggregationAttributeModification:
+      properties:
+        kind:
+          type: string
+          enum:
+          - drop_attributes
+          - keep_attributes
+        spec:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationSpec'
+      required:
+      - kind
+      - spec
+    OTTLStatements:
+      type: array
+      items:
+        $ref: '#/components/schemas/OTTLStatement'
+    SamplingLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    DatasetTracingSettings:
+      type: object
+      properties:
+        retention:
+          $ref: '#/components/schemas/RetentionClass'
+        convertSpanEventsToLogRecords:
+          type: boolean
+          description: 'When enabled, span events are automatically converted to log records correlated with the parent span
+
+            via traceId and spanId. This supports the migration away from the deprecated Span Event API towards
+
+            the unified OTel event model where events are log records with names. Converted log records are tagged
+
+            with the `dash0.span_event.converted` attribute.
+
+            '
+          default: false
+      required:
+      - retention
+    SignalToMetricsOutput:
+      properties:
+        name:
+          type: string
+          description: The name of the resulting metric
+        description:
+          type: string
+          description: Will be used as metadata on the generated metric.
+        interval:
+          $ref: '#/components/schemas/Duration'
+          description: Defines at what interval to output a data point for the matched signals.
+        keepResourceAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matcher'
+          description: 'Key matchers that select which resource attributes from the incoming signal
+
+            are kept as resource attributes on the output metric. An attribute is kept
+
+            if its key matches any matcher in this list. By default, no additional
+
+            resource attributes are kept.
+
+            '
+        keepSignalAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Matcher'
+          description: 'Key matchers that select which signal attributes (span attributes for traces,
+
+            log record attributes for logs) from the incoming signal are kept as metric
+
+            attributes (dimensions) on the output metric. An attribute is kept if its
+
+            key matches any matcher in this list. By default, no additional signal
+
+            attributes are kept, except for otel.span.status.code which is always set
+
+            when the signal type is spans.
+
+            '
+      required:
+      - name
+      - interval
+    TimeSeriesAggregationAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the aggregation was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Timestamp when the aggregation was soft-deleted. Set by the server; read-only. Absent unless the aggregation is deleted.
+          type: string
+          format: date-time
+    TimeSeriesAggregationMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TimeSeriesAggregationLabels'
+        annotations:
+          $ref: '#/components/schemas/TimeSeriesAggregationAnnotations'
+      required:
+      - name
+    SignalToMetricsMatch:
+      properties:
+        signal:
+          $ref: '#/components/schemas/SignalToMetricsSignalType'
+        filters:
+          $ref: '#/components/schemas/FilterCriteria'
+      required:
+      - signal
+      - filters
+    SignalToMetricsSignalType:
+      type: string
+      enum:
+      - spans
+      - logs
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    SamplingDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Sampling
+        metadata:
+          $ref: '#/components/schemas/SamplingMetadata'
+        spec:
+          $ref: '#/components/schemas/SamplingSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    TelemetryTransformationRuleSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/TelemetryTransformationRuleDisplay'
+        signal:
+          $ref: '#/components/schemas/TelemetryTransformationRuleSignalType'
+        context:
+          $ref: '#/components/schemas/TelemetryTransformationRuleContext'
+        conditions:
+          $ref: '#/components/schemas/OTTLConditions'
+          description: 'A list of OTTL conditions that act as a global gate for the statements. The conditions are ORed together,
+
+            meaning only one condition needs to evaluate to true for the statements to be executed.
+
+            '
+        statements:
+          $ref: '#/components/schemas/OTTLStatements'
+      required:
+      - enabled
+      - signal
+      - context
+      - statements
+    SamplingConditionErrorSpec:
+      properties: {}
+      required: []
+    OTTLConditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/OTTLCondition'
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    DatasetSettings:
+      properties:
+        slug:
+          $ref: '#/components/schemas/Dataset'
+        name:
+          type: string
+        version:
+          type: integer
+        preferred:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        tracing:
+          $ref: '#/components/schemas/DatasetTracingSettings'
+        logging:
+          $ref: '#/components/schemas/DatasetLoggingSettings'
+        metrics:
+          $ref: '#/components/schemas/DatasetMetricsSettings'
+        profiling:
+          $ref: '#/components/schemas/DatasetProfilingSettings'
+        webEvents:
+          $ref: '#/components/schemas/DatasetWebEventsSettings'
+        semanticConventionUpgrades:
+          $ref: '#/components/schemas/SemanticConventionUpgrades'
+        telemetryFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelemetryFilter'
+        ipAddresses:
+          $ref: '#/components/schemas/IpAddressesSettings'
+        geoLocation:
+          $ref: '#/components/schemas/GeoLocationSettings'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetPermission'
+        permittedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetAction'
+      required:
+      - slug
+      - name
+      - tracing
+      - logging
+      - metrics
+      - profiling
+      - webEvents
+      - semanticConventionUpgrades
+      - telemetryFilters
+      - ipAddresses
+      - geoLocation
+    TimeSeriesAggregationDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    SamplingConditionOttl:
+      properties:
+        kind:
+          type: string
+          enum:
+          - ottl
+        spec:
+          $ref: '#/components/schemas/SamplingConditionOttlSpec'
+      required:
+      - kind
+      - spec
+    SignalToMetricsDisplay:
+      properties:
+        name:
+          type: string
+      required:
+      - name
+    SamplingMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SamplingLabels'
+      required:
+      - name
+    GeoLocationSettings:
+      properties:
+        endUserGeoLocationStorageStrategy:
+          description: 'When we derive IP addresses from X-FORWARDED-FOR/X-REAL-IP HTTP headers, we will apply these rules.
+
+            '
+          $ref: '#/components/schemas/GeoLocationStorageStrategy'
+      required:
+      - endUserGeoLocationStorageStrategy
+    Matcher:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - operator
+    SignalToMetricsGroupAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the rule was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Soft-delete timestamp. Present when the rule has been deleted but not yet purged. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    DatasetWebEventsSettings:
+      type: object
+      properties:
+        retention:
+          $ref: '#/components/schemas/RetentionClass'
+      required:
+      - retention
+    SamplingConditionProbabilistic:
+      properties:
+        kind:
+          type: string
+          enum:
+          - probabilistic
+        spec:
+          $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
+      required:
+      - kind
+      - spec
+    IpAddressStorageStrategy:
+      type: string
+      enum:
+      - anonymize
+      - do_not_store
+    SamplingRateLimit:
+      description: 'Rate limit is helpful to avoid ingesting extremely large amounts of spans when the sampling conditions are
+
+        triggering much more frequently than expected. For example, when the tail sampling rule is configured to match
+
+        every error, then a system-wide outage can result in a huge amount of spans being ingested.
+
+
+        Note: Probabilistic-only sampling rules do not support rate limiting.
+
+        '
+      properties:
+        rate:
+          type: integer
+          description: 'The maximum number of traces per minute that should be allowed for this sampling rule. Dash0 will make every
+
+            effort not to exceed this rate. However, there is also no guarantee that Dash0 will match exactly this rate.
+
+            Dash0 is attempting to hit a rate that is lower than or equal to the configured rate.
+
+
+            Dash0 cannot guarantee that very low rate limits (<=16) are upheld.
+
+            '
+      required:
+      - rate
+    TimeSeriesAggregationDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0TimeSeriesAggregation
+        metadata:
+          $ref: '#/components/schemas/TimeSeriesAggregationMetadata'
+        spec:
+          $ref: '#/components/schemas/TimeSeriesAggregationSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    OTTLCondition:
+      type: string
+      description: "The OpenTelemetry Transformation Language (OTTL) is a small, domain-specific programming language intended to\nprocess data with OpenTelemetry-native concepts and constructs. An OTTL *Condition* is a boolean expression\ndetermining a certain behavior.\n\nOTTL conditions are only valid for specific evaluation contexts:\nhttps://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/pkg/ottl/README.md#getting-started\n\nExamples:\n - Within the context of telemetry filtering, a condition evaluating to true means that the data should be dropped.\n"
+    TelemetryTransformationRuleDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0TelemetryTransformationRule
+        metadata:
+          $ref: '#/components/schemas/TelemetryTransformationRuleMetadata'
+        spec:
+          $ref: '#/components/schemas/TelemetryTransformationRuleSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    SamplingSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/SamplingDisplay'
+        conditions:
+          $ref: '#/components/schemas/SamplingCondition'
+        rateLimit:
+          $ref: '#/components/schemas/SamplingRateLimit'
+      required:
+      - enabled
+      - conditions
+    SignalControlEdgeSettings:
+      type: object
+      description: 'Per-organization SignalControl *edge* configuration (the edge facet of SignalControl).
+
+        Extensible — additional edge sub-settings will be added here over time. Other facets
+
+        (e.g. SaaS-side) are modelled as their own schemas under sibling endpoints, not as
+
+        fields here.
+
+        '
+      properties:
+        enabled:
+          type: boolean
+          description: Whether the organization is entitled to use SignalControl features.
+      required:
+      - enabled
+    SemanticConventionUpgrades:
+      type: string
+      description: 'Choose whether or not semantic convention upgrades should be executed. Can be one of:
+
+
+        - disabled: No upgrade will be executed
+
+        - latest: We will always upgrade to the latest and greatest
+
+        - vX.X.X: A SEMVER version. We will automatically upgrade up to that version (inclusive)
+
+
+        Defaults to `latest` for new organizations.
+
+        '

@@ -1,0 +1,585 @@
+openapi: 3.1.0
+info:
+  title: Dash0 Edge Collectors Manage Spam Filters API
+  version: 1.0.0
+  description: '## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.
+
+    '
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Spam Filters
+paths:
+  /api/spam-filters/{originOrId}:
+    delete:
+      summary: Delete a spam filter by origin or ID
+      description: Deletes a specific spam filter identified by its origin label or UUID.
+      tags:
+      - Manage Spam Filters
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Spam filter origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successfully deleted
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: delete_api-spam-filters-originorid
+    get:
+      summary: Get a specific spam filter by origin or ID
+      description: Returns a specific spam filter identified by its origin label or UUID.
+      tags:
+      - Manage Spam Filters
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Spam filter origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: The requested spam filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpamFilterResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get_api-spam-filters-originorid
+    put:
+      summary: Update or create a spam filter by origin or ID
+      description: 'Updates an existing spam filter or creates a new one if it doesn''t exist.
+
+        Useful for Infrastructure-as-Code workflows. Provide either structured `filter`
+
+        criteria or a raw OTTL `condition` in the spec, but not both.
+
+        '
+      tags:
+      - Manage Spam Filters
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Spam filter origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpamFilterResponse'
+      responses:
+        '200':
+          description: The updated or created spam filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpamFilterResponse'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: put_api-spam-filters-originorid
+  /api/spam-filters:
+    get:
+      summary: List all spam filters for the organization
+      description: Returns all spam filters configured for your organization.
+      tags:
+      - Manage Spam Filters
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: List of spam filters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSpamFiltersResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: get_api-spam-filters
+    post:
+      summary: Create a new spam filter
+      description: 'Create a new spam filter for your organization. Provide either structured `filter`
+
+        criteria or a raw OTTL `condition` in the spec, but not both.
+
+
+        If `metadata.labels["dash0.com/origin"]` is provided, it must be unique within
+
+        the organization and dataset. A request with a duplicate origin returns 400.
+
+        If no origin is provided, the server auto-generates one (`api-<uuid>`).
+
+        '
+      tags:
+      - Manage Spam Filters
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpamFilterCreateRequest'
+      responses:
+        '200':
+          description: The created spam filter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpamFilterResponse'
+        '400':
+          description: 'Bad request. Possible reasons include: a spam filter with the submitted
+
+            origin already exists in this organization and dataset, or `dash0.com/id`
+
+            was provided in the request body.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: post_api-spam-filters
+components:
+  schemas:
+    GetSpamFiltersResponse:
+      properties:
+        spamFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpamFilterDefinition'
+      required:
+      - spamFilters
+    SpamFilterMetadata:
+      properties:
+        name:
+          type: string
+          description: 'Human-readable name for the spam filter.
+
+            '
+        labels:
+          $ref: '#/components/schemas/SpamFilterLabels'
+        annotations:
+          $ref: '#/components/schemas/SpamFilterAnnotations'
+      required:
+      - name
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    SpamFilterSpecV1Alpha2:
+      description: 'v1alpha2 spam filter specification. The `filter` field defines structured
+
+        criteria that the server compiles into an OTTL condition for evaluation.
+
+        '
+      properties:
+        context:
+          $ref: '#/components/schemas/TelemetryFilterContext'
+          description: 'The signal type this spam filter applies to.
+
+            '
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Structured filter criteria. The server compiles this into an OTTL condition
+
+            for evaluation.
+
+            '
+      required:
+      - context
+      - filter
+    SpamFilterSpec:
+      description: 'v1alpha1 spam filter specification. The `filter` field defines structured
+
+        criteria that the server compiles into an OTTL condition for evaluation.
+
+        '
+      properties:
+        contexts:
+          type: array
+          description: 'The signal types this spam filter applies to.
+
+            '
+          items:
+            $ref: '#/components/schemas/TelemetryFilterContext'
+          maxItems: 1
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Structured filter criteria. The server compiles this into an OTTL condition
+
+            for evaluation.
+
+            '
+      required:
+      - contexts
+      - filter
+    TelemetryFilterContext:
+      type: string
+      enum:
+      - datapoint
+      - span
+      - log
+      - web_event
+    SpamFilterLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+          description: 'External identifier for this spam filter. Must be unique per
+
+            organization and dataset when set. Used by Infrastructure-as-Code
+
+            tools (Terraform, Kubernetes operator). Auto-generated as
+
+            `api-<uuid>` on POST if not provided.
+
+            '
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    SpamFilterCreateRequest:
+      anyOf:
+      - $ref: '#/components/schemas/SpamFilterDefinition'
+      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    SpamFilterApiVersionV1Alpha2:
+      type: string
+      enum:
+      - v1alpha2
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    SpamFilterDefinitionV1Alpha2:
+      description: 'v1alpha2 spam filter definition. Uses `context` (scalar) in the spec.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/SpamFilterApiVersionV1Alpha2'
+        kind:
+          type: string
+          enum:
+          - Dash0SpamFilter
+        metadata:
+          $ref: '#/components/schemas/SpamFilterMetadata'
+        spec:
+          $ref: '#/components/schemas/SpamFilterSpecV1Alpha2'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    SpamFilterApiVersionV1Alpha1:
+      type: string
+      enum:
+      - v1alpha1
+    SpamFilterResponse:
+      anyOf:
+      - $ref: '#/components/schemas/SpamFilterDefinition'
+      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
+    SpamFilterAnnotations:
+      description: 'Spam filters use hard delete (removed from the dataset settings array),
+
+        so there is no `dash0.com/deleted-at` annotation. Timestamps
+
+        (`created-at`, `updated-at`) are not tracked because filters are stored
+
+        as elements of a JSONB array inside the dataset settings, which has no
+
+        per-element timestamp support.
+
+        '
+      properties:
+        dash0.com/enabled:
+          description: 'Whether this spam filter is active. Defaults to `"true"`.
+
+            When set to `"false"`, the filter is skipped.
+
+            '
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+    SpamFilterDefinition:
+      description: 'v1alpha1 spam filter definition. Uses `contexts` (array) in the spec.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/SpamFilterApiVersionV1Alpha1'
+        kind:
+          type: string
+          enum:
+          - Dash0SpamFilter
+        metadata:
+          $ref: '#/components/schemas/SpamFilterMetadata'
+        spec:
+          $ref: '#/components/schemas/SpamFilterSpec'
+      required:
+      - kind
+      - metadata
+      - spec
