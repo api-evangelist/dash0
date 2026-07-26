@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.dash0.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 18 10:35:42 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api-docs.dash0.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 26 02:32:40 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: api.eu-west-1.aws.dash0.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 25 05:22:03 2026 GMT
+  hsts: null
+domains:
+- domain: dash0.com
+  dnssec: false
+  caa:
+  - 0 issue "amazontrust.com"
+  - 0 issue "awstrust.com"
+  - 0 issue "letsencrypt.org"
+  - 0 issuewild "amazon.com"
+  - 0 issuewild "amazonaws.com"
+  - 0 issuewild "amazontrust.com"
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine

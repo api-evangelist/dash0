@@ -1,0 +1,57 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/dash0-openapi.json + https://www.dash0.com/security + live OAuth metadata
+standards:
+- id: opentelemetry-otlp
+  conforms: true
+  evidence: Native OTLP ingest; API returns OTLP spans/log records (post_api-spans, post_api-logs, post_api-trace-details).
+- id: prometheus-http-api
+  conforms: true
+  evidence: 16 operations implement the Prometheus HTTP API v1 (query, query_range, series, labels, metadata, format_query, status/buildinfo).
+- id: promql
+  conforms: true
+  evidence: Check rules, recording rules and dashboards accept PromQL expressions.
+- id: oauth2
+  conforms: true
+  evidence: RFC 6749 authorization_code + refresh_token grants; /oauth/authorize, /oauth/token, /oauth/revoke.
+- id: oauth2-authorization-server-metadata-rfc8414
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns AS metadata.
+- id: oauth2-protected-resource-metadata-rfc9728
+  conforms: true
+  evidence: /.well-known/oauth-protected-resource advertised for MCP clients.
+- id: oauth2-dynamic-client-registration-rfc7591
+  conforms: true
+  evidence: /oauth/register dynamic client registration endpoint.
+- id: oauth2-token-revocation-rfc7009
+  conforms: true
+  evidence: /oauth/revoke token revocation endpoint.
+- id: pkce-rfc7636
+  conforms: true
+  evidence: code_challenge_methods_supported = [S256].
+- id: model-context-protocol
+  conforms: true
+  evidence: OAuth-protected MCP server at /api/<region>/mcp; protected-resource metadata targets MCP clients.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Uses a custom `{error:{code,message,traceId}}` envelope, not application/problem+json.
+- id: soc2-type-ii
+  conforms: true
+  evidence: Published on trust.dash0.com / dash0.com/security.
+- id: iso-27001
+  conforms: true
+  evidence: Published on trust.dash0.com / dash0.com/security.
+- id: gdpr
+  conforms: true
+  evidence: EU data residency; DPA at dash0.com/policies/dpa.
+- id: hipaa
+  conforms: false
+  evidence: Listed as "Coming 2026" with BAAs available on dash0.com/security.
+- id: pci-dss
+  conforms: false
+  evidence: Listed as "Coming 2026" on dash0.com/security.
+compliance_program:
+  published: true
+  certifications: [SOC 2 Type II, ISO 27001, GDPR]
+  planned: [HIPAA, PCI DSS]
+  trust_center: https://trust.dash0.com

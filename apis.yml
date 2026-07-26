@@ -1,28 +1,325 @@
 aid: dash0
 name: Dash0
-description: 'Dash0 is a company surfaced as a portfolio company of accel, balderton-capital and added
-  to the API Evangelist network as a stub for enrichment. Sector: apis. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Dash0 is an OpenTelemetry-native observability platform for engineering teams
+  who want full visibility into logs, metrics, traces, profiles and events
+  without operating complex pipelines or proprietary agents. Founded in 2023
+  (Series B, $110M, 2026), Dash0 ingests OTLP natively, correlates signals
+  automatically, and offers dashboards, PromQL-based alerting, SLOs, synthetic
+  and website monitoring, a service map, transparent cost controls, and Agent0
+  AI SRE agents. Its public API is a 108-operation OpenAPI 3.1 surface (regional
+  AWS/GCP hosts) covering Observability-as-Code (dashboards, check/recording/
+  sampling rules, views, spam filters, notification channels, synthetic checks,
+  automations), telemetry query (spans/logs/traces/SQL), and a Prometheus HTTP
+  API, plus an OAuth-protected MCP server, a Go CLI and a Terraform provider.
 url: https://raw.githubusercontent.com/api-evangelist/dash0/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.dash0.com/images/og-image.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - accel
 - balderton-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
+- Observability
+- OpenTelemetry
+- Monitoring
+- Logs
+- Metrics
+- Tracing
+- APM
+- Prometheus
+- DevOps
 - Company
 - Apis
-apis: []
+apis:
+- aid: dash0:dash0-edge-collectors-api
+  name: Dash0 Edge Collectors API
+  description: The Edge Collectors API from Dash0 — 1 operation(s) for edge collectors.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Edge Collectors
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-edge-collectors-api-openapi.yml
+- aid: dash0:dash0-manage-agent0-automations-api
+  name: Dash0 Manage Agent0 Automations API
+  description: >-
+    The Manage Agent0 Automations API from Dash0 — 2 operation(s) for manage agent0 automations.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Agent0 Automations
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-agent0-automations-api-openapi.yml
+- aid: dash0:dash0-manage-alerting-api
+  name: Dash0 Manage Alerting API
+  description: The Manage Alerting API from Dash0 — 5 operation(s) for manage alerting.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Alerting
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-alerting-api-openapi.yml
+- aid: dash0:dash0-manage-dashboards-api
+  name: Dash0 Manage Dashboards API
+  description: The Manage Dashboards API from Dash0 — 3 operation(s) for manage dashboards.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Dashboards
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-dashboards-api-openapi.yml
+- aid: dash0:dash0-manage-notification-channels-api
+  name: Dash0 Manage Notification Channels API
+  description: >-
+    The Manage Notification Channels API from Dash0 — 2 operation(s) for manage notification channels.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Notification Channels
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-notification-channels-api-openapi.yml
+- aid: dash0:dash0-manage-recording-rules-api
+  name: Dash0 Manage Recording Rules API
+  description: The Manage Recording Rules API from Dash0 — 2 operation(s) for manage recording rules.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Recording Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-recording-rules-api-openapi.yml
+- aid: dash0:dash0-manage-sampling-rules-api
+  name: Dash0 Manage Sampling Rules API
+  description: The Manage Sampling Rules API from Dash0 — 2 operation(s) for manage sampling rules.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Sampling Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-sampling-rules-api-openapi.yml
+- aid: dash0:dash0-manage-signal-to-metrics-beta-api
+  name: Dash0 Manage Signal To Metrics (BETA) API
+  description: >-
+    The Manage Signal To Metrics (BETA) API from Dash0 — 4 operation(s) for manage signal to metrics (beta).
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Signal To Metrics (BETA)
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-signal-to-metrics-beta-api-openapi.yml
+- aid: dash0:dash0-manage-slos-private-beta-api
+  name: Dash0 Manage SLOs (Private BETA) API
+  description: >-
+    The Manage SLOs (Private BETA) API from Dash0 — 2 operation(s) for manage slos (private beta).
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage SLOs (Private BETA)
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-slos-private-beta-api-openapi.yml
+- aid: dash0:dash0-manage-spam-filters-api
+  name: Dash0 Manage Spam Filters API
+  description: The Manage Spam Filters API from Dash0 — 2 operation(s) for manage spam filters.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Spam Filters
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-spam-filters-api-openapi.yml
+- aid: dash0:dash0-manage-synthetic-checks-api
+  name: Dash0 Manage Synthetic Checks API
+  description: The Manage Synthetic Checks API from Dash0 — 5 operation(s) for manage synthetic checks.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Synthetic Checks
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-synthetic-checks-api-openapi.yml
+- aid: dash0:dash0-manage-teams-and-members-api
+  name: Dash0 Manage Teams and Members API
+  description: >-
+    The Manage Teams and Members API from Dash0 — 7 operation(s) for manage teams and members.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Teams and Members
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-teams-and-members-api-openapi.yml
+- aid: dash0:dash0-manage-time-series-aggregations-private-beta-api
+  name: Dash0 Manage Time Series Aggregations (Private BETA) API
+  description: >-
+    The Manage Time Series Aggregations (Private BETA) API from Dash0 — 2 operation(s) for manage time
+    series aggregations (private beta).
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Time Series Aggregations (Private BETA)
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-time-series-aggregations-private-beta-api-openapi.yml
+- aid: dash0:dash0-manage-views-api
+  name: Dash0 Manage Views API
+  description: The Manage Views API from Dash0 — 3 operation(s) for manage views.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Views
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-views-api-openapi.yml
+- aid: dash0:dash0-oauth-2-0-api
+  name: Dash0 OAuth 2.0 API
+  description: The OAuth 2.0 API from Dash0 — 6 operation(s) for oauth 2.0.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - OAuth 2.0
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-oauth-2-0-api-openapi.yml
+- aid: dash0:dash0-prometheus-api-api
+  name: Dash0 Prometheus API API
+  description: The Prometheus API API from Dash0 — 9 operation(s) for prometheus api.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Prometheus API
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-prometheus-api-api-openapi.yml
+- aid: dash0:dash0-query-sql-api
+  name: Dash0 Query SQL API
+  description: The Query SQL API from Dash0 — 1 operation(s) for query sql.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Query SQL
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-query-sql-api-openapi.yml
+- aid: dash0:dash0-query-telemetry-api
+  name: Dash0 Query Telemetry API
+  description: The Query Telemetry API from Dash0 — 4 operation(s) for query telemetry.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Query Telemetry
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-query-telemetry-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+# --- link properties ---
 - type: Website
   url: https://www.dash0.com/
+- type: DeveloperPortal
+  url: https://www.dash0.com/docs/dash0
+- type: Documentation
+  url: https://www.dash0.com/docs/dash0
+- type: APIReference
+  url: https://api-docs.dash0.com/
+- type: GettingStarted
+  url: https://www.dash0.com/docs/dash0/get-started
+- type: Support
+  url: https://www.dash0.com/contact
+- type: Blog
+  url: https://www.dash0.com/blog
+- type: GitHubOrganization
+  url: https://github.com/dash0hq
+- type: Pricing
+  url: https://www.dash0.com/pricing
+- type: SignUp
+  url: https://www.dash0.com/sign-up
+- type: Login
+  url: https://app.dash0.com
+- type: TermsOfService
+  url: https://www.dash0.com/policies/terms-product
+- type: PrivacyPolicy
+  url: https://www.dash0.com/policies/privacy
+- type: StatusPage
+  url: https://dash0status.com/
+- type: Security
+  url: https://www.dash0.com/policies/vulnerability-disclosure.pdf
+- type: Compliance
+  url: https://trust.dash0.com
+# --- artifacts ---
+- type: LLMsTxt
+  url: llms/dash0-llms.txt
+- type: Packages
+  url: packages/dash0-packages.yml
+- type: SDKs
+  url: packages/dash0-packages.yml
+- type: CLI
+  url: cli/dash0-cli.yml
+- type: MCPServer
+  url: mcp/dash0-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: WellKnown
+  url: well-known/dash0-well-known.yml
+- type: SecurityTxt
+  url: well-known/dash0-security.txt
+- type: Authentication
+  url: authentication/dash0-authentication.yml
+- type: OAuthScopes
+  url: scopes/dash0-scopes.yml
+- type: Conventions
+  url: conventions/dash0-conventions.yml
+- type: Idempotency
+  url: conventions/dash0-conventions.yml
+- type: ErrorCatalog
+  url: errors/dash0-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/dash0-lifecycle.yml
+- type: ChangeLog
+  url: changelog/dash0-changelog.yml
+- type: Conformance
+  url: conformance/dash0-conformance.yml
+- type: DataModel
+  url: data-model/dash0-data-model.yml
+- type: Webhooks
+  url: asyncapi/dash0-webhooks.yml
+- type: AgenticAccess
+  url: agentic-access/dash0-agentic-access.yml
+- type: TrustCenter
+  url: security/dash0-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/dash0-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/dash0-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

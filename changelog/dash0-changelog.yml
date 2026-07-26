@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.dash0.com/changelog
+scheme: dated
+versioned: false
+current_as_of: '2026-07-15'
+entries:
+- date: '2026-07-15'
+  title: Related logs & events tab
+  highlights: Unified time-ordered list interleaving log records and span events across traces; correlation scopes (Trace, Resource, Resource & Trace, Span).
+  breaking: false
+- date: '2026-07-14'
+  title: AWS Lambda Observability
+  highlights: One-click AWS account connection via CloudFormation; automatic Lambda catalog + metrics; UI instrumentation for Python/Node.js/Java; payload capture with masking.
+  breaking: false
+- date: '2026-07-06'
+  title: 'Automations: Agent0 now runs autonomously'
+  highlights: Event-driven AI workflows triggered by Slack, GitHub, webhooks or schedules; read actions auto-run, write actions require approval.
+  breaking: false
+- date: '2026-07-06'
+  title: Spam filter metrics
+  highlights: Time-series charts of dropped signal counts per filter; queryable metrics for alerting via check rules.
+  breaking: false
+- date: '2026-07-03'
+  title: Performance improvements for charts and lists
+  highlights: High-cardinality charts rendered as lightweight layers; faster load; smoother scrolling in Logs/Traces/Web Events.
+  breaking: false
+- date: '2026-06-16'
+  title: Web events on the GeoMap
+  highlights: Web-event pins on geographic maps with severity colors and clustering.
+  breaking: false
+- date: '2026-06-16'
+  title: Google Cloud infrastructure monitoring - Cloud SQL
+  highlights: Automatic metric collection for Cloud SQL (PostgreSQL/MySQL/SQL Server) with PromQL support.
+  breaking: false
+- date: '2026-06-15'
+  title: 'Dash0 CLI: OAuth support, OTLP proxy, and more'
+  highlights: Browser-based OAuth 2.0 login with token refresh; local OTLP forwarder; precision-mode queries; Homebrew install.
+  breaking: false

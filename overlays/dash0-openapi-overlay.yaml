@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Dash0 API
+  version: 1.0.0
+extends: openapi/dash0-openapi.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provenance: >-
+      Spec reconstructed by merging the 108 per-operation OpenAPI 3.1 fragments
+      published on api-docs.dash0.com (ReadMe). operationIds set to the provider's
+      ReadMe reference slugs. Servers, schemas and responses are verbatim.
+    x-apievangelist-auth: Bearer auth-token (Authorization header) + OAuth 2.0 (PKCE, DCR) for CLI/MCP.
+    x-apievangelist-idempotency: PUT /api/<resource>/{originOrId} is an origin-keyed upsert (IaC-idempotent).
+    x-apievangelist-mcp: OAuth-protected MCP server at /api/<region>/mcp.
+- target: $.info
+  update:
+    x-agentic-access-ref: agentic-access/dash0-agentic-access.yml
+- target: $.tags
+  update:
+    x-apievangelist-note: >-
+      18 tag groups spanning configuration assets (dashboards, rules, SLOs,
+      views, filters, checks), telemetry query (spans/logs/traces/SQL), the
+      Prometheus HTTP API, and OAuth 2.0.

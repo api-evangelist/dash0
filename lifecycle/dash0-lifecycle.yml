@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.dash0.com/ + https://api-docs.dash0.com/
+versioning:
+  scheme: unversioned-path
+  current: '1.0.0'
+  docs: https://api-docs.dash0.com/
+  notes: >-
+    Paths are unversioned (/api/...). OpenAPI info.version is 1.0.0. Maturity is
+    signaled per-feature via tag suffixes: "(BETA)" and "(Private BETA)" on
+    Signal-to-Metrics, SLOs and Time Series Aggregations.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No dedicated deprecation/sunset policy published; no operations flagged deprecated in the spec.
+status_page: https://dash0status.com/
+sla:
+  url: https://www.dash0.com/security
+  notes: SOC 2 Type II covers availability; no public numeric uptime SLA found.
+changelog: https://www.dash0.com/changelog
+beta_surfaces:
+- Signal To Metrics (BETA)
+- SLOs (Private BETA)
+- Time Series Aggregations (Private BETA)
+deprecated_operations: []

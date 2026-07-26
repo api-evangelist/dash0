@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/dash0-openapi.json (operationIds verified against the spec)
+skills:
+- file: dash0-manage-dashboards-as-code.md
+  name: Manage Dash0 dashboards as code
+  api: openapi/dash0-openapi.json
+  operations: [get_api-dashboards, post_api-dashboards, put_api-dashboards-originorid, delete_api-dashboards-originorid, post_api-import-dashboard]
+- file: dash0-alerting-check-rules.md
+  name: Create Dash0 alerting check rules
+  api: openapi/dash0-openapi.json
+  operations: [get_api-alerting-check-rules, post_api-alerting-check-rules, put_api-alerting-check-rules-originorid, post_api-alerting-check-rules-bulk, get_api-notification-channels, post_api-notification-channels]
+- file: dash0-query-telemetry.md
+  name: Query Dash0 telemetry
+  api: openapi/dash0-openapi.json
+  operations: [post_api-spans, post_api-logs, post_api-trace-ids, post_api-trace-details, post_api-sql, post_api-prometheus-api-v1-query, post_api-prometheus-api-v1-query-range]
+provider_published_skills:
+  repo: https://github.com/dash0hq/agent-skills
+  description: >-
+    Dash0 publishes vendor-neutral Agent Skills that teach AI coding agents to
+    instrument apps with OpenTelemetry (SKILL.md + rules/ + AGENTS.md).
+  skills:
+  - otel-instrumentation
+  - otel-semantic-conventions
+  - otel-collector
+  - otel-ottl

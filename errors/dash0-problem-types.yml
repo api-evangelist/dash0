@@ -1,0 +1,43 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/dash0-openapi.json (4xx/5xx responses) + https://api-docs.dash0.com/
+format: custom-json
+envelope:
+  shape: '{ "error": { "code": <int>, "message": <string>, "traceId": <string> } }'
+  fields:
+    code: HTTP-aligned integer status code
+    message: Human-readable error message (carries per-item diagnostics on bulk endpoints)
+    traceId: Dash0 trace id for correlating the failed request in the platform
+  note: >-
+    Dash0 uses a custom error envelope keyed under `error`, not RFC 9457
+    application/problem+json. The `default` response on every operation returns
+    this ErrorResponse schema.
+problems:
+- status: 400
+  title: Bad Request / validation error
+  description: >-
+    Invalid payload — failed PromQL/OTTL validation, bad interval, summary
+    length, template functions, or origin/id collision. On bulk endpoints the
+    whole batch is rejected and per-item diagnostics are returned in `message`;
+    nothing is written.
+  observed_on: [post_api-alerting-check-rules, post_api-alerting-check-rules-bulk, post_api-spam-filters, post_api-signal-to-metrics-test]
+- status: 403
+  title: Forbidden
+  description: >-
+    The bearer token is missing, invalid, or lacks access to the requested
+    organization/dataset. Observed on 18 operations.
+  observed_on: [get_api-dashboards, put_api-dashboards-originorid, get_api-alerting-check-rules]
+- status: 413
+  title: Content Too Large
+  description: >-
+    Request body exceeds the size limit (256KB default; 2MB on bulk endpoints).
+  observed_on: [post_api-logs, post_api-spans, post_api-alerting-check-rules-bulk]
+- status: 302
+  title: Redirect
+  description: OAuth authorize endpoint always redirects to the consent UI.
+  observed_on: [get_oauth-authorize]
+- status: default
+  title: Error
+  description: >-
+    Catch-all error response (ErrorResponse envelope) present on all 108
+    operations; carries the integer `code`, `message`, and `traceId`.

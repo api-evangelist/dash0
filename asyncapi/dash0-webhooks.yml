@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: searched
+source: https://www.dash0.com/docs/dash0 + https://www.dash0.com/changelog + openapi/dash0-openapi.json
+spec_type: Webhooks
+summary: >-
+  Dash0 exposes an outbound alert/notification surface and an inbound automation
+  trigger surface rather than a single AsyncAPI document. Alerts fire from check
+  rules and route to notification channels (webhook + third-party); Agent0
+  automations are event-driven and can be triggered by inbound webhooks.
+outbound:
+  mechanism: notification-channels
+  managed_by:
+  - get_api-notification-channels
+  - post_api-notification-channels
+  - put_api-notification-channels-originorid
+  - delete_api-notification-channels-originorid
+  description: >-
+    Check-rule alerts are delivered to configured notification channels, which
+    include generic webhook delivery alongside Slack/email and other providers.
+inbound:
+  mechanism: agent0-automations
+  managed_by:
+  - get_api-agentic-workflows
+  - post_api-agentic-workflows
+  - put_api-agentic-workflows-originorid
+  triggers: [slack, github, webhooks, schedule]
+  description: >-
+    Agent0 automations (changelog 2026-07-06) are event-driven workflows that
+    can be triggered by inbound webhooks, Slack, GitHub or a schedule; read
+    actions run automatically while write actions require approval.
+asyncapi_document: null
+notes: >-
+  No published AsyncAPI document was found; the event surface is documented as
+  notification channels + automation triggers. Not fabricating an AsyncAPI spec.

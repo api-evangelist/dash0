@@ -1,0 +1,63 @@
+generated: '2026-07-18'
+method: searched
+source: https://api-docs.dash0.com/ + openapi/dash0-openapi.json
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <DASH0_AUTH_TOKEN>'
+  oauth2: true
+  ref: authentication/dash0-authentication.yml
+idempotency:
+  supported: true
+  mechanism: upsert-by-origin-or-id
+  description: >-
+    Dash0's configuration ("asset") endpoints are idempotent by design for
+    Infrastructure-as-Code. `PUT /api/<resource>/{originOrId}` performs an
+    upsert keyed on a caller-supplied origin (dash0.com/origin label) or id: if
+    an asset with that origin/id exists it is updated, otherwise it is created
+    with the given identifier as its origin. Re-applying the same definition is
+    a no-op-equivalent, so Terraform/CLI/operator runs converge. Bulk import
+    endpoints (signal-to-metrics, check rules) are likewise matched by origin
+    across invocations. Note: the create-only bulk POST endpoints
+    (`/api/alerting/check-rules/bulk`) are explicitly NOT idempotent — a
+    verbatim retry 400s on origin/id collision.
+  idempotency_key: origin (metadata.labels["dash0.com/origin"]) or id
+pagination:
+  style: limit-offset
+  params: [limit, offset]
+  notes: >-
+    List and query endpoints accept `limit`/`offset`; telemetry query endpoints
+    (spans, logs, trace-ids) also accept time-window bounds (`start`, `end`) and
+    the Prometheus-compatible endpoints follow Prometheus query semantics.
+multitenancy:
+  dataset_param: dataset
+  description: >-
+    A `dataset` query parameter scopes most operations to a named dataset
+    (pattern ^[A-Za-z0-9_-]{3,26}$); it defaults to the organization's default
+    dataset. Datasets are the primary tenancy/segmentation boundary.
+versioning:
+  scheme: none-in-path
+  current: 1.0.0
+  notes: >-
+    The API is unversioned in the path (paths are /api/...). The OpenAPI info
+    version is 1.0.0. Beta surfaces are flagged in tag names ("(BETA)",
+    "(Private BETA)").
+request_body_limits:
+  default: 256KB
+  bulk: 2MB
+  over_limit_status: 413
+error_envelope:
+  shape: '{ "error": { "code": <int>, "message": <string>, "traceId": <string> } }'
+  format: custom-json
+  ref: errors/dash0-problem-types.yml
+observability_as_code:
+  description: >-
+    The entire configuration surface (dashboards, check/recording/sampling
+    rules, SLOs, views, spam filters, notification channels, synthetic checks,
+    signal-to-metrics, time-series aggregations, automations) is CRUD-manageable
+    via origin-keyed upserts, and mirrored by the Terraform provider and CLI
+    `apply` command.
+cross_links:
+  authentication: authentication/dash0-authentication.yml
+  errors: errors/dash0-problem-types.yml
+  lifecycle: lifecycle/dash0-lifecycle.yml
+  scopes: scopes/dash0-scopes.yml

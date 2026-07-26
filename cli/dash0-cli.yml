@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/dash0hq/dash0-cli
+binary: dash0
+language: go
+repo: https://github.com/dash0hq/dash0-cli
+install:
+- method: homebrew
+  command: brew install --cask dash0hq/dash0-cli/dash0
+- method: docker
+  command: docker run ghcr.io/dash0hq/cli:latest [command]
+- method: nix
+  command: nix run github:dash0hq/dash0-cli
+- method: binary
+  command: download from https://github.com/dash0hq/dash0-cli/releases
+- method: source
+  command: git clone https://github.com/dash0hq/dash0-cli.git && cd dash0-cli && make install
+auth:
+  commands: [login, logout]
+  method: browser-based OAuth 2.0 with token refresh (or DASH0_AUTH_TOKEN)
+command_groups:
+- group: assets
+  description: CRUD (list/get/create/update/delete) over configuration assets
+  resources: [dashboards, check-rules, synthetic-checks, views, recording-rules, notification-channels, spam-filters]
+- group: apply
+  description: Apply asset definitions from files/directories (Observability-as-Code)
+- group: telemetry
+  resources: [logs (send/query), spans (send/query), traces (get), metrics (instant), failed-checks (query)]
+- group: config
+  description: Manage profiles and show configuration
+- group: otlp
+  description: Local OTLP proxy/forwarder on default ports
+- group: experimental
+  resources: [teams, members, api, otlp proxy]
+- group: completion
+  description: Shell completions

@@ -1,0 +1,5 @@
+Contact: mailto:security@dash0.com
+Expires: 2027-04-21T22:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.dash0.com/.well-known/security.txt
+Policy: https://www.dash0.com/policies/vulnerability-disclosure.pdf

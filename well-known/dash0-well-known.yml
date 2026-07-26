@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: live probes of dash0.com + api.<region>.aws.dash0.com
+hosts:
+- host: https://www.dash0.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: dash0-security.txt
+- host: https://api.eu-west-1.aws.dash0.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: dash0-oauth-authorization-server.json
+    note: RFC 8414 OAuth 2.0 Authorization Server Metadata (PKCE S256, dynamic client registration)
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: dash0-oauth-protected-resource.json
+    note: RFC 9728 Protected Resource Metadata — advertised for MCP clients
+  - path: /.well-known/openid-configuration
+    status: 404
+notes: >-
+  OAuth well-known documents are served per-region on each API host
+  (eu-west-1, eu-central-1, us-west-2 AWS + europe-west4 GCP). The
+  authorization/protected-resource metadata backs Dash0's OAuth-protected MCP
+  server and CLI browser login.

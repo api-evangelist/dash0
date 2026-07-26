@@ -1,0 +1,86 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/dash0-openapi.json (tags, paths, *Definition schemas)
+identity:
+  primary_key: originOrId
+  description: >-
+    Configuration assets are addressed by `originOrId` — a caller-supplied
+    origin label (metadata.labels["dash0.com/origin"]) or a server-generated
+    UUID (prefixed `api-` for API-created assets). All assets are scoped to an
+    organization and a `dataset`.
+scoping:
+- entity: Organization
+  description: Top-level tenant; owns all assets and members.
+- entity: Dataset
+  pattern: ^[A-Za-z0-9_-]{3,26}$
+  description: Named data partition within an organization; the `dataset` query param scopes most operations.
+entities:
+- name: Dashboard
+  schema: DashboardDefinition
+  operations: [get_api-dashboards, post_api-dashboards, put_api-dashboards-originorid, delete_api-dashboards-originorid, post_api-import-dashboard]
+- name: CheckRule
+  schema: PrometheusRuleDefinition
+  description: Prometheus alert rule.
+  operations: [get_api-alerting-check-rules, post_api-alerting-check-rules, put_api-alerting-check-rules-originorid, delete_api-alerting-check-rules-originorid, post_api-alerting-check-rules-bulk, post_api-import-check-rule, post_api-import-check-rules]
+- name: RecordingRule
+  schema: PrometheusRuleDefinition
+  operations: [get_api-recording-rules, post_api-recording-rules, put_api-recording-rules-originorid, delete_api-recording-rules-originorid]
+- name: SamplingRule
+  schema: SamplingDefinition
+  operations: [get_api-sampling-rules, post_api-sampling-rules, put_api-sampling-rules-originorid, delete_api-sampling-rules-originorid]
+- name: SLO
+  schema: SloDefinition
+  operations: [get_api-slos, post_api-slos, put_api-slos-originorid, delete_api-slos-originorid]
+- name: SpamFilter
+  schema: SpamFilterDefinition
+  operations: [get_api-spam-filters, post_api-spam-filters, put_api-spam-filters-originorid, delete_api-spam-filters-originorid]
+- name: SyntheticCheck
+  schema: SyntheticCheckDefinition
+  operations: [get_api-synthetic-checks, post_api-synthetic-checks, put_api-synthetic-checks-originorid, delete_api-synthetic-checks-originorid, post_api-synthetic-checks-test, get_api-synthetic-checks-locations, post_api-import-synthetic-check]
+- name: View
+  schema: ViewDefinition
+  operations: [get_api-views, post_api-views, put_api-views-originorid, delete_api-views-originorid, post_api-import-view]
+- name: NotificationChannel
+  schema: NotificationChannelDefinition
+  operations: [get_api-notification-channels, post_api-notification-channels, put_api-notification-channels-originorid, delete_api-notification-channels-originorid]
+- name: SignalToMetrics
+  schema: SignalToMetricsDefinition
+  operations: [get_api-signal-to-metrics, post_api-signal-to-metrics, put_api-signal-to-metrics-originorid, delete_api-signal-to-metrics-originorid, post_api-signal-to-metrics-test, put_api-import-signal-to-metrics]
+- name: TimeSeriesAggregation
+  schema: TimeSeriesAggregationDefinition
+  operations: [get_api-time-series-aggregations, post_api-time-series-aggregations, put_api-time-series-aggregations-originorid, delete_api-time-series-aggregations-originorid]
+- name: Automation
+  schema: AgenticWorkflowDefinition
+  description: Agent0 event-driven automation.
+  operations: [get_api-agentic-workflows, post_api-agentic-workflows, put_api-agentic-workflows-originorid, delete_api-agentic-workflows-originorid]
+- name: Team
+  schema: TeamDefinition
+  operations: [get_api-teams, post_api-teams, put_api-teams-originorid-display, delete_api-teams-originorid, post_api-teams-originorid-members, delete_api-teams-originorid-members-memberid]
+- name: Member
+  schema: MemberDefinition
+  operations: [get_api-members, post_api-members, delete_api-members-memberid]
+relationships:
+- from: Organization
+  to: Dataset
+  type: has_many
+- from: Organization
+  to: Member
+  type: has_many
+- from: Team
+  to: Member
+  type: has_many
+  via: members
+- from: Dataset
+  to: Dashboard
+  type: has_many
+- from: Dataset
+  to: CheckRule
+  type: has_many
+- from: CheckRule
+  to: NotificationChannel
+  type: references
+  via: notification routing
+- from: SLO
+  to: CheckRule
+  type: references
+telemetry_signals: [logs, metrics, traces, spans, events, profiles]

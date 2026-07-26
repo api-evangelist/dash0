@@ -1,0 +1,59 @@
+generated: '2026-07-18'
+method: searched
+source: npm, pkg.go.dev, github.com/dash0hq
+packages:
+- language: javascript
+  registry: npm
+  name: "@dash0/sdk-web"
+  url: https://www.npmjs.com/package/@dash0/sdk-web
+  install: npm install @dash0/sdk-web
+  repo: https://github.com/dash0hq/dash0-sdk-web
+  description: Dash0's Web SDK to collect telemetry (RUM) from end-users' web browsers.
+  official: true
+  latest: 0.22.1
+- language: javascript
+  registry: npm
+  name: "@dash0hq/sdk-web"
+  url: https://www.npmjs.com/package/@dash0hq/sdk-web
+  install: npm install @dash0hq/sdk-web
+  repo: https://github.com/dash0hq/dash0-sdk-web
+  description: Legacy-scope publication of the Dash0 Web SDK (superseded by @dash0/sdk-web).
+  official: true
+  latest: 0.6.1
+- language: go
+  registry: pkg.go.dev
+  name: github.com/dash0hq/dash0-cli
+  url: https://pkg.go.dev/github.com/dash0hq/dash0-cli
+  install: go install github.com/dash0hq/dash0-cli@latest
+  repo: https://github.com/dash0hq/dash0-cli
+  description: Command line utility to interact with Dash0 (binary name `dash0`).
+  official: true
+- language: go
+  registry: pkg.go.dev
+  name: github.com/dash0hq/terraform-provider-dash0
+  url: https://pkg.go.dev/github.com/dash0hq/terraform-provider-dash0
+  install: terraform (registry.terraform.io/dash0hq/dash0)
+  repo: https://github.com/dash0hq/terraform-provider-dash0
+  description: Terraform provider to manage Dash0 dashboards, check rules and other assets as code.
+  official: true
+- language: go
+  registry: github
+  name: dash0-operator
+  url: https://github.com/dash0hq/dash0-operator
+  install: helm (Dash0 Kubernetes operator)
+  repo: https://github.com/dash0hq/dash0-operator
+  description: Dash0 Operator for Kubernetes — auto-instruments workloads and ships OTel telemetry.
+  official: true
+- language: java
+  registry: github
+  name: dash0-lambda-extension
+  url: https://github.com/dash0hq/dash0-lambda-extension
+  install: AWS Lambda layer
+  repo: https://github.com/dash0hq/dash0-lambda-extension
+  description: AWS Lambda extension that forwards OpenTelemetry telemetry to Dash0.
+  official: true
+notes: >-
+  The unscoped npm package `dash0` is published by an unrelated project
+  (dash0cloud/cli, "AWS infrastructure") and is NOT a Dash0 (dash0hq) library —
+  excluded. First-party client surface is the Web SDK (RUM), the `dash0` Go CLI,
+  the Terraform provider, the Kubernetes operator and the Lambda extension.

@@ -1,0 +1,22 @@
+generated: '2026-07-18'
+method: searched
+source: https://api.eu-west-1.aws.dash0.com/.well-known/oauth-authorization-server
+docs: https://api-docs.dash0.com/reference/get_well-known-oauth-authorization-server
+schemes:
+- name: OAuth2
+  authorizationUrl: https://api.<region>.aws.dash0.com/oauth/authorize
+  tokenUrl: https://api.<region>.aws.dash0.com/oauth/token
+  flows: [authorizationCode, refreshToken]
+scopes:
+- scope: '*'
+  description: >-
+    Full-access wildcard scope. Dash0's OAuth Authorization Server Metadata
+    advertises `scopes_supported: ["*"]` — a single wildcard scope rather than a
+    granular per-resource scope catalog. Fine-grained access is instead governed
+    by organization roles/RBAC and dataset scoping (the `dataset` query
+    parameter), not by OAuth scopes.
+  flows: [authorizationCode]
+notes: >-
+  Bearer auth-token requests (the primary API auth) are not scoped via OAuth;
+  they carry organization-level access. This artifact reflects the OAuth surface
+  used by the CLI and MCP clients.
