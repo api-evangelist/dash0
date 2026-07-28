@@ -1,0 +1,94 @@
+{
+  "id": "https://www.dash0.com/.well-known/agent-card.json",
+  "name": "Dash0",
+  "description": "OpenTelemetry-native observability platform. Enables AI agents to query metrics, logs, and traces, investigate production incidents, manage dashboards, and configure alerting rules via the Model Context Protocol (MCP).",
+  "provider": {
+    "name": "Dash0 Inc.",
+    "url": "https://www.dash0.com"
+  },
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "extendedAgentCard": false
+  },
+  "skills": [
+    {
+      "id": "query-telemetry",
+      "name": "Query Telemetry",
+      "description": "Query metrics, logs, and traces stored in Dash0 using natural language or structured queries.",
+      "inputModes": [
+        "text"
+      ],
+      "outputModes": [
+        "text",
+        "application/json"
+      ]
+    },
+    {
+      "id": "investigate-incident",
+      "name": "Investigate Incident",
+      "description": "Investigate production incidents by correlating metrics, logs, and traces across services.",
+      "inputModes": [
+        "text"
+      ],
+      "outputModes": [
+        "text",
+        "application/json"
+      ]
+    },
+    {
+      "id": "manage-dashboards",
+      "name": "Manage Dashboards",
+      "description": "Create, update, and retrieve Dash0 dashboards.",
+      "inputModes": [
+        "text",
+        "application/json"
+      ],
+      "outputModes": [
+        "text",
+        "application/json"
+      ]
+    },
+    {
+      "id": "configure-alerts",
+      "name": "Configure Alerts",
+      "description": "Create and manage alerting rules and check rules in Dash0.",
+      "inputModes": [
+        "text",
+        "application/json"
+      ],
+      "outputModes": [
+        "text",
+        "application/json"
+      ]
+    },
+    {
+      "id": "explore-resources",
+      "name": "Explore OpenTelemetry Resources",
+      "description": "Navigate and inspect OpenTelemetry resources, services, and their relationships.",
+      "inputModes": [
+        "text"
+      ],
+      "outputModes": [
+        "text",
+        "application/json"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "type": "http",
+      "url": "https://api.eu-west-1.aws.dash0.com/mcp"
+    }
+  ],
+  "securitySchemes": {
+    "bearer": {
+      "type": "http",
+      "scheme": "bearer",
+      "description": "Dash0 auth token. Create one under Settings \u2192 Auth Tokens in the Dash0 app."
+    }
+  },
+  "security": [
+    "bearer"
+  ]
+}
