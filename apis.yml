@@ -240,6 +240,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/dash0-openapi-overlay.yaml
 - type: AgentCard
   url: a2a/dash0-a2a.yml
   name: A2A Agent Card
