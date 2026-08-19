@@ -1,0 +1,1389 @@
+{
+  "item": [
+    {
+      "id": "96ec0a1a-e78f-421c-bda3-2ef47cc1bff4",
+      "name": "Manage Signal To Metrics (BETA)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "52d46d08-874b-4add-8d31-779b90175049",
+          "name": "Delete a signal-to-metrics config by origin or ID",
+          "request": {
+            "name": "Delete a signal-to-metrics config by origin or ID",
+            "description": {
+              "content": "Deletes a specific signal-to-metrics configuration identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Signal-to-metrics config origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "396e6607-7864-4afa-b8ef-744b86770d67",
+              "name": "Successfully deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d2a79c1b-fc52-4bac-ba9f-99825fb36922",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75ed1ded-f3b7-41bf-b87a-766fe0df5444",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6867182-49b6-4c5a-bb49-17cc089e0429",
+          "name": "Get a specific signal-to-metrics config by origin or ID",
+          "request": {
+            "name": "Get a specific signal-to-metrics config by origin or ID",
+            "description": {
+              "content": "Returns a specific signal-to-metrics configuration identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Signal-to-metrics config origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "62a18d41-c49d-42ae-aa22-8746a1f25277",
+              "name": "The requested signal-to-metrics config",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1951-03-29T05:04:31.130Z\",\n      \"dash0.com/updated-at\": \"2002-06-20T11:45:24.261Z\",\n      \"dash0.com/deleted-at\": \"1958-02-26T14:42:49.188Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"494321d4541546h\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"contains\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"both\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e21a233-739b-4dde-a267-a1ea9be73a5e",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54a9531a-44d4-45a2-8797-bbbbd0aed6f0",
+          "name": "Update or create a signal-to-metrics config by origin or ID",
+          "request": {
+            "name": "Update or create a signal-to-metrics config by origin or ID",
+            "description": {
+              "content": "Updates an existing signal-to-metrics configuration or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Signal-to-metrics config origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"<string>\",\n      \"filters\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"<string>\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"<string>\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a296f39c-a44a-4cbb-8448-b57ebd47fb8d",
+              "name": "The updated or created signal-to-metrics config",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1951-03-29T05:04:31.130Z\",\n      \"dash0.com/updated-at\": \"2002-06-20T11:45:24.261Z\",\n      \"dash0.com/deleted-at\": \"1958-02-26T14:42:49.188Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"494321d4541546h\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"contains\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"both\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd754ac6-632e-4657-8304-cd65e80d3248",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3d65f45-fa16-4b12-ace8-70c603b80c7d",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Signal-to-metrics config origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23f629bb-3882-4752-8b17-c77a892db604",
+          "name": "List all signal-to-metrics configs for the organization",
+          "request": {
+            "name": "List all signal-to-metrics configs for the organization",
+            "description": {
+              "content": "Returns all signal-to-metrics configurations for your organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of items to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of items to skip."
+                },
+                {
+                  "disabled": false,
+                  "key": "originPrefix",
+                  "value": "<string>",
+                  "description": "Filter by origin prefix."
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Case-insensitive substring search on the rule name."
+                },
+                {
+                  "disabled": false,
+                  "key": "signal",
+                  "value": "<string>",
+                  "description": "Filter by signal type."
+                },
+                {
+                  "disabled": false,
+                  "key": "enabled",
+                  "value": "<boolean>",
+                  "description": "Filter by enabled state."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0cfc1412-d986-40d0-9521-889fdcc49610",
+              "name": "List of signal-to-metrics configs",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "signal",
+                      "value": "logs"
+                    },
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"signalToMetrics\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1988-06-27T07:24:56.541Z\",\n          \"dash0.com/updated-at\": \"1953-04-23T11:07:41.270Z\",\n          \"dash0.com/deleted-at\": \"1952-04-01T10:00:41.145Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"5227w146y3w20294ms980d145y96811698s\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    },\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"ui\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"2025-07-26T04:20:20.471Z\",\n          \"dash0.com/updated-at\": \"1990-02-03T22:52:11.638Z\",\n          \"dash0.com/deleted-at\": \"2016-07-22T20:55:26.878Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"logs\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"69474d209546663d33607y35h33M56653620w99716768925ms69498465m\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    }\n  ],\n  \"hasMore\": true,\n  \"total\": 1728\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "611b66ef-2d8e-4e10-ad1c-ab42fec11883",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "signal",
+                      "value": "logs"
+                    },
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97916b47-c57e-4d49-8951-07f4b85503b4",
+          "name": "Create a new signal-to-metrics config",
+          "request": {
+            "name": "Create a new signal-to-metrics config",
+            "description": {
+              "content": "Create a new signal-to-metrics configuration for your organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"<string>\",\n      \"filters\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"<string>\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"<string>\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"<string>\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "edbcff00-31dc-4e45-b67a-836c8a4bfc2b",
+              "name": "The created signal-to-metrics config",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1951-03-29T05:04:31.130Z\",\n      \"dash0.com/updated-at\": \"2002-06-20T11:45:24.261Z\",\n      \"dash0.com/deleted-at\": \"1958-02-26T14:42:49.188Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"494321d4541546h\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"contains\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"both\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "702f3b6a-f90a-45ea-9951-1ab3d79ad80b",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c02c4b12-7d53-4282-98db-babe06ee6e46",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2010-07-23T17:20:28.080Z\",\n      \"dash0.com/updated-at\": \"1975-09-16T07:38:10.505Z\",\n      \"dash0.com/deleted-at\": \"2021-09-30T13:08:51.749Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"match\": {\n      \"signal\": \"spans\",\n      \"filters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"string\",\n      \"interval\": \"050M087407w25824996M\",\n      \"description\": \"string\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"does_not_match\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"ends_with\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"operator\": \"is_one_of\",\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"original\",\n    \"alternativeDatasetId\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7bbb5fd8-4e0a-41b8-b26c-0f0d35e4c9b7",
+          "name": "Test a signal-to-metrics config",
+          "request": {
+            "name": "Test a signal-to-metrics config",
+            "description": {
+              "content": "Validates a signal-to-metrics definition and simulates its match filter\nagainst real signals in the selected dataset over a recent time window.\nReturns the number of matching signals on success. A 4xx error is returned\nwhen the definition fails validation or the request is otherwise invalid.\nNothing is persisted.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "signal-to-metrics",
+                "test"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"definition\": {\n    \"kind\": \"<string>\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"<string>\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": \"<boolean>\",\n      \"display\": {\n        \"name\": \"<string>\"\n      },\n      \"match\": {\n        \"signal\": \"<string>\",\n        \"filters\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"<string>\",\n        \"interval\": \"<string>\",\n        \"description\": \"<string>\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"<string>\",\n      \"alternativeDatasetId\": \"<string>\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6471a360-68ad-46a3-a531-5f14237736a9",
+              "name": "The test result.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    "test"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/version\": \"string\",\n        \"dash0.com/dataset\": \"string\",\n        \"dash0.com/source\": \"operator\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1958-06-11T13:35:01.253Z\",\n        \"dash0.com/updated-at\": \"1992-04-03T16:30:07.702Z\",\n        \"dash0.com/deleted-at\": \"1966-10-23T06:34:19.533Z\",\n        \"dash0.com/folder-path\": \"string\",\n        \"dash0.com/sharing\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": false,\n      \"display\": {\n        \"name\": \"string\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"string\",\n        \"interval\": \"37190516ms33Q53Q44728870y86y\",\n        \"description\": \"string\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"string\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"1988-04-10T03:40:16.587Z\",\n    \"to\": \"1979-05-20T19:17:36.870Z\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"executionTime\": \"2007-07-06T00:38:41.219Z\",\n  \"timeRange\": {\n    \"from\": \"2024-07-20T11:51:24.157Z\",\n    \"to\": \"2012-11-14T14:04:08.287Z\"\n  },\n  \"matchedCount\": 1563\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1755597-01e7-4a94-959b-6d3545971a5c",
+              "name": "The request is invalid — either the body is missing/malformed, the\ntime range is unparseable or out of range, or the definition fails\nvalidation. The response payload lists the specific failures.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    "test"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/version\": \"string\",\n        \"dash0.com/dataset\": \"string\",\n        \"dash0.com/source\": \"operator\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1958-06-11T13:35:01.253Z\",\n        \"dash0.com/updated-at\": \"1992-04-03T16:30:07.702Z\",\n        \"dash0.com/deleted-at\": \"1966-10-23T06:34:19.533Z\",\n        \"dash0.com/folder-path\": \"string\",\n        \"dash0.com/sharing\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": false,\n      \"display\": {\n        \"name\": \"string\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"string\",\n        \"interval\": \"37190516ms33Q53Q44728870y86y\",\n        \"description\": \"string\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"string\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"1988-04-10T03:40:16.587Z\",\n    \"to\": \"1979-05-20T19:17:36.870Z\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0158ccc8-a0b6-4684-b67f-c1d298c53915",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "signal-to-metrics",
+                    "test"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/version\": \"string\",\n        \"dash0.com/dataset\": \"string\",\n        \"dash0.com/source\": \"operator\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1958-06-11T13:35:01.253Z\",\n        \"dash0.com/updated-at\": \"1992-04-03T16:30:07.702Z\",\n        \"dash0.com/deleted-at\": \"1966-10-23T06:34:19.533Z\",\n        \"dash0.com/folder-path\": \"string\",\n        \"dash0.com/sharing\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": false,\n      \"display\": {\n        \"name\": \"string\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"string\",\n        \"interval\": \"37190516ms33Q53Q44728870y86y\",\n        \"description\": \"string\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"string\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"1988-04-10T03:40:16.587Z\",\n    \"to\": \"1979-05-20T19:17:36.870Z\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "321a1168-1c5e-4a3a-b618-c5d63fa4184b",
+          "name": "Bulk upsert signal-to-metrics configs.",
+          "request": {
+            "name": "Bulk upsert signal-to-metrics configs.",
+            "description": {
+              "content": "Atomically upserts up to 500 signal-to-metrics configurations at once. If any item\nfails validation or cannot be written, the entire batch is rejected and no\nconfigurations are changed.\n\nThis endpoint is designed for Infrastructure-as-Code (IaC) workflows (Terraform,\nthe operator, CLI scripts). Rules are matched by their `origin` values across\nrepeated invocations, making the operation idempotent.\n\nThis endpoint accepts request bodies up to 2 MB (vs. the 256 KB default for other\nendpoints) to accommodate batched payloads of up to 500 rules per request.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "import",
+                "signal-to-metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "(Required) The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"<string>\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"<string>\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"<string>\",\n          \"filters\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"<string>\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"<string>\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2dc35e82-8418-405a-ae96-6055d1742780",
+              "name": "All items were successfully upserted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"terraform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1983-06-18T01:21:15.066Z\",\n          \"dash0.com/updated-at\": \"1965-02-09T12:10:23.764Z\",\n          \"dash0.com/deleted-at\": \"2022-11-21T05:15:38.159Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"logs\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"77ms954546y76030886975y5215M6724m47255090344Q876552897d28601089077M0551229ms\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"original\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 5631,\n  \"updated\": 6408\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "07e2c80d-dadf-43e9-9d0b-59ac6cf827cd",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "signal-to-metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "N7w4_JYf"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"terraform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1983-06-18T01:21:15.066Z\",\n          \"dash0.com/updated-at\": \"1965-02-09T12:10:23.764Z\",\n          \"dash0.com/deleted-at\": \"2022-11-21T05:15:38.159Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"logs\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"77ms954546y76030886975y5215M6724m47255090344Q876552897d28601089077M0551229ms\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"original\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5232,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "1100373b-e85f-4561-966e-387a52472ef8",
+    "name": "Dash0 Edge Collectors Manage Signal To Metrics (BETA) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

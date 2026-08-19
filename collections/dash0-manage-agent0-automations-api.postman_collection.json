@@ -1,0 +1,956 @@
+{
+  "item": [
+    {
+      "id": "1019a0a4-ff85-4aee-9800-2087baa56e4d",
+      "name": "Manage Agent0 Automations",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0bc466ef-256d-4f61-9f9c-ac7602e033d5",
+          "name": "Delete an automation by origin or ID",
+          "request": {
+            "name": "Delete an automation by origin or ID",
+            "description": {
+              "content": "Deletes a specific automation identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "agentic-workflows",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Automation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fab5df97-de30-4fcb-bbcc-fe8a0273edeb",
+              "name": "Successfully deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d669eab9-e89f-4a91-a4f3-97f94e292620",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0fea0ac-d766-496f-9bf7-500f985391ec",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7df5fb8-0381-42f1-bfe7-a57bafcc4596",
+          "name": "Get a specific automation by origin or ID",
+          "request": {
+            "name": "Get a specific automation by origin or ID",
+            "description": {
+              "content": "Returns a specific automation identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "agentic-workflows",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Automation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "95e3f053-ff7c-4dd4-979b-c95175d0bf74",
+              "name": "The requested automation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0AgenticWorkflow\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2016-11-08T07:24:34.073Z\",\n      \"dash0.com/created-by\": \"string\",\n      \"dash0.com/last-updated-at\": \"1952-11-16T13:50:34.832Z\",\n      \"dash0.com/last-updated-by\": \"string\",\n      \"dash0.com/deleted-at\": \"1951-01-07T15:42:48.692Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-secret\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"no_network\",\n      \"timeout\": \"90161046w22500656275s60234538786m4873703w745h701917877s25114400y49433s04553d\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"queue\",\n        \"maxParallel\": 9927\n      },\n      \"debounce\": \"46M7465909ms58M665618w093252948h\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 2068.676383774275,\n        \"window\": \"442350s059m700d36m0855913474d38831m\",\n        \"warningThreshold\": 89.95478265292776\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74088335-c07b-4925-b2ee-b612f97fc5f1",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54c9eae0-4343-4d96-931d-6537704cc380",
+          "name": "Update or create an automation by origin or ID",
+          "request": {
+            "name": "Update or create an automation by origin or ID",
+            "description": {
+              "content": "Updates an existing automation or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "agentic-workflows",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Automation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"dash0.com/webhook-id\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/webhook-trigger-enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"<string>\"\n      },\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"<string>\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"<string>\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"<string>\",\n      \"timeout\": \"<string>\",\n      \"allowedTools\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"requiredToolCalls\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"<string>\",\n        \"maxParallel\": \"<integer>\"\n      },\n      \"debounce\": \"<string>\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"<string>\"\n        },\n        \"key_1\": {\n          \"key_0\": \"<string>\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": \"<number>\",\n        \"window\": \"<string>\",\n        \"warningThreshold\": \"<number>\"\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"<string>\",\n          \"tool\": \"<string>\",\n          \"enabled\": \"<boolean>\"\n        },\n        {\n          \"server\": \"<string>\",\n          \"tool\": \"<string>\",\n          \"enabled\": \"<boolean>\"\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"<string>\",\n      \"runId\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"onFailureChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "925b2a39-a896-4ad9-85a5-0a5c995f0f77",
+              "name": "The updated or created automation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0AgenticWorkflow\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2016-11-08T07:24:34.073Z\",\n      \"dash0.com/created-by\": \"string\",\n      \"dash0.com/last-updated-at\": \"1952-11-16T13:50:34.832Z\",\n      \"dash0.com/last-updated-by\": \"string\",\n      \"dash0.com/deleted-at\": \"1951-01-07T15:42:48.692Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-secret\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"no_network\",\n      \"timeout\": \"90161046w22500656275s60234538786m4873703w745h701917877s25114400y49433s04553d\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"queue\",\n        \"maxParallel\": 9927\n      },\n      \"debounce\": \"46M7465909ms58M665618w093252948h\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 2068.676383774275,\n        \"window\": \"442350s059m700d36m0855913474d38831m\",\n        \"warningThreshold\": 89.95478265292776\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65851f58-5d35-4ec6-9a8d-8df315745396",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f09f81e6-d57b-4b93-bb0f-518505fa88ba",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Automation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ff93e32f-7aa9-472f-8717-d4c75f8194fb",
+          "name": "List all automations for the organization",
+          "request": {
+            "name": "List all automations for the organization",
+            "description": {
+              "content": "Returns all automations configured for your organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "agentic-workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "folderPath",
+                  "value": "<string>",
+                  "description": "Filter by folder path (exact match on dash0.com/folder-path annotation)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2f9fb47-842b-4e05-9a52-9b54f626afd1",
+              "name": "List of automations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    },
+                    {
+                      "key": "folderPath",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"agenticWorkflows\": [\n    {\n      \"kind\": \"Dash0AgenticWorkflow\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"terraform\",\n          \"dash0.com/webhook-id\": \"string\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1989-04-27T02:31:40.733Z\",\n          \"dash0.com/created-by\": \"string\",\n          \"dash0.com/last-updated-at\": \"1963-03-26T15:26:14.571Z\",\n          \"dash0.com/last-updated-by\": \"string\",\n          \"dash0.com/deleted-at\": \"2008-10-15T22:22:10.542Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\",\n          \"dash0.com/webhook-secret\": \"string\",\n          \"dash0.com/webhook-trigger-enabled\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"display\": {\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"triggers\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"prompt\": {\n          \"user\": \"string\"\n        },\n        \"guardrails\": {\n          \"networkLevel\": \"no_network\",\n          \"timeout\": \"6168w39ms6316424d26111m\",\n          \"allowedTools\": [\n            \"string\",\n            \"string\"\n          ],\n          \"requiredToolCalls\": [\n            \"string\",\n            \"string\"\n          ],\n          \"concurrency\": {\n            \"policy\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxParallel\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"debounce\": \"64479h8d232y874m985440y\",\n          \"toolParameterOverrides\": {\n            \"key_0\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"key_1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"creditBudgetWindow\": {\n            \"credits\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"window\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"warningThreshold\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"mcpTools\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"parent\": {\n          \"workflowId\": \"string\",\n          \"runId\": \"string\",\n          \"version\": \"string\"\n        },\n        \"permissions\": [\n          {\n            \"actions\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"teamId\": \"string\",\n            \"userId\": \"string\",\n            \"role\": \"string\"\n          },\n          {\n            \"actions\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"teamId\": \"string\",\n            \"userId\": \"string\",\n            \"role\": \"string\"\n          }\n        ],\n        \"constants\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\",\n          \"key_3\": \"string\",\n          \"key_4\": \"string\"\n        },\n        \"notifications\": {\n          \"onSuccessChannels\": [\n            \"string\",\n            \"string\"\n          ],\n          \"onFailureChannels\": [\n            \"string\",\n            \"string\"\n          ],\n          \"onBudgetWarningChannels\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0AgenticWorkflow\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"api\",\n          \"dash0.com/webhook-id\": \"string\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1965-01-14T02:54:39.627Z\",\n          \"dash0.com/created-by\": \"string\",\n          \"dash0.com/last-updated-at\": \"1990-09-12T04:34:32.917Z\",\n          \"dash0.com/last-updated-by\": \"string\",\n          \"dash0.com/deleted-at\": \"1970-01-03T13:10:38.636Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\",\n          \"dash0.com/webhook-secret\": \"string\",\n          \"dash0.com/webhook-trigger-enabled\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\",\n          \"description\": \"string\"\n        },\n        \"triggers\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"prompt\": {\n          \"user\": \"string\"\n        },\n        \"guardrails\": {\n          \"networkLevel\": \"no_network\",\n          \"timeout\": \"15383h4302364h10757404M9753457546s2d1m57690Q261y\",\n          \"allowedTools\": [\n            \"string\",\n            \"string\"\n          ],\n          \"requiredToolCalls\": [\n            \"string\",\n            \"string\"\n          ],\n          \"concurrency\": {\n            \"policy\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxParallel\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"debounce\": \"553663m379Q\",\n          \"toolParameterOverrides\": {\n            \"key_0\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"key_1\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"creditBudgetWindow\": {\n            \"credits\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"window\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"warningThreshold\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"mcpTools\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"parent\": {\n          \"workflowId\": \"string\",\n          \"runId\": \"string\",\n          \"version\": \"string\"\n        },\n        \"permissions\": [\n          {\n            \"actions\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"teamId\": \"string\",\n            \"userId\": \"string\",\n            \"role\": \"string\"\n          },\n          {\n            \"actions\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"teamId\": \"string\",\n            \"userId\": \"string\",\n            \"role\": \"string\"\n          }\n        ],\n        \"constants\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\",\n          \"key_3\": \"string\"\n        },\n        \"notifications\": {\n          \"onSuccessChannels\": [\n            \"string\",\n            \"string\"\n          ],\n          \"onFailureChannels\": [\n            \"string\",\n            \"string\"\n          ],\n          \"onBudgetWarningChannels\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "627fcf85-9d24-43a7-aa13-7b7eca155d64",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    },
+                    {
+                      "key": "folderPath",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "677a39ee-20c5-4e9c-8650-ff38b7cd767a",
+          "name": "Create a new automation",
+          "request": {
+            "name": "Create a new automation",
+            "description": {
+              "content": "Create a new automation for your organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "agentic-workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"dash0.com/webhook-id\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/webhook-trigger-enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"<string>\"\n      },\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"<string>\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"<string>\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"<string>\",\n      \"timeout\": \"<string>\",\n      \"allowedTools\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"requiredToolCalls\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"<string>\",\n        \"maxParallel\": \"<integer>\"\n      },\n      \"debounce\": \"<string>\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"<string>\"\n        },\n        \"key_1\": {\n          \"key_0\": \"<string>\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": \"<number>\",\n        \"window\": \"<string>\",\n        \"warningThreshold\": \"<number>\"\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"<string>\",\n          \"tool\": \"<string>\",\n          \"enabled\": \"<boolean>\"\n        },\n        {\n          \"server\": \"<string>\",\n          \"tool\": \"<string>\",\n          \"enabled\": \"<boolean>\"\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"<string>\",\n      \"runId\": \"<string>\",\n      \"version\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"onFailureChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76f4b83a-ea36-4715-be09-116c2ca974fc",
+              "name": "The created automation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0AgenticWorkflow\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"terraform\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2016-11-08T07:24:34.073Z\",\n      \"dash0.com/created-by\": \"string\",\n      \"dash0.com/last-updated-at\": \"1952-11-16T13:50:34.832Z\",\n      \"dash0.com/last-updated-by\": \"string\",\n      \"dash0.com/deleted-at\": \"1951-01-07T15:42:48.692Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-secret\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"availableVariables\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"no_network\",\n      \"timeout\": \"90161046w22500656275s60234538786m4873703w745h701917877s25114400y49433s04553d\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"queue\",\n        \"maxParallel\": 9927\n      },\n      \"debounce\": \"46M7465909ms58M665618w093252948h\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 2068.676383774275,\n        \"window\": \"442350s059m700d36m0855913474d38831m\",\n        \"warningThreshold\": 89.95478265292776\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63036bd0-dfda-48f1-97d5-4c9e63f313ee",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "156f6fe1-2fba-4d56-95d1-62e28ededb2a",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "agentic-workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "iEU0-out2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"dash0.com/webhook-id\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2016-03-06T13:57:56.465Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/webhook-trigger-enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"triggers\": [\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      },\n      {\n        \"kind\": \"string\",\n        \"spec\": {\n          \"cron\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"task\": \"string\"\n      }\n    ],\n    \"prompt\": {\n      \"user\": \"string\"\n    },\n    \"guardrails\": {\n      \"networkLevel\": \"trusted_only\",\n      \"timeout\": \"33ms81473387y4ms\",\n      \"allowedTools\": [\n        \"string\",\n        \"string\"\n      ],\n      \"requiredToolCalls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"concurrency\": {\n        \"policy\": \"supersede\",\n        \"maxParallel\": 4601\n      },\n      \"debounce\": \"21597082343M20178809502M455462w8M5144350717m8775861w647406d\",\n      \"toolParameterOverrides\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\"\n        }\n      },\n      \"creditBudgetWindow\": {\n        \"credits\": 983.5481860798056,\n        \"window\": \"2558577311s21854551m63125h6m44085722572M4134ms374011Q570552913y9874y56386140084d\",\n        \"warningThreshold\": 63.27379568788185\n      },\n      \"mcpTools\": [\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": true\n        },\n        {\n          \"server\": \"string\",\n          \"tool\": \"string\",\n          \"enabled\": false\n        }\n      ]\n    },\n    \"parent\": {\n      \"workflowId\": \"string\",\n      \"runId\": \"string\",\n      \"version\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"agentic_workflow:read\",\n          \"agentic_workflow:read\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"agentic_workflow:delete\",\n          \"agentic_workflow:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"constants\": {\n      \"key_0\": \"string\"\n    },\n    \"notifications\": {\n      \"onSuccessChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onFailureChannels\": [\n        \"string\",\n        \"string\"\n      ],\n      \"onBudgetWarningChannels\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3384,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4a9556fa-0be5-41af-9618-1d1dcd6bbb9d",
+    "name": "Dash0 Edge Collectors Manage Agent0 Automations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

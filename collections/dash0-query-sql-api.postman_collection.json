@@ -1,0 +1,166 @@
+{
+  "item": [
+    {
+      "id": "153ba248-86b1-4e1a-b3b7-88131c51d308",
+      "name": "Query SQL",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "afcd8b4d-0485-4551-88bf-e911fe869ffa",
+          "name": "Execute a SQL query and return results as JSON.",
+          "request": {
+            "name": "Execute a SQL query and return results as JSON.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sql"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"query\": \"<string>\",\n  \"dataset\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "40311d9e-5b97-491f-bb20-4e9139dd2507",
+              "name": "Returns the SQL query results.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1952-05-21T08:23:38.494Z\",\n    \"to\": \"2006-08-15T07:49:44.147Z\"\n  },\n  \"query\": \"<string>\",\n  \"dataset\": \"fFt5HTDgJga\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"executionTime\": \"1997-01-16T20:26:37.118Z\",\n  \"timeRange\": {\n    \"from\": \"1947-11-18T01:18:10.875Z\",\n    \"to\": \"1995-12-14T15:23:33.395Z\"\n  },\n  \"warnings\": [\n    \"string\",\n    \"string\"\n  ],\n  \"error\": \"string\",\n  \"queryError\": {\n    \"title\": \"string\",\n    \"description\": \"string\",\n    \"correctedQuery\": \"string\"\n  },\n  \"progress\": {\n    \"rowsRead\": 8343,\n    \"bytesRead\": 5744,\n    \"totalRowsToRead\": 7132,\n    \"executionTimeMillis\": 2793\n  },\n  \"resultRows\": [\n    {\n      \"values\": [\n        {\n          \"key\": \"string\",\n          \"value\": {\n            \"stringValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"boolValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"intValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"doubleValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bytesValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"key\": \"string\",\n          \"value\": {\n            \"stringValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"boolValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"intValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"doubleValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bytesValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    },\n    {\n      \"values\": [\n        {\n          \"key\": \"string\",\n          \"value\": {\n            \"stringValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"boolValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"intValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"doubleValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bytesValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"key\": \"string\",\n          \"value\": {\n            \"stringValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"boolValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"intValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"doubleValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"bytesValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba084fa0-2b88-4ff5-9ba6-8afe278122ed",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1952-05-21T08:23:38.494Z\",\n    \"to\": \"2006-08-15T07:49:44.147Z\"\n  },\n  \"query\": \"<string>\",\n  \"dataset\": \"fFt5HTDgJga\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5299,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b2095652-bf34-4c82-ad6e-568beebc35e3",
+    "name": "Dash0 Edge Collectors Query SQL API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

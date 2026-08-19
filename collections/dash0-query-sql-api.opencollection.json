@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Query SQL API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query SQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a SQL query and return results as JSON.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/sql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a SQL query and return results as JSON."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

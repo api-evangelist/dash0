@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Synthetic Checks API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Synthetic Checks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Receive a specific synthetic check by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Synthetic check origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Receive a specific synthetic check by its origin or id."
+        },
+        {
+          "info": {
+            "name": "Update or insert a specific synthetic check by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Synthetic check origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update or insert a specific synthetic check by its origin or id."
+        },
+        {
+          "info": {
+            "name": "Delete a specific synthetic check by origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Synthetic check origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Delete a specific synthetic check by origin or id."
+        },
+        {
+          "info": {
+            "name": "Retrieve list of synthetic check locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks/locations"
+          },
+          "docs": "Retrieves the current list of synthetic check locations."
+        },
+        {
+          "info": {
+            "name": "Receive a list of synthetic checks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Receive a list of your organization synthetic checks"
+        },
+        {
+          "info": {
+            "name": "Create a synthetic check",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a synthetic check."
+        },
+        {
+          "info": {
+            "name": "Import a synthetic check",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/import/synthetic-check",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows you **to import an existing synthetic check** into your organization. It's intended for one-time migrations rather than ongoing synthetic check management.\nUnlike the standard API, this endpoint supports importing synthetic checks **with full editability**, allowing you to modify synthetic checks that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration "
+        },
+        {
+          "info": {
+            "name": "Trigger a test run of a synthetic check",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/synthetic-checks/test",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Triggers an immediate test execution of a synthetic check."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

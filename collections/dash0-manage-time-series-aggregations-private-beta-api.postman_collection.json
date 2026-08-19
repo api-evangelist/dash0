@@ -1,0 +1,942 @@
+{
+  "item": [
+    {
+      "id": "5955ff1f-8f6f-4e2d-a6ef-9e8ae7459ae8",
+      "name": "Manage Time Series Aggregations (Private BETA)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ff741e2e-d425-44a3-901c-657c7f9990df",
+          "name": "Delete a time series aggregation by origin or ID",
+          "request": {
+            "name": "Delete a time series aggregation by origin or ID",
+            "description": {
+              "content": "Deletes a specific time series aggregation identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "time-series-aggregations",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Time series aggregation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ac6f7347-5e5f-415e-a0e6-99ae52403b3b",
+              "name": "Successfully deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a09a01a0-36b9-4f63-8803-d0bd25c16747",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddf22f43-3810-438a-bcb3-f867a834ff41",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3db50653-f223-494e-ad2f-68698d51e946",
+          "name": "Get a specific time series aggregation by origin or ID",
+          "request": {
+            "name": "Get a specific time series aggregation by origin or ID",
+            "description": {
+              "content": "Returns a specific time series aggregation identified by its origin label or UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "time-series-aggregations",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Time series aggregation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ff6e27ba-0a35-4e8c-9259-fe4f940714d7",
+              "name": "The requested time series aggregation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-10-10T11:14:16.657Z\",\n      \"dash0.com/updated-at\": \"1963-11-18T18:30:54.608Z\",\n      \"dash0.com/deleted-at\": \"1949-12-04T17:17:15.848Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"gt\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"891665d7625840M024d76421798868s8M20622576723d5302229452d3d\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"11615222h\"\n    },\n    \"priority\": 4885,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"scope\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0abbb0b6-f021-40e7-9a00-62c1ca493d34",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "da71edea-647e-45b7-b913-533143a3dd04",
+          "name": "Update or create a time series aggregation by origin or ID",
+          "request": {
+            "name": "Update or create a time series aggregation by origin or ID",
+            "description": {
+              "content": "Updates an existing time series aggregation or creates a new one if it doesn't exist.\nUseful for Infrastructure-as-Code workflows.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "time-series-aggregations",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Time series aggregation origin or UUID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"custom\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\",\n        \"key_2\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"<string>\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"<string>\"\n    },\n    \"priority\": \"<integer>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"<string>\"\n        }\n      },\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b42ab09a-404f-4ffc-9222-7833ba2057cf",
+              "name": "The updated or created time series aggregation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-10-10T11:14:16.657Z\",\n      \"dash0.com/updated-at\": \"1963-11-18T18:30:54.608Z\",\n      \"dash0.com/deleted-at\": \"1949-12-04T17:17:15.848Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"gt\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"891665d7625840M024d76421798868s8M20622576723d5302229452d3d\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"11615222h\"\n    },\n    \"priority\": 4885,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"scope\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b168c875-5638-4ea5-9533-e627ce5a04ef",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cefa1ee-08b8-4b2a-978b-9fd73505651f",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Time series aggregation origin or UUID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "accbc25d-d514-479b-b314-ec075f64f507",
+          "name": "List all time series aggregations for the organization",
+          "request": {
+            "name": "List all time series aggregations for the organization",
+            "description": {
+              "content": "Returns all time series aggregation rules configured for your organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "time-series-aggregations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c94bef8c-9f4d-4469-8882-e4811bf731d4",
+              "name": "List of time series aggregations",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"timeSeriesAggregations\": [\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1965-04-11T20:08:36.752Z\",\n          \"dash0.com/updated-at\": \"1984-06-08T17:18:05.544Z\",\n          \"dash0.com/deleted-at\": \"1970-03-16T15:41:05.936Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"4699466m071050Q15100m\",\n          \"delay\": \"20s\",\n          \"staleAfter\": \"1057538w726940871Q18M54h0w924m\"\n        },\n        \"priority\": 659,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"terraform\",\n          \"custom\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1950-12-24T09:29:43.558Z\",\n          \"dash0.com/updated-at\": \"2017-07-30T15:47:20.419Z\",\n          \"dash0.com/deleted-at\": \"1982-06-10T12:35:06.967Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"39065124M49695518s99727y171259052w\",\n          \"delay\": \"20s\",\n          \"staleAfter\": \"201950939s3819809w101361455y07988M9781ms51M2006898113w6126689Q33709Q\"\n        },\n        \"priority\": 7294,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47029e4d-32bc-41dd-b67e-a00cad240b3d",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23c00843-8553-40d4-8e79-45b13706871f",
+          "name": "Create a new time series aggregation",
+          "request": {
+            "name": "Create a new time series aggregation",
+            "description": {
+              "content": "Create a new time series aggregation rule for your organization. If\n`metadata.labels[\"dash0.com/origin\"]` is provided, it must be unique within the\norganization and dataset; a request with a duplicate origin returns 400. If no\norigin is provided, the server auto-generates one.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "time-series-aggregations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"custom\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\",\n        \"key_2\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"operator\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"value\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"values\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"<string>\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"<string>\"\n    },\n    \"priority\": \"<integer>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"<string>\"\n        }\n      },\n      {\n        \"kind\": \"<string>\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e24f4e4a-cd2f-410f-a4c9-40a2892b2cc3",
+              "name": "The created time series aggregation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-10-10T11:14:16.657Z\",\n      \"dash0.com/updated-at\": \"1963-11-18T18:30:54.608Z\",\n      \"dash0.com/deleted-at\": \"1949-12-04T17:17:15.848Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"gt\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"891665d7625840M024d76421798868s8M20622576723d5302229452d3d\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"11615222h\"\n    },\n    \"priority\": 4885,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"scope\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "afbe6dfd-81d4-403b-b5a6-e0db5d9c3606",
+              "name": "Forbidden - Admin access required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa456415-212a-4d7a-80b3-b4547d09d57b",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "3XzgBO-j-LzL38"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1971-03-31T01:04:12.923Z\",\n      \"dash0.com/updated-at\": \"1980-11-09T05:14:40.456Z\",\n      \"dash0.com/deleted-at\": \"1951-08-28T03:17:25.503Z\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": true,\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not_set\",\n        \"value\": \"string\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"service.name\",\n          \"operator\": \"is\",\n          \"value\": \"foo\"\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"1h197032w8262s6000410s7870047460Q60953057s723578555M3956M49290554842w1w\",\n      \"delay\": \"20s\",\n      \"staleAfter\": \"4M0d016664513s\"\n    },\n    \"priority\": 7210,\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"keep_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5001,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "255cb500-dd5f-44fd-a474-ef1227db3d9a",
+    "name": "Dash0 Edge Collectors Manage Time Series Aggregations (Private BETA) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

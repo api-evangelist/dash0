@@ -1,0 +1,29 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Edge Collectors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve settings for the organization identified by the provided Dash0 auth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/edge/settings"
+          },
+          "docs": "Returns the aggregate settings payload (dataset settings, signal-to-metrics rules,\ntelemetry transformation rules, observed patterns, etc.) for the organization that\nowns the provided bearer token. Designed for edge collectors running in customer\nenvironments that need their full configuration in one request.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

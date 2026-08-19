@@ -1,0 +1,577 @@
+{
+  "item": [
+    {
+      "id": "67a85db7-c10b-4fac-9a4d-70014546139a",
+      "name": "Query Telemetry",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "53916634-92f2-47ff-985d-6749b62be5fa",
+          "name": "Returns OTLP logs records",
+          "request": {
+            "name": "Returns OTLP logs records",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"dataset\": \"<string>\",\n  \"sampling\": {\n    \"mode\": \"<string>\",\n    \"timeRange\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"<string>\",\n    \"limit\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "624a1151-ba59-4830-acd2-a1342eec33fc",
+              "name": "Returns log records in OTLP format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1946-10-19T22:19:37.724Z\",\n    \"to\": \"2000-12-29T04:50:28.337Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"P-OhIp-0NrqMQuU91nh_BE\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1956-07-08T18:26:57.799Z\",\n      \"to\": \"2001-07-06T01:25:32.233Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"resourceLogs\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 636,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeLogs\": [\n        {\n          \"logRecords\": [\n            {\n              \"timeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"observedTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eventName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0EventId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityNumber\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityText\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"body\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 6673\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 2900,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeLogs\": [\n        {\n          \"logRecords\": [\n            {\n              \"timeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"observedTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eventName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0EventId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityNumber\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityText\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"body\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 1130\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ],\n  \"executionTime\": \"2014-05-29T17:26:33.604Z\",\n  \"timeRange\": {\n    \"from\": \"1968-05-17T06:10:37.403Z\",\n    \"to\": \"2006-05-28T19:55:23.509Z\"\n  },\n  \"cursors\": {\n    \"before\": \"string\",\n    \"after\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3bb3e396-5b59-47df-8caf-94588721a809",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1946-10-19T22:19:37.724Z\",\n    \"to\": \"2000-12-29T04:50:28.337Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"P-OhIp-0NrqMQuU91nh_BE\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1956-07-08T18:26:57.799Z\",\n      \"to\": \"2001-07-06T01:25:32.233Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 4991,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4538a079-7ff6-49ca-87e4-88d9ade1aadf",
+          "name": "Returns OTLP spans",
+          "request": {
+            "name": "Returns OTLP spans",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "spans"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"dataset\": \"<string>\",\n  \"sampling\": {\n    \"mode\": \"<string>\",\n    \"timeRange\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"<string>\",\n    \"limit\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8535fb93-d283-4dc1-b784-d27f4473903f",
+              "name": "Returns spans in OTLP format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "spans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1993-08-25T03:58:59.204Z\",\n    \"to\": \"1973-09-24T21:20:19.031Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"esaSW-c9hCClR\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1962-08-25T13:52:35.509Z\",\n      \"to\": \"1957-02-25T10:46:17.741Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"resourceSpans\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 124,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 8194\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 2710,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 6001\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ],\n  \"executionTime\": \"1974-12-11T02:20:15.060Z\",\n  \"timeRange\": {\n    \"from\": \"1981-08-26T03:39:29.682Z\",\n    \"to\": \"2019-04-10T13:51:06.165Z\"\n  },\n  \"cursors\": {\n    \"before\": \"string\",\n    \"after\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb3094fa-e015-44f2-9dd2-2eea2e2b87a7",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "spans"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"1993-08-25T03:58:59.204Z\",\n    \"to\": \"1973-09-24T21:20:19.031Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"esaSW-c9hCClR\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1962-08-25T13:52:35.509Z\",\n      \"to\": \"1957-02-25T10:46:17.741Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 4991,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3b44c26f-af03-42f9-beaa-755a4578520a",
+          "name": "Returns the OTLP spans and log records (if any) associated with the trace ID.",
+          "request": {
+            "name": "Returns the OTLP spans and log records (if any) associated with the trace ID.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "trace",
+                "details"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"traceId\": \"<string>\",\n  \"dataset\": \"<string>\",\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"includeLinkedTraces\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9c10b66d-ba7f-4ace-83d8-76318f338028",
+              "name": "Returns spans and log records (if any) in OTLP format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "trace",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"traceId\": \"<string>\",\n  \"dataset\": \"JxMxOvPhZQnsEoxnHqyPGMDf\",\n  \"timeRange\": {\n    \"from\": \"1960-08-05T22:18:01.439Z\",\n    \"to\": \"2008-12-06T20:50:58.123Z\"\n  },\n  \"includeLinkedTraces\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"resourceSpans\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 3752,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 4796\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 3069,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 9209\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ],\n  \"resourceLogs\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 5980,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeLogs\": [\n        {\n          \"logRecords\": [\n            {\n              \"timeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"observedTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eventName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0EventId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityNumber\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityText\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"body\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 9931\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 1259,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeLogs\": [\n        {\n          \"logRecords\": [\n            {\n              \"timeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"observedTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eventName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0EventId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityNumber\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityText\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"body\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 3256\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ],\n  \"webEvents\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 6969,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeLogs\": [\n        {\n          \"logRecords\": [\n            {\n              \"timeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"observedTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"eventName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0EventId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityNumber\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"severityText\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"body\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 3322\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ],\n  \"syntheticCheckAttemptDetails\": {\n    \"attemptId\": \"string\",\n    \"duration\": 5291,\n    \"events\": [\n      {\n        \"timeUnixNano\": \"string\",\n        \"name\": \"string\",\n        \"attributes\": [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 6983\n      },\n      {\n        \"timeUnixNano\": \"string\",\n        \"name\": \"string\",\n        \"attributes\": [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 8135\n      }\n    ],\n    \"failedCriticalAssertions\": [\n      {\n        \"assertion\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"explanation\": \"string\",\n        \"actualValue\": \"string\"\n      },\n      {\n        \"assertion\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"explanation\": \"string\",\n        \"actualValue\": \"string\"\n      }\n    ],\n    \"failedDegradedAssertions\": [\n      {\n        \"assertion\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"explanation\": \"string\",\n        \"actualValue\": \"string\"\n      },\n      {\n        \"assertion\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"explanation\": \"string\",\n        \"actualValue\": \"string\"\n      }\n    ],\n    \"isTestRun\": true,\n    \"location\": \"string\",\n    \"passedCriticalAssertions\": [\n      {\n        \"kind\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spec\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"kind\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spec\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"passedDegradedAssertions\": [\n      {\n        \"kind\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spec\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"kind\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spec\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"runId\": \"string\",\n    \"spanAttributes\": [\n      {\n        \"key\": \"string\",\n        \"value\": {\n          \"stringValue\": \"string\",\n          \"boolValue\": false,\n          \"intValue\": \"string\",\n          \"doubleValue\": 7745.0796842791915,\n          \"bytesValue\": \"string\"\n        }\n      },\n      {\n        \"key\": \"string\",\n        \"value\": {\n          \"stringValue\": \"string\",\n          \"boolValue\": true,\n          \"intValue\": \"string\",\n          \"doubleValue\": 6908.906501126003,\n          \"bytesValue\": \"string\"\n        }\n      }\n    ],\n    \"spanId\": \"string\",\n    \"startTime\": \"1965-01-06T19:52:47.023Z\",\n    \"statusCode\": 728,\n    \"syntheticCheckId\": \"string\",\n    \"syntheticCheckVersion\": \"string\",\n    \"traceId\": \"string\",\n    \"errorType\": \"dns\",\n    \"errorMessage\": \"string\"\n  },\n  \"additionalResourceSpans\": [\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 8674,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 1920\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    },\n    {\n      \"resource\": {\n        \"attributes\": [\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": \"string\",\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"droppedAttributesCount\": 8408,\n        \"firstSeenUnixNano\": \"string\",\n        \"lastSeenUnixNano\": \"string\",\n        \"operationTypes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"deploymentEnvironments\": [\n          \"string\",\n          \"string\"\n        ],\n        \"languages\": [\n          \"string\",\n          \"string\"\n        ],\n        \"orchestrations\": [\n          \"kubernetes\",\n          \"kubernetes\"\n        ],\n        \"clouds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"scopeSpans\": [\n        {\n          \"spans\": [\n            {\n              \"traceId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"spanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"attributes\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"events\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"links\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"status\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"startTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"endTimeUnixNano\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"kind\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"traceState\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"parentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"hasChildren\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"flags\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0Name\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginType\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0TraceOriginParentSpanId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"dash0ForwardLinks\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedAttributesCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedEventsCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"droppedLinksCount\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"scope\": {\n            \"attributes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"name\": \"string\",\n            \"version\": \"string\",\n            \"droppedAttributesCount\": 1289\n          },\n          \"schemaUrl\": \"string\"\n        }\n      ],\n      \"schemaUrl\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e9555479-b44d-4ab8-99f7-e69fb833bfae",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "trace",
+                    "details"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"traceId\": \"<string>\",\n  \"dataset\": \"JxMxOvPhZQnsEoxnHqyPGMDf\",\n  \"timeRange\": {\n    \"from\": \"1960-08-05T22:18:01.439Z\",\n    \"to\": \"2008-12-06T20:50:58.123Z\"\n  },\n  \"includeLinkedTraces\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 4991,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04bffa00-5a3b-4ced-a6b0-7d3c3e765f2b",
+          "name": "Returns unique trace IDs matching the given filters.",
+          "request": {
+            "name": "Returns unique trace IDs matching the given filters.",
+            "description": {
+              "content": "Lightweight endpoint that returns only the unique trace IDs of traces containing\nat least one span matching the request filters. Useful for two-step workflows: first\nfind matching trace IDs, then fetch full trace details via `GetTrace`\n(`POST /api/trace/details`). Significantly faster and lighter-weight than\n`GetSpans` (`POST /api/spans`) when only trace IDs are needed.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "trace",
+                "ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"key\": \"<string>\",\n      \"operator\": \"<string>\",\n      \"value\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"dataset\": \"<string>\",\n  \"sampling\": {\n    \"mode\": \"<string>\",\n    \"timeRange\": {\n      \"from\": \"<dateTime>\",\n      \"to\": \"<dateTime>\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"<string>\",\n    \"limit\": \"<long>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6611c827-be66-489c-8897-e21b69ed4faa",
+              "name": "Returns unique trace IDs as hex-encoded strings.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "trace",
+                    "ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"2008-05-05T14:46:47.724Z\",\n    \"to\": \"1986-10-25T09:38:17.927Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"a3sbE\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1958-11-20T13:32:18.915Z\",\n      \"to\": \"1961-03-12T02:52:41.338Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"traceIds\": [\n    \"string\",\n    \"string\"\n  ],\n  \"cursors\": {\n    \"before\": \"string\",\n    \"after\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aeca2de8-3df9-439d-9c76-4c69fa02cb6f",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "trace",
+                    "ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeRange\": {\n    \"from\": \"2008-05-05T14:46:47.724Z\",\n    \"to\": \"1986-10-25T09:38:17.927Z\"\n  },\n  \"filter\": [\n    {\n      \"key\": \"service.name\",\n      \"operator\": \"is\",\n      \"value\": \"foo\"\n    }\n  ],\n  \"dataset\": \"a3sbE\",\n  \"sampling\": {\n    \"mode\": \"adaptive\",\n    \"timeRange\": {\n      \"from\": \"1958-11-20T13:32:18.915Z\",\n      \"to\": \"1961-03-12T02:52:41.338Z\"\n    }\n  },\n  \"ordering\": [\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    },\n    {\n      \"key\": \"string\",\n      \"direction\": \"ascending\"\n    }\n  ],\n  \"pagination\": {\n    \"cursor\": \"string\",\n    \"limit\": 10\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 4991,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "1faaf7c0-d60a-4053-8b03-a228932889f8",
+    "name": "Dash0 Edge Collectors Query Telemetry API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

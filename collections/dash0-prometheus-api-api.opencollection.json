@@ -1,0 +1,454 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Prometheus API API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Prometheus API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Evaluates and returns a formatted version of the query.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/format_query",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "PromQL expression to validate and pretty-print. The response `data` is the\nformatted expression. If the query contains Dash0 template variables (e.g.\n`$__range`, `$__interval`), the original query is returned unmodified.\n"
+              }
+            ]
+          },
+          "docs": "Evaluates and returns a formatted version of the query."
+        },
+        {
+          "info": {
+            "name": "Evaluates and returns a formatted version of the query.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/format_query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Evaluates and returns a formatted version of the query."
+        },
+        {
+          "info": {
+            "name": "Returns a list of label values for a provided label name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/label/:label_name/values",
+            "params": [
+              {
+                "name": "label_name",
+                "value": "",
+                "type": "path",
+                "description": "The label name whose values are returned."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp to restrict the set of returned label values."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp to restrict the set of returned label values."
+              },
+              {
+                "name": "match[]",
+                "value": "",
+                "type": "query",
+                "description": "Repeated series selector that restricts the label values returned."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results. Defaults to and is capped at the server-configured maximum."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Returns a list of label values for a provided label name."
+        },
+        {
+          "info": {
+            "name": "Returns a list of label values for a provided label name.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/label/:label_name/values",
+            "params": [
+              {
+                "name": "label_name",
+                "value": "",
+                "type": "path",
+                "description": "The label name whose values are returned."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a list of label values for a provided label name."
+        },
+        {
+          "info": {
+            "name": "Returns a list of label names.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/labels",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp to restrict the set of returned label names."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp to restrict the set of returned label names."
+              },
+              {
+                "name": "match[]",
+                "value": "",
+                "type": "query",
+                "description": "Repeated series selector that restricts the label names returned."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results. Defaults to and is capped at the server-configured maximum."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Returns a list of label names."
+        },
+        {
+          "info": {
+            "name": "Returns a list of label names.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/labels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a list of label names."
+        },
+        {
+          "info": {
+            "name": "Returns metadata about metrics currently scraped from targets.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/metadata",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of metrics to return. When omitted, all metrics are returned."
+              },
+              {
+                "name": "limit_per_metric",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of metadata entries to return per metric."
+              },
+              {
+                "name": "metric",
+                "value": "",
+                "type": "query",
+                "description": "If provided, only metadata for this metric name is returned. When omitted,\nmetadata for all metrics is returned.\n"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp. Must be provided together with `end`."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp. Must be provided together with `start`."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Returns metadata about metrics currently scraped from targets."
+        },
+        {
+          "info": {
+            "name": "Returns metadata about metrics currently scraped from targets.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/metadata",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns metadata about metrics currently scraped from targets."
+        },
+        {
+          "info": {
+            "name": "Evaluates a PromQL expression over a range of time.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/query_range",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "PromQL expression to evaluate."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp of the range (inclusive)."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp of the range (inclusive). Must not be before `start`."
+              },
+              {
+                "name": "step",
+                "value": "",
+                "type": "query",
+                "description": "Query resolution step width, as a duration or a number of seconds."
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query",
+                "description": "Per-query timeout, clamped to the server-configured maximum."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of returned series. Defaults to and is capped at the\nserver-configured maximum.\n"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Evaluates a PromQL expression over a range of time."
+        },
+        {
+          "info": {
+            "name": "Evaluates a PromQL expression over a range of time.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/query_range",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Evaluates a PromQL expression over a range of time."
+        },
+        {
+          "info": {
+            "name": "Evaluates an instant query at a single point in time.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/query",
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "PromQL expression to evaluate."
+              },
+              {
+                "name": "time",
+                "value": "",
+                "type": "query",
+                "description": "Evaluation timestamp. Defaults to the current server time when omitted."
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query",
+                "description": "Per-query timeout, clamped to the server-configured maximum."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of returned series. Defaults to and is capped at the\nserver-configured maximum.\n"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Evaluates an instant query at a single point in time."
+        },
+        {
+          "info": {
+            "name": "Evaluates an instant query at a single point in time.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Evaluates an instant query at a single point in time."
+        },
+        {
+          "info": {
+            "name": "Returns the list of time series that match a label selector.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/series",
+            "params": [
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp to restrict the set of returned series."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp to restrict the set of returned series."
+              },
+              {
+                "name": "match[]",
+                "value": "",
+                "type": "query",
+                "description": "Repeated series selector that selects the series to return. Upstream\nPrometheus requires at least one selector.\n"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results. Defaults to and is capped at the server-configured maximum."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Dataset to query. Defaults to the organization's default dataset."
+              }
+            ]
+          },
+          "docs": "Returns the list of time series that match a label selector."
+        },
+        {
+          "info": {
+            "name": "Returns the list of time series that match a label selector.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/series",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the list of time series that match a label selector."
+        },
+        {
+          "info": {
+            "name": "Returns various build information properties about the Prometheus-compatible server.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/status/buildinfo"
+          },
+          "docs": "Returns various build information properties about the Prometheus-compatible server."
+        },
+        {
+          "info": {
+            "name": "Returns various runtime information properties about the Prometheus-compatible server.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/prometheus/api/v1/status/runtimeinfo"
+          },
+          "docs": "Returns various runtime information properties about the Prometheus-compatible server."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

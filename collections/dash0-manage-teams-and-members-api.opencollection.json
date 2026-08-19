@@ -1,0 +1,198 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Teams and Members API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Teams and Members",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Remove a member from the organization.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/members/:memberID",
+            "params": [
+              {
+                "name": "memberID",
+                "value": "",
+                "type": "path",
+                "description": "The Clerk user ID of the member to remove."
+              }
+            ]
+          },
+          "docs": "Removes the given member from the organization."
+        },
+        {
+          "info": {
+            "name": "Remove a member from a team.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams/:originOrId/members/:memberID",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the team."
+              },
+              {
+                "name": "memberID",
+                "value": "",
+                "type": "path",
+                "description": "The **id** of the member."
+              }
+            ]
+          },
+          "docs": "Removes the given member from the team."
+        },
+        {
+          "info": {
+            "name": "Receive a specific team by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the team."
+              }
+            ]
+          },
+          "docs": "Receive a specific team by its **origin** or **id**."
+        },
+        {
+          "info": {
+            "name": "Delete a specific team by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the team."
+              }
+            ]
+          },
+          "docs": "Delete a specific team by its **origin** or **id**."
+        },
+        {
+          "info": {
+            "name": "Receive a list of organization members.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/members"
+          },
+          "docs": "Receive a list of all members in your organization."
+        },
+        {
+          "info": {
+            "name": "Invite a member to the organization.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/members",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sends an invitation to join the organization to the given email address."
+        },
+        {
+          "info": {
+            "name": "Receive a list of teams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams"
+          },
+          "docs": "Receive a list of your organization teams"
+        },
+        {
+          "info": {
+            "name": "Create a new team",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new team in the organization."
+        },
+        {
+          "info": {
+            "name": "Add members to a team.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams/:originOrId/members",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the team."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds the given members to the team."
+        },
+        {
+          "info": {
+            "name": "Update a specific team display option.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/teams/:originOrId/display",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the team."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the display name, description, and color of a team."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

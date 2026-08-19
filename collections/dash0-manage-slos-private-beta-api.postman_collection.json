@@ -1,0 +1,787 @@
+{
+  "item": [
+    {
+      "id": "8183dbc2-1a33-45db-a294-51da53b57a05",
+      "name": "Manage SLOs (Private BETA)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "063d3424-5077-490b-9bc3-f5d2555f756b",
+          "name": "Delete a specific SLO.",
+          "request": {
+            "name": "Delete a specific SLO.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "slos",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) SLO origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3c5cfc90-c593-4c31-a9bd-74e7ce050919",
+              "name": "The SLO was deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "dd94b39b-fa98-4fb3-a61a-e768c81ab02b",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 2341,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2a3cce9f-3d70-42e1-8355-b90764fcea66",
+          "name": "Retrieve the latest version of a specific SLO.",
+          "request": {
+            "name": "Retrieve the latest version of a specific SLO.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "slos",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) SLO origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6111b1f3-db9a-4a65-ad60-63c920dafef0",
+              "name": "The requested SLO.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1949-02-18T05:01:30.455Z\",\n      \"dash0.com/updated-at\": \"1995-06-04T11:21:01.744Z\",\n      \"dash0.com/deleted-at\": \"2002-07-24T13:54:51.747Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"Occurrences\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"lt\",\n        \"value\": 989.1400528878813,\n        \"target\": 9113.777608884368,\n        \"targetPercent\": 1350.482795774668,\n        \"timeSliceTarget\": 8979.479453642378,\n        \"timeSliceWindow\": \"8065260980M\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 6657.169985969971\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": false,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"2949671103s\",\n        \"isRolling\": true,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d088246-2d47-4d21-9907-a82d3ca17baf",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 2341,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "26e62589-d8a7-44eb-9966-3d3dad7a9f2b",
+          "name": "Update a specific SLO.",
+          "request": {
+            "name": "Update a specific SLO.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "slos",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) SLO origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"<string>\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"<string>\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"<string>\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"<string>\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8ea55c6c-837d-4e9d-ac54-47f1826e62c6",
+              "name": "The SLO was updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-10-24T23:26:51.806Z\",\n      \"dash0.com/updated-at\": \"2009-04-30T12:44:50.020Z\",\n      \"dash0.com/deleted-at\": \"1989-04-20T21:21:23.626Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"gte\",\n        \"value\": 4626.791286835987,\n        \"target\": 6375.071103663702,\n        \"targetPercent\": 5214.233134604139,\n        \"timeSliceTarget\": 3862.3557181147326,\n        \"timeSliceWindow\": \"53d55414463w\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 1096.278229870835\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": true,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"296553s3s5496m\",\n        \"isRolling\": false,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": true,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1949-02-18T05:01:30.455Z\",\n      \"dash0.com/updated-at\": \"1995-06-04T11:21:01.744Z\",\n      \"dash0.com/deleted-at\": \"2002-07-24T13:54:51.747Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"Occurrences\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"lt\",\n        \"value\": 989.1400528878813,\n        \"target\": 9113.777608884368,\n        \"targetPercent\": 1350.482795774668,\n        \"timeSliceTarget\": 8979.479453642378,\n        \"timeSliceWindow\": \"8065260980M\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 6657.169985969971\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": false,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"2949671103s\",\n        \"isRolling\": true,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df13c1a7-c15b-4117-af57-658e3fc2daa4",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) SLO origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-10-24T23:26:51.806Z\",\n      \"dash0.com/updated-at\": \"2009-04-30T12:44:50.020Z\",\n      \"dash0.com/deleted-at\": \"1989-04-20T21:21:23.626Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"gte\",\n        \"value\": 4626.791286835987,\n        \"target\": 6375.071103663702,\n        \"targetPercent\": 5214.233134604139,\n        \"timeSliceTarget\": 3862.3557181147326,\n        \"timeSliceWindow\": \"53d55414463w\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 1096.278229870835\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": true,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"296553s3s5496m\",\n        \"isRolling\": false,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": true,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 2341,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6a2b642a-c7ce-4e92-8d1b-5ecaccf8bd26",
+          "name": "Retrieve a list of SLOs.",
+          "request": {
+            "name": "Retrieve a list of SLOs.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "slos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "Filter by dataset."
+                },
+                {
+                  "disabled": false,
+                  "key": "originPrefix",
+                  "value": "<string>",
+                  "description": "Filter by origin prefix."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b6b6e61-0538-4a3f-8927-d8fefb04189a",
+              "name": "List of SLOs.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"apiVersion\": \"openslo/v1\",\n    \"kind\": \"SLO\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/version\": \"string\",\n        \"dash0.com/dataset\": \"string\",\n        \"dash0.com/source\": \"api\",\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1982-09-19T20:29:48.243Z\",\n        \"dash0.com/updated-at\": \"2021-04-13T02:06:41.479Z\",\n        \"dash0.com/deleted-at\": \"1977-09-18T17:09:19.055Z\",\n        \"dash0.com/folder-path\": \"string\",\n        \"dash0.com/sharing\": \"string\",\n        \"dash0.com/enabled\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"budgetingMethod\": \"RatioTimeslices\",\n      \"objectives\": [\n        {\n          \"displayName\": \"string\",\n          \"op\": \"gt\",\n          \"value\": 6728.037646383817,\n          \"target\": 9309.3531741968,\n          \"targetPercent\": 3866.7845453557125,\n          \"timeSliceTarget\": 4538.961094576997,\n          \"timeSliceWindow\": \"2946264m23561642506h74116227m72700871d16291525710d580235153ms9w9340852683ms\",\n          \"indicator\": {\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"metadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"indicatorRef\": \"string\",\n          \"compositeWeight\": 7504.169757132404\n        }\n      ],\n      \"description\": \"string\",\n      \"service\": \"string\",\n      \"indicator\": {\n        \"spec\": {\n          \"description\": \"string\",\n          \"ratioMetric\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"thresholdMetric\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        }\n      },\n      \"indicatorRef\": \"string\",\n      \"timeWindow\": [\n        {\n          \"duration\": \"36765181m56h3294h\",\n          \"isRolling\": false,\n          \"calendar\": {\n            \"startTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeZone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"alertPolicies\": [\n        {\n          \"alertPolicyRef\": \"string\",\n          \"kind\": \"string\",\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenResolved\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenNoData\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notificationTargets\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"alertPolicyRef\": \"string\",\n          \"kind\": \"string\",\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenResolved\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenNoData\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notificationTargets\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  {\n    \"apiVersion\": \"openslo/v1\",\n    \"kind\": \"SLO\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/version\": \"string\",\n        \"dash0.com/dataset\": \"string\",\n        \"dash0.com/source\": \"ui\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1991-07-22T11:08:10.012Z\",\n        \"dash0.com/updated-at\": \"2007-10-15T17:29:37.753Z\",\n        \"dash0.com/deleted-at\": \"1986-11-22T01:21:08.086Z\",\n        \"dash0.com/folder-path\": \"string\",\n        \"dash0.com/sharing\": \"string\",\n        \"dash0.com/enabled\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"budgetingMethod\": \"RatioTimeslices\",\n      \"objectives\": [\n        {\n          \"displayName\": \"string\",\n          \"op\": \"gt\",\n          \"value\": 8395.379427965683,\n          \"target\": 1836.1785977295465,\n          \"targetPercent\": 9464.433873365873,\n          \"timeSliceTarget\": 4009.0328354569447,\n          \"timeSliceWindow\": \"600173132m2225237ms72391199589Q3695227996d3482d489158h7457313s\",\n          \"indicator\": {\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"metadata\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"indicatorRef\": \"string\",\n          \"compositeWeight\": 4597.39383208981\n        }\n      ],\n      \"description\": \"string\",\n      \"service\": \"string\",\n      \"indicator\": {\n        \"spec\": {\n          \"description\": \"string\",\n          \"ratioMetric\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"thresholdMetric\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        }\n      },\n      \"indicatorRef\": \"string\",\n      \"timeWindow\": [\n        {\n          \"duration\": \"9y723746ms06862369642d2803959976d04576595w3365487y\",\n          \"isRolling\": true,\n          \"calendar\": {\n            \"startTime\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"timeZone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ],\n      \"alertPolicies\": [\n        {\n          \"alertPolicyRef\": \"string\",\n          \"kind\": \"string\",\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenResolved\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenNoData\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notificationTargets\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"alertPolicyRef\": \"string\",\n          \"kind\": \"string\",\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenResolved\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"alertWhenNoData\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"conditions\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"notificationTargets\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41e64fca-3805-465e-93b7-2daee88f1ebc",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 2341,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b8d8815f-f38f-4e88-a292-59d8c1d05148",
+          "name": "Create an SLO.",
+          "request": {
+            "name": "Create an SLO.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "slos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"<string>\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"<string>\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"<string>\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"<string>\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aa99859e-74d5-4032-a723-879887db8554",
+              "name": "The SLO was created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-10-24T23:26:51.806Z\",\n      \"dash0.com/updated-at\": \"2009-04-30T12:44:50.020Z\",\n      \"dash0.com/deleted-at\": \"1989-04-20T21:21:23.626Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"gte\",\n        \"value\": 4626.791286835987,\n        \"target\": 6375.071103663702,\n        \"targetPercent\": 5214.233134604139,\n        \"timeSliceTarget\": 3862.3557181147326,\n        \"timeSliceWindow\": \"53d55414463w\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 1096.278229870835\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": true,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"296553s3s5496m\",\n        \"isRolling\": false,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": true,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1949-02-18T05:01:30.455Z\",\n      \"dash0.com/updated-at\": \"1995-06-04T11:21:01.744Z\",\n      \"dash0.com/deleted-at\": \"2002-07-24T13:54:51.747Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"Occurrences\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"lt\",\n        \"value\": 989.1400528878813,\n        \"target\": 9113.777608884368,\n        \"targetPercent\": 1350.482795774668,\n        \"timeSliceTarget\": 8979.479453642378,\n        \"timeSliceWindow\": \"8065260980M\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 6657.169985969971\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": false,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"2949671103s\",\n        \"isRolling\": true,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a0b2e07-eedf-41a1-bd3d-fd9278153e63",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "AiTM"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"ui\",\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": \"string\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-10-24T23:26:51.806Z\",\n      \"dash0.com/updated-at\": \"2009-04-30T12:44:50.020Z\",\n      \"dash0.com/deleted-at\": \"1989-04-20T21:21:23.626Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\",\n      \"dash0.com/enabled\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"string\",\n        \"op\": \"gte\",\n        \"value\": 4626.791286835987,\n        \"target\": 6375.071103663702,\n        \"targetPercent\": 5214.233134604139,\n        \"timeSliceTarget\": 3862.3557181147326,\n        \"timeSliceWindow\": \"53d55414463w\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"ratioMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"thresholdMetric\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"metadata\": {\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"displayName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"indicatorRef\": \"string\",\n        \"compositeWeight\": 1096.278229870835\n      }\n    ],\n    \"description\": \"string\",\n    \"service\": \"string\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"string\",\n        \"ratioMetric\": {\n          \"counter\": true,\n          \"good\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"bad\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"total\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"raw\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"rawType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"string\",\n        \"displayName\": \"string\"\n      }\n    },\n    \"indicatorRef\": \"string\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"296553s3s5496m\",\n        \"isRolling\": false,\n        \"calendar\": {\n          \"startTime\": \"string\",\n          \"timeZone\": \"string\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": true,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": true,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"string\",\n        \"kind\": \"string\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"displayName\": \"string\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": false,\n          \"alertWhenResolved\": false,\n          \"alertWhenNoData\": false,\n          \"conditions\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"description\": \"string\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 2341,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b5a0dcc6-f505-4628-acf5-3a5d0fc7ed92",
+    "name": "Dash0 Edge Collectors Manage SLOs (Private BETA) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

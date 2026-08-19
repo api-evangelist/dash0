@@ -1,0 +1,140 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Agent0 Automations API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Agent0 Automations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific automation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/agentic-workflows/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Automation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific automation identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "Update or create an automation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/agentic-workflows/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Automation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing automation or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows."
+        },
+        {
+          "info": {
+            "name": "Delete an automation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/agentic-workflows/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Automation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Deletes a specific automation identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "List all automations for the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/agentic-workflows",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "folderPath",
+                "value": "",
+                "type": "query",
+                "description": "Filter by folder path (exact match on dash0.com/folder-path annotation)."
+              }
+            ]
+          },
+          "docs": "Returns all automations configured for your organization."
+        },
+        {
+          "info": {
+            "name": "Create a new automation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/agentic-workflows",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new automation for your organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

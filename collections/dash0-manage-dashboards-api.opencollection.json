@@ -1,0 +1,156 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Dashboards API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Dashboards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Receive a specific dashboard by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/dashboards/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the dashboard."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Receive a specific dashboard by its **origin** or **id**."
+        },
+        {
+          "info": {
+            "name": "Update or insert a specific dashboard by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/dashboards/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the dashboard."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**."
+        },
+        {
+          "info": {
+            "name": "Delete a specific dashboard by its origin or id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/dashboards/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "The **origin** or **id** of the dashboard."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Delete a specific dashboard by its **origin** or **id**."
+        },
+        {
+          "info": {
+            "name": "Receive a list of dashboards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/dashboards",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Receive a list of your organization dashboards"
+        },
+        {
+          "info": {
+            "name": "Create a dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/dashboards",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a dashboard."
+        },
+        {
+          "info": {
+            "name": "Import a dashboard",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/import/dashboard",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint allows you **to import an existing dashboard** into your organization. It's intended for one-time migrations rather than ongoing dashboard management.\nUnlike the standard API, this endpoint supports importing dashboards **with full editability**, allowing you to modify dashboards that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencie"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

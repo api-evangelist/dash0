@@ -1,0 +1,1288 @@
+{
+  "item": [
+    {
+      "id": "952601ec-8ac1-4e56-8a41-530b1b970de9",
+      "name": "Manage Alerting",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "dd84941b-f4ce-4fd8-977a-60186f06c604",
+          "name": "Delete a specific check rule (Prometheus alert rule) by origin or id.",
+          "request": {
+            "name": "Delete a specific check rule (Prometheus alert rule) by origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Check rule origin or id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8a02866b-c140-4f90-b2d9-4bc59b33deb3",
+              "name": "Successful response in case the check rule was deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aa77a37d-25a9-4dc2-a675-68f2b080815e",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "745cb5a7-eec9-49f1-9fda-ad4cc7d03ad8",
+          "name": "Retrieve a specific check rule (Prometheus alert rule) by its origin or id.",
+          "request": {
+            "name": "Retrieve a specific check rule (Prometheus alert rule) by its origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Check rule origin or id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b15b6ceb-2853-4475-88ce-10ffa59261b2",
+              "name": "Successful response in case the check rule could be retrieved.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"expression\": \"string\",\n  \"dataset\": \"W3AKCP2E\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"string\",\n  \"thresholds\": {\n    \"degraded\": 1331.576608398094,\n    \"failed\": 7558.102563616763\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"annotations\": {\n    \"summary\": \"string\",\n    \"description\": \"string\",\n    \"folderPath\": \"string\",\n    \"sharing\": \"string\"\n  },\n  \"enabled\": false,\n  \"summary\": \"string\",\n  \"description\": \"string\",\n  \"keepFiringFor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38e7b167-0e11-4197-9534-583f9502e001",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5af4035-05b5-464e-9627-38c0f22c0be2",
+          "name": "Update or insert a specific check rule (Prometheus alert rule) by origin or id.",
+          "request": {
+            "name": "Update or insert a specific check rule (Prometheus alert rule) by origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) Check rule origin or id"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"<string>\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": \"<double>\",\n    \"failed\": \"<double>\"\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aad508da-a0ed-41d6-9e55-95e1261384af",
+              "name": "Successful response in case the check rule was updated. The response contains the updated rule.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"expression\": \"string\",\n  \"dataset\": \"W3AKCP2E\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"string\",\n  \"thresholds\": {\n    \"degraded\": 1331.576608398094,\n    \"failed\": 7558.102563616763\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"annotations\": {\n    \"summary\": \"string\",\n    \"description\": \"string\",\n    \"folderPath\": \"string\",\n    \"sharing\": \"string\"\n  },\n  \"enabled\": false,\n  \"summary\": \"string\",\n  \"description\": \"string\",\n  \"keepFiringFor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "084f702a-bf62-491e-8e01-36d48aa5f0b1",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) Check rule origin or id"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b40a4f51-5a6c-49a1-90a7-6b340d4abe23",
+          "name": "Retrieve a list of check rule ids.",
+          "request": {
+            "name": "Retrieve a list of check rule ids.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "idPrefix",
+                  "value": "<string>",
+                  "description": "If provided, only check rules for which the origin starts with the given string are returned. (deprecated)\n\nThe `originPrefix` query parameter takes precedence over this parameter if both are provided.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "originPrefix",
+                  "value": "<string>",
+                  "description": "If provided, only check rules for which the origin starts with the given string are returned."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f53454ce-9796-4b15-aef2-7cc0c70642d1",
+              "name": "Successful response in case the list of check rules could be retrieved.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    },
+                    {
+                      "key": "idPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"dataset\": \"QGDWrCRDi\",\n    \"origin\": \"string\",\n    \"source\": \"ui\",\n    \"name\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"dataset\": \"fVygzNMtv\",\n    \"origin\": \"string\",\n    \"source\": \"ui\",\n    \"name\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "248fc083-e92b-46c5-af25-a9fefeff9011",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    },
+                    {
+                      "key": "idPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dac1466b-500a-4306-b32c-b0ba84129959",
+          "name": "Create a new check rule.",
+          "request": {
+            "name": "Create a new check rule.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "The associated dataset."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"<string>\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": \"<double>\",\n    \"failed\": \"<double>\"\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c99707e0-f70e-4c93-a22b-98e3a1f6cadd",
+              "name": "Create a new check rule.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"expression\": \"string\",\n  \"dataset\": \"W3AKCP2E\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"string\",\n  \"thresholds\": {\n    \"degraded\": 1331.576608398094,\n    \"failed\": 7558.102563616763\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"annotations\": {\n    \"summary\": \"string\",\n    \"description\": \"string\",\n    \"folderPath\": \"string\",\n    \"sharing\": \"string\"\n  },\n  \"enabled\": false,\n  \"summary\": \"string\",\n  \"description\": \"string\",\n  \"keepFiringFor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c9bbdcf-fefb-465b-9745-d42317d0e379",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd8502fb-f45e-464a-b215-91555ed41297",
+          "name": "Bulk create check rules.",
+          "request": {
+            "name": "Bulk create check rules.",
+            "description": {
+              "content": "Atomically create up to 1000 Prometheus alert rules in a single request.\nCreate-only — every item produces a brand-new check rule. The public\nschema uses `id` as the user-defined origin; per-item resolution\npriority mirrors the single-rule POST handler (id → server-generated\nUUID with \"api-\" prefix). Any item whose resolved origin or id\ncollides with an existing rule (including soft-deleted rules whose\norigin is still reserved by the unique constraint) is rejected with a\nper-item diagnostic.\n\nIf any item fails validation (PromQL, intervals, summary length,\ntemplate functions, origin/id collision, etc.) the whole batch is\nrejected with a 400 that carries per-item diagnostics in the message;\nnothing is written. On any DB failure the entire batch is rolled back\nand 500 is returned. The endpoint is not idempotent — a successful\nbatch retried verbatim will 400 on every item the second time.\n\nThis endpoint accepts request bodies up to 2 MB (vs. the 256 KB default\nfor other endpoints) to accommodate batched payloads of up to 1000\nrules per request.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "alerting",
+                "check-rules",
+                "bulk"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "(Required) The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"name\": \"<string>\",\n      \"expression\": \"<string>\",\n      \"dataset\": \"<string>\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"<string>\"\n        }\n      },\n      \"id\": \"<string>\",\n      \"thresholds\": {\n        \"degraded\": \"<double>\",\n        \"failed\": \"<double>\"\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"<string>\"\n      },\n      \"annotations\": {\n        \"summary\": \"<string>\",\n        \"description\": \"<string>\",\n        \"folderPath\": \"<string>\",\n        \"sharing\": \"<string>\"\n      },\n      \"enabled\": \"<boolean>\",\n      \"summary\": \"<string>\",\n      \"description\": \"<string>\",\n      \"keepFiringFor\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "226ec43f-c81f-4124-968f-b4db5ea0056b",
+              "name": "All items were successfully created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"expression\": \"string\",\n      \"dataset\": \"FFUfCnxmSTh8y4QIC\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"terraform\"\n        }\n      },\n      \"id\": \"string\",\n      \"thresholds\": {\n        \"degraded\": 3165.1565141760175,\n        \"failed\": 5756.664114591974\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"string\"\n      },\n      \"annotations\": {\n        \"summary\": \"string\",\n        \"description\": \"string\",\n        \"folderPath\": \"string\",\n        \"sharing\": \"string\"\n      },\n      \"enabled\": true,\n      \"summary\": \"string\",\n      \"description\": \"string\",\n      \"keepFiringFor\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 1315\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca1749fb-8606-4494-9fdf-7205a94a1129",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "alerting",
+                    "check-rules",
+                    "bulk"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"expression\": \"string\",\n      \"dataset\": \"FFUfCnxmSTh8y4QIC\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"terraform\"\n        }\n      },\n      \"id\": \"string\",\n      \"thresholds\": {\n        \"degraded\": 3165.1565141760175,\n        \"failed\": 5756.664114591974\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"string\"\n      },\n      \"annotations\": {\n        \"summary\": \"string\",\n        \"description\": \"string\",\n        \"folderPath\": \"string\",\n        \"sharing\": \"string\"\n      },\n      \"enabled\": true,\n      \"summary\": \"string\",\n      \"description\": \"string\",\n      \"keepFiringFor\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11e89336-c30a-4abe-9892-96993b9ca6bb",
+          "name": "Import a check rule.",
+          "request": {
+            "name": "Import a check rule.",
+            "description": {
+              "content": "This endpoint allows you **to import an existing check rule** into your organization. It's intended for one-time migrations rather than ongoing check rule management.\nUnlike the standard API, this endpoint supports importing check rules **with full editability**, allowing you to modify check rules that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported check rule state.\nImporting a check rule without an id will create a new check rule and return the created asset with a generated id.\nImporting a check rule with an existing id (metadata>dash0Extensions>id) will override the corresponding check rule definition. In case there is no check rule with the given id a new check rule will be created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "import",
+                "check-rule"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "The associated dataset."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"<string>\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": \"<double>\",\n    \"failed\": \"<double>\"\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "54d05490-35a5-43d9-b2b1-1a249bd701c6",
+              "name": "The imported check rule.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "check-rule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"expression\": \"string\",\n  \"dataset\": \"W3AKCP2E\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"string\",\n  \"thresholds\": {\n    \"degraded\": 1331.576608398094,\n    \"failed\": 7558.102563616763\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"string\",\n    \"key_1\": \"string\"\n  },\n  \"annotations\": {\n    \"summary\": \"string\",\n    \"description\": \"string\",\n    \"folderPath\": \"string\",\n    \"sharing\": \"string\"\n  },\n  \"enabled\": false,\n  \"summary\": \"string\",\n  \"description\": \"string\",\n  \"keepFiringFor\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b52aab23-61a8-41bc-9a99-4bccd1de750b",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "check-rule"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"expression\": \"<string>\",\n  \"dataset\": \"vVMgrvgy0gohIged\",\n  \"metadata\": {\n    \"labels\": {\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"id\": \"<string>\",\n  \"thresholds\": {\n    \"degraded\": 2380.5035570058963,\n    \"failed\": 5090.096911441946\n  },\n  \"interval\": \"1m\",\n  \"for\": \"0s\",\n  \"keep_firing_for\": \"0s\",\n  \"labels\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\",\n    \"key_3\": \"<string>\"\n  },\n  \"annotations\": {\n    \"summary\": \"<string>\",\n    \"description\": \"<string>\",\n    \"folderPath\": \"<string>\",\n    \"sharing\": \"<string>\"\n  },\n  \"enabled\": \"<boolean>\",\n  \"summary\": \"<string>\",\n  \"description\": \"<string>\",\n  \"keepFiringFor\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1c2b0f02-152d-4119-aaf1-27fbb90d3cbd",
+          "name": "Import multiple check rules in one batch.",
+          "request": {
+            "name": "Import multiple check rules in one batch.",
+            "description": {
+              "content": "Bulk variant of `/api/import/check-rule`. Atomically imports up to 1000\nPrometheus alert rules into your organization with **full editability**\n— the resulting rules behave like UI-created assets, not API-managed\nones, so they can be modified in the Dash0 UI afterwards. Intended for\none-time migrations rather than ongoing Infrastructure-as-Code\nmanagement.\n\nPer-item id/origin resolution mirrors the single-rule import handler:\nitems without an `id` receive a server-generated UUID; items with an\n`id` reuse it. Generated origins are **not** prefixed with `api-` and\nthe rules remain UI-editable.\n\nBehaves like the regular bulk endpoint in every other respect: items\nare validated up-front, the whole batch is rejected on any item\nfailure, nothing is written on rollback, and the endpoint is not\nidempotent. This endpoint accepts request bodies up to 2 MB (vs. the\n256 KB default for other endpoints) to accommodate batched payloads of\nup to 1000 rules per request.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "import",
+                "check-rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>",
+                  "description": "The associated dataset."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"name\": \"<string>\",\n      \"expression\": \"<string>\",\n      \"dataset\": \"<string>\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"<string>\"\n        }\n      },\n      \"id\": \"<string>\",\n      \"thresholds\": {\n        \"degraded\": \"<double>\",\n        \"failed\": \"<double>\"\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"<string>\"\n      },\n      \"annotations\": {\n        \"summary\": \"<string>\",\n        \"description\": \"<string>\",\n        \"folderPath\": \"<string>\",\n        \"sharing\": \"<string>\"\n      },\n      \"enabled\": \"<boolean>\",\n      \"summary\": \"<string>\",\n      \"description\": \"<string>\",\n      \"keepFiringFor\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ad0f9883-dabd-4ec4-90ec-17ddc54a8c2e",
+              "name": "All items were successfully imported.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"expression\": \"string\",\n      \"dataset\": \"FFUfCnxmSTh8y4QIC\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"terraform\"\n        }\n      },\n      \"id\": \"string\",\n      \"thresholds\": {\n        \"degraded\": 3165.1565141760175,\n        \"failed\": 5756.664114591974\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"string\"\n      },\n      \"annotations\": {\n        \"summary\": \"string\",\n        \"description\": \"string\",\n        \"folderPath\": \"string\",\n        \"sharing\": \"string\"\n      },\n      \"enabled\": true,\n      \"summary\": \"string\",\n      \"description\": \"string\",\n      \"keepFiringFor\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created\": 1315\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8d765c7a-d065-49d6-aea0-7e0585dccef3",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "check-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "SiGAj2W6ymM6"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"items\": [\n    {\n      \"name\": \"string\",\n      \"expression\": \"string\",\n      \"dataset\": \"FFUfCnxmSTh8y4QIC\",\n      \"metadata\": {\n        \"labels\": {\n          \"dash0.com/source\": \"terraform\"\n        }\n      },\n      \"id\": \"string\",\n      \"thresholds\": {\n        \"degraded\": 3165.1565141760175,\n        \"failed\": 5756.664114591974\n      },\n      \"interval\": \"1m\",\n      \"for\": \"0s\",\n      \"keep_firing_for\": \"0s\",\n      \"labels\": {\n        \"key_0\": \"string\"\n      },\n      \"annotations\": {\n        \"summary\": \"string\",\n        \"description\": \"string\",\n        \"folderPath\": \"string\",\n        \"sharing\": \"string\"\n      },\n      \"enabled\": true,\n      \"summary\": \"string\",\n      \"description\": \"string\",\n      \"keepFiringFor\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 5812,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "21da2cea-2642-483b-a394-279b7c382a4a",
+    "name": "Dash0 Edge Collectors Manage Alerting API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

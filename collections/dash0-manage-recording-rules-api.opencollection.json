@@ -1,0 +1,143 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Recording Rules API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Recording Rules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve the latest version of a specific recording rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/recording-rules/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Recording rule origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve the latest version of a specific recording rule."
+        },
+        {
+          "info": {
+            "name": "Update a specific recording rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/recording-rules/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Recording rule origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific recording rule."
+        },
+        {
+          "info": {
+            "name": "Delete a specific recording rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/recording-rules/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Recording rule origin or id."
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Delete a specific recording rule."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of recording rules.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/recording-rules",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Filter by dataset."
+              },
+              {
+                "name": "originPrefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter by origin prefix."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of recording rules."
+        },
+        {
+          "info": {
+            "name": "Create a recording rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/recording-rules",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a recording rule."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

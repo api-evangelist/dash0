@@ -1,0 +1,215 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Signal To Metrics (BETA) API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Signal To Metrics (BETA)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific signal-to-metrics config by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Signal-to-metrics config origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific signal-to-metrics configuration identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "Update or create a signal-to-metrics config by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Signal-to-metrics config origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing signal-to-metrics configuration or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows."
+        },
+        {
+          "info": {
+            "name": "Delete a signal-to-metrics config by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Signal-to-metrics config origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Deletes a specific signal-to-metrics configuration identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "List all signal-to-metrics configs for the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of items to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to skip."
+              },
+              {
+                "name": "originPrefix",
+                "value": "",
+                "type": "query",
+                "description": "Filter by origin prefix."
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Case-insensitive substring search on the rule name."
+              },
+              {
+                "name": "signal",
+                "value": "",
+                "type": "query",
+                "description": "Filter by signal type."
+              },
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Filter by enabled state."
+              }
+            ]
+          },
+          "docs": "Returns all signal-to-metrics configurations for your organization."
+        },
+        {
+          "info": {
+            "name": "Create a new signal-to-metrics config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new signal-to-metrics configuration for your organization."
+        },
+        {
+          "info": {
+            "name": "Test a signal-to-metrics config",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/signal-to-metrics/test",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Validates a signal-to-metrics definition and simulates its match filter\nagainst real signals in the selected dataset over a recent time window.\nReturns the number of matching signals on success. A 4xx error is returned\nwhen the definition fails validation or the request is otherwise invalid.\nNothing is persisted.\n"
+        },
+        {
+          "info": {
+            "name": "Bulk upsert signal-to-metrics configs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/import/signal-to-metrics",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query",
+                "description": "The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Atomically upserts up to 500 signal-to-metrics configurations at once. If any item\nfails validation or cannot be written, the entire batch is rejected and no\nconfigurations are changed.\n\nThis endpoint is designed for Infrastructure-as-Code (IaC) workflows (Terraform,\nthe operator, CLI scripts). Rules are matched by their `origin` values across\nrepeated invocations, making the operation idempotent.\n\nThis endpoint accepts request bodies up to 2 MB (vs. the 256 KB default for other\nendpoints) to ac"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

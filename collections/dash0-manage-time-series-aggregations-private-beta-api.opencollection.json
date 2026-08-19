@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Time Series Aggregations (Private BETA) API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Time Series Aggregations (Private BETA)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific time series aggregation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/time-series-aggregations/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Time series aggregation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns a specific time series aggregation identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "Update or create a time series aggregation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/time-series-aggregations/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Time series aggregation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing time series aggregation or creates a new one if it doesn't exist.\nUseful for Infrastructure-as-Code workflows.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a time series aggregation by origin or ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/time-series-aggregations/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Time series aggregation origin or UUID"
+              },
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Deletes a specific time series aggregation identified by its origin label or UUID."
+        },
+        {
+          "info": {
+            "name": "List all time series aggregations for the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/time-series-aggregations",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns all time series aggregation rules configured for your organization."
+        },
+        {
+          "info": {
+            "name": "Create a new time series aggregation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/time-series-aggregations",
+            "params": [
+              {
+                "name": "dataset",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new time series aggregation rule for your organization. If\n`metadata.labels[\"dash0.com/origin\"]` is provided, it must be unique within the\norganization and dataset; a request with a duplicate origin returns 400. If no\norigin is provided, the server auto-generates one.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

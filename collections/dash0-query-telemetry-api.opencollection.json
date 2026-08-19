@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Query Telemetry API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query Telemetry",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns OTLP logs records",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/logs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns OTLP logs records"
+        },
+        {
+          "info": {
+            "name": "Returns OTLP spans",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/spans",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns OTLP spans"
+        },
+        {
+          "info": {
+            "name": "Returns the OTLP spans and log records (if any) associated with the trace ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/trace/details",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the OTLP spans and log records (if any) associated with the trace ID."
+        },
+        {
+          "info": {
+            "name": "Returns unique trace IDs matching the given filters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/trace/ids",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Lightweight endpoint that returns only the unique trace IDs of traces containing\nat least one span matching the request filters. Useful for two-step workflows: first\nfind matching trace IDs, then fetch full trace details via `GetTrace`\n(`POST /api/trace/details`). Significantly faster and lighter-weight than\n`GetSpans` (`POST /api/spans`) when only trace IDs are needed.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

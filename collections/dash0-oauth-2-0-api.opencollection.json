@@ -1,0 +1,146 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors OAuth 2.0 API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "OAuth 2.0",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "OAuth 2.0 Authorization Endpoint (Unauthenticated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/oauth/authorize",
+            "params": [
+              {
+                "name": "response_type",
+                "value": "",
+                "type": "query",
+                "description": "Must be \"code\" for the authorization code flow."
+              },
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query",
+                "description": "The client identifier obtained during registration."
+              },
+              {
+                "name": "redirect_uri",
+                "value": "",
+                "type": "query",
+                "description": "Must match one of the client's registered redirect URIs."
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Space-separated list of requested scopes."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Opaque value for CSRF protection, returned unchanged in the redirect."
+              },
+              {
+                "name": "code_challenge",
+                "value": "",
+                "type": "query",
+                "description": "PKCE code challenge (RFC 7636)."
+              },
+              {
+                "name": "code_challenge_method",
+                "value": "",
+                "type": "query",
+                "description": "Must be \"S256\"."
+              },
+              {
+                "name": "prompt",
+                "value": "",
+                "type": "query",
+                "description": "Space-separated list of prompt directives. Supported value: \"consent\".\n"
+              }
+            ]
+          },
+          "docs": "Unauthenticated authorization endpoint (RFC 6749 section 3.1). Validates the client,\nredirect URI, PKCE parameters, and scopes. Creates a pending authorization request\nand always redirects to the consent UI.\n"
+        },
+        {
+          "info": {
+            "name": "OAuth 2.0 Authorization Server Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/.well-known/oauth-authorization-server"
+          },
+          "docs": "Returns the OAuth 2.0 Authorization Server Metadata document (RFC 8414).\nClients use this endpoint to discover authorization server capabilities\nand endpoint locations.\n"
+        },
+        {
+          "info": {
+            "name": "OAuth 2.0 Protected Resource Metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/.well-known/oauth-protected-resource"
+          },
+          "docs": "Returns the OAuth 2.0 Protected Resource Metadata document (RFC 9728).\nMCP clients use this endpoint to discover which authorization server(s)\ncan issue tokens accepted by this resource server.\n"
+        },
+        {
+          "info": {
+            "name": "Register a new OAuth client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/oauth/register",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Dynamic Client Registration endpoint (RFC 7591). Allows clients to register\nthemselves and obtain a client_id for use in the authorization code flow.\n"
+        },
+        {
+          "info": {
+            "name": "OAuth 2.0 Token Revocation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/oauth/revoke",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Token revocation endpoint (RFC 7009). Revokes an access or refresh token.\nThe server responds with HTTP 200 regardless of whether the token was valid,\nto prevent token scanning attacks.\n"
+        },
+        {
+          "info": {
+            "name": "OAuth 2.0 Token Endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/oauth/token",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Token endpoint (RFC 6749 section 3.2). Exchanges an authorization code for\naccess and refresh tokens (authorization_code grant), or exchanges a refresh\ntoken for new tokens (refresh_token grant).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

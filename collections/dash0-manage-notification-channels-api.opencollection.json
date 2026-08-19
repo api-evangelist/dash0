@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Dash0 Edge Collectors Manage Notification Channels API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage Notification Channels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a specific notification channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/notification-channels/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Notification channel origin or UUID."
+              }
+            ]
+          },
+          "docs": "Returns a specific notification channel identified by its UUID or origin.\n"
+        },
+        {
+          "info": {
+            "name": "Update a notification channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/notification-channels/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Notification channel origin or UUID."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates an existing notification channel.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a notification channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/notification-channels/:originOrId",
+            "params": [
+              {
+                "name": "originOrId",
+                "value": "",
+                "type": "path",
+                "description": "Notification channel origin or UUID."
+              }
+            ]
+          },
+          "docs": "Deletes a specific notification channel identified by its UUID or origin."
+        },
+        {
+          "info": {
+            "name": "List all notification channels for the organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/notification-channels"
+          },
+          "docs": "Returns all notification channels configured for your organization as CRD-enveloped resources.\n"
+        },
+        {
+          "info": {
+            "name": "Create a new notification channel",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.eu-west-1.aws.dash0.com/api/notification-channels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new notification channel for your organization.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

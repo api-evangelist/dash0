@@ -1,0 +1,932 @@
+{
+  "item": [
+    {
+      "id": "7ff1fb4a-c957-45a3-b23d-a0ba137b407e",
+      "name": "Manage Views",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "caf75c93-ab2a-4ebe-8738-86765dba9d55",
+          "name": "Delete a specific view by origin or id.",
+          "request": {
+            "name": "Delete a specific view by origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "views",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) View origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a0e30c90-6c2f-4aab-b084-6d989694d2a5",
+              "name": "Delete a specific view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "356a34ba-1730-4834-b759-535842557046",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f13efd25-c2fe-4dbf-b9fe-53c20f8e72e4",
+          "name": "Receive a specific view by its origin or id.",
+          "request": {
+            "name": "Receive a specific view by its origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "views",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) View origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eb5acbac-3d91-49a2-b902-f405307d65e3",
+              "name": "Receive a specific view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1522ee9-ea2e-45ed-98c9-2b203b5644d3",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a7e8230-5a60-41f1-8af1-0e8f2effc0e7",
+          "name": "Update or insert a specific view by its origin or id.",
+          "request": {
+            "name": "Update or insert a specific view by its origin or id.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "views",
+                ":originOrId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "originOrId",
+                  "description": "(Required) View origin or id."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37b144be-50ce-4a01-bb95-e8fa560a055d",
+              "name": "Update a specific view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2ac4e8b-e37f-4037-9a5e-6b8a49ca4b42",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views",
+                    ":originOrId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "originOrId",
+                      "description": "(Required) View origin or id."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "42cb1a1a-7813-482b-ab31-fe181b10b82c",
+          "name": "Receive a list of views",
+          "request": {
+            "name": "Receive a list of views",
+            "description": {
+              "content": "Receive a list of your organization views",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2deb0c9-233e-4541-b21b-2902011d2aa9",
+              "name": "Receive a list of views.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"type\": \"web_events\",\n    \"origin\": \"string\",\n    \"name\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"type\": \"resources\",\n    \"origin\": \"string\",\n    \"name\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e35813f5-3c8d-45e1-b1da-c60994f76e50",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "465f0bee-f3a3-41b4-b4de-549678558372",
+          "name": "Create a view",
+          "request": {
+            "name": "Create a view",
+            "description": {
+              "content": "Create a view.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f698bd7b-8e6e-4f47-bff7-f57481642994",
+              "name": "The created view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc6126cc-b77d-419f-b7d8-c2b981c1a7d1",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63421208-442f-4801-98b0-30ba9fbc098a",
+          "name": "Import a view",
+          "request": {
+            "name": "Import a view",
+            "description": {
+              "content": "This endpoint allows you **to import an existing view** into your organization. It's intended for one-time migrations rather than ongoing view management.\nUnlike the standard API, this endpoint supports importing views **with full editability**, allowing you to modify views that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported view state.\nImporting a view without an id will create a new view and return the created asset with a generated id.\nImporting a view with an existing id (metadata>dash0Extensions>id) will override the corresponding view definition. In case there is no view with the given id a new view will be created.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "import",
+                "view"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "dataset",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "136ed8ef-25cf-45e3-8e93-c944b4b5693f",
+              "name": "The imported view.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "view"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2fb16115-825a-44d9-b4c9-6ea5f921a43e",
+              "name": "In case any error happens.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "import",
+                    "view"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "DolDSfaAiAL2"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.eu-west-1.aws.dash0.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f48e4a73-098c-4a55-b812-729e0f77eacb",
+    "name": "Dash0 Edge Collectors Manage Views API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
+      "type": "text/plain"
+    }
+  }
+}

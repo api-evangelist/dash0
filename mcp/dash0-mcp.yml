@@ -15,19 +15,19 @@ server:
     type: oauth2
     protected_resource_metadata: /.well-known/oauth-protected-resource
     authorization_server_metadata: /.well-known/oauth-authorization-server
-    grant_types: [authorization_code, refresh_token]
+    grant_types:
+    - authorization_code
+    - refresh_token
     pkce: S256
     dynamic_client_registration: true
-    scopes_supported: ['*']
-notes: >-
-  Dash0 runs an OAuth-protected, remote MCP server co-located on the API host at
-  /mcp (returns HTTP 401 without a bearer token). The API advertises RFC 9728
-  Protected Resource Metadata explicitly for MCP clients, and RFC 8414
-  Authorization Server Metadata with dynamic client registration (RFC 7591) and
-  PKCE, so MCP clients can self-register and complete the browser OAuth flow.
-  The candidate tool surface below mirrors the read/query side of the public API
-  (108 operations across 18 tag groups); the live tool list is enumerated by the
-  server after authentication.
+    scopes_supported:
+    - '*'
+notes: Dash0 runs an OAuth-protected, remote MCP server co-located on the API host at /mcp (returns HTTP
+  401 without a bearer token). The API advertises RFC 9728 Protected Resource Metadata explicitly for
+  MCP clients, and RFC 8414 Authorization Server Metadata with dynamic client registration (RFC 7591)
+  and PKCE, so MCP clients can self-register and complete the browser OAuth flow. The candidate tool surface
+  below mirrors the read/query side of the public API (108 operations across 18 tag groups); the live
+  tool list is enumerated by the server after authentication.
 candidate_tools:
 - name: query_sql
   description: Execute a SQL query over telemetry and return JSON results.
@@ -56,3 +56,10 @@ candidate_tools:
 - name: upsert_check_rule
   description: Create or update a Prometheus alert (check) rule by origin or id.
   source_operation: openapi/dash0-openapi.json#put_api-alerting-check-rules-originorid
+deployment:
+  mode: remote
+  endpoint: https://api.eu-west-1.aws.dash0.com/mcp
+  verified: probed
+  probe: wall
+  checked: '2026-08-12'
+  source: catalog MCP census
