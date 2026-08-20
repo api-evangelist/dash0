@@ -45,6 +45,17 @@ tags:
 - Prometheus
 - DevOps
 - Company
+tags_raw:
+- Observability
+- OpenTelemetry
+- Monitoring
+- Logs
+- Metrics
+- Tracing
+- APM
+- Prometheus
+- DevOps
+- Company
 - Apis
 apis:
 - aid: dash0:dash0-edge-collectors-api
@@ -200,6 +211,8 @@ apis:
   humanURL: https://api-docs.dash0.com/
   baseURL: https://api.eu-west-1.aws.dash0.com
   tags:
+  - Authentication
+  tags_raw:
   - OAuth 2.0
   properties:
   - type: OpenAPI
