@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Dash0 Edge Collectors Manage Alerting API
+  title: Dash0 Manage Alerting API
   version: 1.0.0
   description: '## Request body size limit
 
@@ -14,9 +14,7 @@ info:
 
     Requests exceeding the applicable limit are rejected with a
 
-    `413 Content Too Large` response.
-
-    '
+    `413 Content Too Large` response.'
 servers:
 - url: https://api.eu-west-1.aws.dash0.com
   description: API endpoint for AWS region EU (Ireland)
@@ -31,7 +29,7 @@ tags:
 paths:
   /api/alerting/check-rules/{originOrId}:
     delete:
-      summary: Delete a specific check rule (Prometheus alert rule) by origin or id.
+      summary: Delete a specific check rule (Prometheus alert rule) by origin or id
       parameters:
       - in: path
         name: originOrId
@@ -56,7 +54,7 @@ paths:
       - Manage Alerting
       operationId: delete_api-alerting-check-rules-originorid
     get:
-      summary: Retrieve a specific check rule (Prometheus alert rule) by its origin or id.
+      summary: Retrieve a specific check rule (Prometheus alert rule) by its origin or id
       parameters:
       - in: path
         name: originOrId
@@ -85,7 +83,7 @@ paths:
       - Manage Alerting
       operationId: get_api-alerting-check-rules-originorid
     put:
-      summary: Update or insert a specific check rule (Prometheus alert rule) by origin or id.
+      summary: Update or insert a specific check rule (Prometheus alert rule) by origin or id
       parameters:
       - in: path
         name: originOrId
@@ -121,7 +119,7 @@ paths:
       operationId: put_api-alerting-check-rules-originorid
   /api/alerting/check-rules:
     get:
-      summary: Retrieve a list of check rule ids.
+      summary: Retrieve a list of check rule ids
       parameters:
       - in: query
         name: dataset
@@ -162,7 +160,7 @@ paths:
       - Manage Alerting
       operationId: get_api-alerting-check-rules
     post:
-      summary: Create a new check rule.
+      summary: Create a new check rule
       parameters:
       - in: query
         name: dataset
@@ -194,7 +192,7 @@ paths:
       operationId: post_api-alerting-check-rules
   /api/alerting/check-rules/bulk:
     post:
-      summary: Bulk create check rules.
+      summary: Bulk create check rules
       description: 'Atomically create up to 1000 Prometheus alert rules in a single request.
 
         Create-only — every item produces a brand-new check rule. The public
@@ -229,9 +227,7 @@ paths:
 
         for other endpoints) to accommodate batched payloads of up to 1000
 
-        rules per request.
-
-        '
+        rules per request.'
       parameters:
       - in: query
         name: dataset
@@ -263,7 +259,7 @@ paths:
       operationId: post_api-alerting-check-rules-bulk
   /api/import/check-rule:
     post:
-      summary: Import a check rule.
+      summary: Import a check rule
       description: 'This endpoint allows you **to import an existing check rule** into your organization. It''s intended for one-time migrations rather than ongoing check rule management.
 
         Unlike the standard API, this endpoint supports importing check rules **with full editability**, allowing you to modify check rules that were previously created elsewhere.
@@ -274,9 +270,7 @@ paths:
 
         Importing a check rule without an id will create a new check rule and return the created asset with a generated id.
 
-        Importing a check rule with an existing id (metadata>dash0Extensions>id) will override the corresponding check rule definition. In case there is no check rule with the given id a new check rule will be created.
-
-        '
+        Importing a check rule with an existing id (metadata>dash0Extensions>id) will override the corresponding check rule definition. In case there is no check rule with the given id a new check rule will be created.'
       parameters:
       - in: query
         name: dataset
@@ -308,7 +302,7 @@ paths:
       operationId: post_api-import-check-rule
   /api/import/check-rules:
     post:
-      summary: Import multiple check rules in one batch.
+      summary: Import multiple check rules in one batch
       description: 'Bulk variant of `/api/import/check-rule`. Atomically imports up to 1000
 
         Prometheus alert rules into your organization with **full editability**
@@ -341,9 +335,7 @@ paths:
 
         256 KB default for other endpoints) to accommodate batched payloads of
 
-        up to 1000 rules per request.
-
-        '
+        up to 1000 rules per request.'
       parameters:
       - in: query
         name: dataset
@@ -375,9 +367,42 @@ paths:
       operationId: post_api-import-check-rules
 components:
   schemas:
-    Duration:
-      type: string
-      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    CheckThresholds:
+      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
+
+        '
+      properties:
+        degraded:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a degraded state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
+        failed:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a failed state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    PrometheusAlertRuleBulkCreateResponse:
+      type: object
+      required:
+      - created
+      properties:
+        created:
+          type: integer
+          description: Number of check rules that were newly created.
     PrometheusAlertRuleBulkCreateRequest:
       type: object
       required:
@@ -389,6 +414,47 @@ components:
           maxItems: 1000
           items:
             $ref: '#/components/schemas/PrometheusAlertRule'
+    PrometheusAlertRuleMetadataLabels:
+      type: object
+      description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
+
+        emitted alert. Currently includes `dash0.com/source`
+
+        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
+
+        '
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    PrometheusAlertRuleMetadata:
+      type: object
+      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
+
+        '
+      properties:
+        labels:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
     PrometheusAlertRuleApiListItem:
       description: The ID, origin, dataset, and the name of a check rule.
       properties:
@@ -415,6 +481,21 @@ components:
       required:
       - id
       - dataset
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
     PrometheusAlertRule:
       description: 'Check rules represent a periodically evaluated expression to determine the health of a resource.
 
@@ -565,92 +646,3 @@ components:
       required:
       - name
       - expression
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    PrometheusAlertRuleMetadata:
-      type: object
-      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
-
-        '
-      properties:
-        labels:
-          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
-    PrometheusAlertRuleMetadataLabels:
-      type: object
-      description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
-
-        emitted alert. Currently includes `dash0.com/source`
-
-        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
-
-        '
-      properties:
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    CheckThresholds:
-      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
-
-        '
-      properties:
-        degraded:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a degraded state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
-        failed:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a failed state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
-    PrometheusAlertRuleBulkCreateResponse:
-      type: object
-      required:
-      - created
-      properties:
-        created:
-          type: integer
-          description: Number of check rules that were newly created.
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

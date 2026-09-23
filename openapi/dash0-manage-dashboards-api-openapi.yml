@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Dash0 Edge Collectors Manage Dashboards API
+  title: Dash0 Manage Dashboards API
   version: 1.0.0
   description: '## Request body size limit
 
@@ -14,9 +14,7 @@ info:
 
     Requests exceeding the applicable limit are rejected with a
 
-    `413 Content Too Large` response.
-
-    '
+    `413 Content Too Large` response.'
 servers:
 - url: https://api.eu-west-1.aws.dash0.com
   description: API endpoint for AWS region EU (Ireland)
@@ -31,7 +29,7 @@ tags:
 paths:
   /api/dashboards/{originOrId}:
     delete:
-      summary: Delete a specific dashboard by its origin or id.
+      summary: Delete a specific dashboard by its origin or id
       description: Delete a specific dashboard by its **origin** or **id**.
       parameters:
       - in: path
@@ -57,7 +55,7 @@ paths:
       - Manage Dashboards
       operationId: delete_api-dashboards-originorid
     get:
-      summary: Receive a specific dashboard by its origin or id.
+      summary: Receive a specific dashboard by its origin or id
       description: Receive a specific dashboard by its **origin** or **id**.
       parameters:
       - in: path
@@ -87,7 +85,7 @@ paths:
       - Manage Dashboards
       operationId: get_api-dashboards-originorid
     put:
-      summary: Update or insert a specific dashboard by its origin or id.
+      summary: Update or insert a specific dashboard by its origin or id
       description: Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**.
       parameters:
       - in: path
@@ -192,9 +190,7 @@ paths:
 
         Importing a dashboard without an id will create a new dashboard and return the created asset with a generated id.
 
-        Importing a dashboard with an existing id (metadata>dash0Extensions>id) will override the corresponding dashboard definition. In case there is no dashboard with the given id a new dashboard will be created.
-
-        '
+        Importing a dashboard with an existing id (metadata>dash0Extensions>id) will override the corresponding dashboard definition. In case there is no dashboard with the given id a new dashboard will be created.'
       parameters:
       - in: query
         name: dataset
@@ -224,6 +220,50 @@ paths:
       operationId: post_api-import-dashboard
 components:
   schemas:
+    DashboardApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+      - dataset
+      - tags
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
+      required:
+      - kind
+      - metadata
+      - spec
     DashboardMetadata:
       properties:
         name:
@@ -248,24 +288,6 @@ components:
           $ref: '#/components/schemas/DashboardAnnotations'
       required:
       - name
-    DashboardAnnotations:
-      properties:
-        dash0.com/deleted-at:
-          type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
     CrdSource:
       description: 'Origin of a Dash0 resource.
 
@@ -284,42 +306,6 @@ components:
       - terraform
       - operator
       - api
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    DashboardDefinition:
-      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
-
-        '
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dashboard
-        metadata:
-          $ref: '#/components/schemas/DashboardMetadata'
-        spec:
-          type: object
-      required:
-      - kind
-      - metadata
-      - spec
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    DashboardLabels:
-      properties:
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
     DashboardMetadataExtensions:
       properties:
         tags:
@@ -346,23 +332,33 @@ components:
         createdBy:
           type: string
           description: The member ID of the user who created this dashboard or dashboard version.
-    DashboardApiListItem:
+    DashboardAnnotations:
       properties:
-        id:
+        dash0.com/deleted-at:
           type: string
-        origin:
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
           type: string
-        dataset:
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
           type: string
-        name:
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
           type: string
-        description:
+        traceId:
           type: string
-        tags:
-          type: array
-          items:
-            type: string
       required:
-      - id
-      - dataset
-      - tags
+      - code
+      - message
+    DashboardLabels:
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'

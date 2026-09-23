@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Dash0 Edge Collectors Manage Recording Rules API
+  title: Dash0 Manage Recording Rules API
   version: 1.0.0
   description: '## Request body size limit
 
@@ -14,9 +14,7 @@ info:
 
     Requests exceeding the applicable limit are rejected with a
 
-    `413 Content Too Large` response.
-
-    '
+    `413 Content Too Large` response.'
 servers:
 - url: https://api.eu-west-1.aws.dash0.com
   description: API endpoint for AWS region EU (Ireland)
@@ -31,7 +29,7 @@ tags:
 paths:
   /api/recording-rules/{originOrId}:
     delete:
-      summary: Delete a specific recording rule.
+      summary: Delete a specific recording rule
       parameters:
       - in: path
         name: originOrId
@@ -57,7 +55,7 @@ paths:
       - Manage Recording Rules
       operationId: delete_api-recording-rules-originorid
     get:
-      summary: Retrieve the latest version of a specific recording rule.
+      summary: Retrieve the latest version of a specific recording rule
       parameters:
       - in: path
         name: originOrId
@@ -87,7 +85,7 @@ paths:
       - Manage Recording Rules
       operationId: get_api-recording-rules-originorid
     put:
-      summary: Update a specific recording rule.
+      summary: Update a specific recording rule
       parameters:
       - in: path
         name: originOrId
@@ -125,7 +123,7 @@ paths:
       operationId: put_api-recording-rules-originorid
   /api/recording-rules:
     get:
-      summary: Retrieve a list of recording rules.
+      summary: Retrieve a list of recording rules
       parameters:
       - in: query
         name: dataset
@@ -158,7 +156,7 @@ paths:
       - Manage Recording Rules
       operationId: get_api-recording-rules
     post:
-      summary: Create a recording rule.
+      summary: Create a recording rule
       parameters:
       - in: query
         name: dataset
@@ -190,6 +188,179 @@ paths:
       operationId: post_api-recording-rules
 components:
   schemas:
+    PrometheusRule:
+      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
+
+        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
+
+        Groups may contain recording rules, alerting rules, or both.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/PrometheusRuleApiVersion'
+        kind:
+          $ref: '#/components/schemas/PrometheusRuleKind'
+        metadata:
+          $ref: '#/components/schemas/PrometheusRuleMetadata'
+        spec:
+          $ref: '#/components/schemas/PrometheusRuleSpec'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    PrometheusRuleDefinition:
+      description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
+
+        an alerting rule (has `alert`). Exactly one of `record` or `alert` must be set.
+
+
+        Recording rules pre-compute a PromQL expression and store the result as a new metric.
+
+        Alerting rules evaluate a PromQL expression and fire alerts when the result is non-empty.
+
+        '
+      properties:
+        record:
+          description: 'Name of the output metric for a recording rule. Must be a valid Prometheus metric name.
+
+            Mutually exclusive with `alert`.
+
+            '
+          type: string
+          pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
+        alert:
+          description: 'Name of the alert for an alerting rule.
+
+            Mutually exclusive with `record`.
+
+            '
+          type: string
+        expr:
+          description: "PromQL expression to evaluate.\n\nFor **recording rules**, the expression must satisfy these constraints\n(alerting rules are not subject to them):\n- **Maximum query window**: the longest matrix-selector range (or subquery\n  range, plus `lookbackDelta`) may not exceed 30 days + 15 minutes.\n- **Minimum evaluation interval** depends on the query window — see the\n  band table on the group's `interval` field, including the RR-over-RR carve-out.\n- **At most 7 distinct metric names** may be referenced (only enforced when\n  the query window exceeds 1h+10m).\n- **Each matrix selector** must be bounded — at least one non-`__name__`\n  label matcher, an enclosing range function (`rate`, `*_over_time`, …),\n  an enclosing `by`/`without` aggregation, or the inner metric must itself\n  be an active recording-rule output in the same (organization, dataset).\n- **At most 10 `or` arms** (only enforced when the query window exceeds 1h+10m).\n- **Self-reference is rejected**: the rule's own `record` may not appear\n  in its own expression.\n- **Vector matching must resolve to a clean, aligned match**: a binary\n  operation matched with `on()` and an empty label set is rejected when the\n  one-side operand is not statically a single series (an unaggregated selector\n  there fails at evaluation with a duplicate-series error). Aggregate the\n  one-side to a single series (e.g. `sum(...)`) or match on explicit labels\n  with `on(<labels>)`.\n"
+          type: string
+        for:
+          description: 'Duration for which the expression must be continuously satisfied before an alert fires.
+
+            Only applicable to alerting rules (e.g., "5m", "10m").
+
+            '
+          type: string
+        keep_firing_for:
+          description: 'Duration for which an alert continues firing after the expression is no longer satisfied.
+
+            Only applicable to alerting rules (e.g., "5m").
+
+            '
+          type: string
+        labels:
+          description: Additional labels to attach to the resulting metrics or alerts.
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Annotations to attach to alerts. Only applicable to alerting rules.
+
+            Commonly used keys include `summary` and `description`.
+
+
+            Dash0 also recognizes:
+
+            - `dash0.com/notification-channel-ids`: Comma-separated list of notification channel UUIDs to notify when the alert fires.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - expr
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    PrometheusRuleSpec:
+      description: 'Spec of the PrometheusRule resource containing rule groups.
+
+        '
+      properties:
+        groups:
+          description: 'Rule groups. Each group is evaluated independently at its own interval.
+
+            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusRuleGroup'
+          minItems: 1
+          maxItems: 1
+      required:
+      - groups
+    PrometheusRuleMetadata:
+      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
+
+        '
+      properties:
+        name:
+          description: Resource name.
+          type: string
+        labels:
+          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
+
+
+            - `dash0.com/id`: Internal ID (read-only, server-set).
+
+            - `dash0.com/origin`: External identifier for API-managed resources.
+
+            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
+
+            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
+
+            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
+
+
+            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
+
+            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
+
+            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
+
+            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
+
+            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
+
+            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
+
+            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
+
+            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
+
+            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - name
+    PrometheusRuleApiVersion:
+      description: 'API version of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - monitoring.coreos.com/v1
     PrometheusRuleGroup:
       description: 'A group of rules evaluated together at a common interval. Follows the Prometheus
 
@@ -294,179 +465,6 @@ components:
       required:
       - name
       - rules
-    PrometheusRule:
-      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
-
-        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
-
-        Groups may contain recording rules, alerting rules, or both.
-
-        '
-      properties:
-        apiVersion:
-          $ref: '#/components/schemas/PrometheusRuleApiVersion'
-        kind:
-          $ref: '#/components/schemas/PrometheusRuleKind'
-        metadata:
-          $ref: '#/components/schemas/PrometheusRuleMetadata'
-        spec:
-          $ref: '#/components/schemas/PrometheusRuleSpec'
-      required:
-      - apiVersion
-      - kind
-      - metadata
-      - spec
-    PrometheusRuleDefinition:
-      description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
-
-        an alerting rule (has `alert`). Exactly one of `record` or `alert` must be set.
-
-
-        Recording rules pre-compute a PromQL expression and store the result as a new metric.
-
-        Alerting rules evaluate a PromQL expression and fire alerts when the result is non-empty.
-
-        '
-      properties:
-        record:
-          description: 'Name of the output metric for a recording rule. Must be a valid Prometheus metric name.
-
-            Mutually exclusive with `alert`.
-
-            '
-          type: string
-          pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
-        alert:
-          description: 'Name of the alert for an alerting rule.
-
-            Mutually exclusive with `record`.
-
-            '
-          type: string
-        expr:
-          description: "PromQL expression to evaluate.\n\nFor **recording rules**, the expression must satisfy these constraints\n(alerting rules are not subject to them):\n- **Maximum query window**: the longest matrix-selector range (or subquery\n  range, plus `lookbackDelta`) may not exceed 30 days + 15 minutes.\n- **Minimum evaluation interval** depends on the query window — see the\n  band table on the group's `interval` field, including the RR-over-RR carve-out.\n- **At most 7 distinct metric names** may be referenced (only enforced when\n  the query window exceeds 1h+10m).\n- **Each matrix selector** must be bounded — at least one non-`__name__`\n  label matcher, an enclosing range function (`rate`, `*_over_time`, …),\n  an enclosing `by`/`without` aggregation, or the inner metric must itself\n  be an active recording-rule output in the same (organization, dataset).\n- **At most 10 `or` arms** (only enforced when the query window exceeds 1h+10m).\n- **Self-reference is rejected**: the rule's own `record` may not appear\n  in its own expression.\n- **Vector matching must resolve to a clean, aligned match**: a binary\n  operation matched with `on()` and an empty label set is rejected when the\n  one-side operand is not statically a single series (an unaggregated selector\n  there fails at evaluation with a duplicate-series error). Aggregate the\n  one-side to a single series (e.g. `sum(...)`) or match on explicit labels\n  with `on(<labels>)`.\n"
-          type: string
-        for:
-          description: 'Duration for which the expression must be continuously satisfied before an alert fires.
-
-            Only applicable to alerting rules (e.g., "5m", "10m").
-
-            '
-          type: string
-        keep_firing_for:
-          description: 'Duration for which an alert continues firing after the expression is no longer satisfied.
-
-            Only applicable to alerting rules (e.g., "5m").
-
-            '
-          type: string
-        labels:
-          description: Additional labels to attach to the resulting metrics or alerts.
-          type: object
-          additionalProperties:
-            type: string
-        annotations:
-          description: 'Annotations to attach to alerts. Only applicable to alerting rules.
-
-            Commonly used keys include `summary` and `description`.
-
-
-            Dash0 also recognizes:
-
-            - `dash0.com/notification-channel-ids`: Comma-separated list of notification channel UUIDs to notify when the alert fires.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-      required:
-      - expr
-    PrometheusRuleApiVersion:
-      description: 'API version of the PrometheusRule CRD.
-
-        '
-      type: string
-      enum:
-      - monitoring.coreos.com/v1
-    PrometheusRuleMetadata:
-      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
-
-        '
-      properties:
-        name:
-          description: Resource name.
-          type: string
-        labels:
-          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
-
-
-            - `dash0.com/id`: Internal ID (read-only, server-set).
-
-            - `dash0.com/origin`: External identifier for API-managed resources.
-
-            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
-
-            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
-
-            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-        annotations:
-          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
-
-
-            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
-
-            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
-
-            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
-
-            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
-
-            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
-
-            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
-
-            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
-
-            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
-
-            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-      required:
-      - name
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    PrometheusRuleSpec:
-      description: 'Spec of the PrometheusRule resource containing rule groups.
-
-        '
-      properties:
-        groups:
-          description: 'Rule groups. Each group is evaluated independently at its own interval.
-
-            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/PrometheusRuleGroup'
-          minItems: 1
-          maxItems: 1
-      required:
-      - groups
     PrometheusRuleKind:
       description: 'Kind of the PrometheusRule CRD.
 
@@ -474,6 +472,10 @@ components:
       type: string
       enum:
       - PrometheusRule
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     Error:
       properties:
         code:
@@ -485,7 +487,3 @@ components:
       required:
       - code
       - message
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

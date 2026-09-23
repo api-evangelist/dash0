@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Dash0 Edge Collectors Manage Views API
+  title: Dash0 Manage Views API
   version: 1.0.0
   description: '## Request body size limit
 
@@ -14,9 +14,7 @@ info:
 
     Requests exceeding the applicable limit are rejected with a
 
-    `413 Content Too Large` response.
-
-    '
+    `413 Content Too Large` response.'
 servers:
 - url: https://api.eu-west-1.aws.dash0.com
   description: API endpoint for AWS region EU (Ireland)
@@ -31,7 +29,7 @@ tags:
 paths:
   /api/views/{originOrId}:
     delete:
-      summary: Delete a specific view by origin or id.
+      summary: Delete a specific view by origin or id
       parameters:
       - in: path
         name: originOrId
@@ -56,7 +54,7 @@ paths:
       - Manage Views
       operationId: delete_api-views-originorid
     get:
-      summary: Receive a specific view by its origin or id.
+      summary: Receive a specific view by its origin or id
       parameters:
       - in: path
         name: originOrId
@@ -85,7 +83,7 @@ paths:
       - Manage Views
       operationId: get_api-views-originorid
     put:
-      summary: Update or insert a specific view by its origin or id.
+      summary: Update or insert a specific view by its origin or id
       parameters:
       - in: path
         name: originOrId
@@ -189,9 +187,7 @@ paths:
 
         Importing a view without an id will create a new view and return the created asset with a generated id.
 
-        Importing a view with an existing id (metadata>dash0Extensions>id) will override the corresponding view definition. In case there is no view with the given id a new view will be created.
-
-        '
+        Importing a view with an existing id (metadata>dash0Extensions>id) will override the corresponding view definition. In case there is no view with the given id a new view will be created.'
       parameters:
       - in: query
         name: dataset
@@ -221,147 +217,15 @@ paths:
       operationId: post_api-import-view
 components:
   schemas:
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    AttributeFilterAnyValue:
-      description: AttributeFilterAnyValue may contain any AnyValue value.
-      $ref: '#/components/schemas/AnyValue'
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    ViewDisplay:
-      properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
-          type: string
-        description:
-          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
-
-            team members understand the purpose of the view.
-
-            '
-          type: string
-      required:
-      - name
-    AxisScale:
-      type: string
-      enum:
-      - linear
-      - log10
-    ViewMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/ViewLabels'
-        annotations:
-          $ref: '#/components/schemas/ViewAnnotations'
-      required:
-      - name
-    ViewVisualizationRenderer:
-      type: string
-      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
-
-        The matching prioritizes precise matches before wildcard matches.
-
-        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
-
-        '
-      enum:
-      - traces-explorer/*/outliers
-      - traces-explorer/*/red
-      - logging/*/stacked_bar
-      - resources/*/table-tree
-      - resources/overview/overview
-      - resources/services/red
-      - resources/operations/red
-      - resources/names/red
-      - resources/k8s-cron-jobs/executions
-      - resources/k8s-cron-jobs/red
-      - resources/k8s-daemon-sets/scheduled-nodes
-      - resources/k8s-daemon-sets/red
-      - resources/k8s-deployments/replicas
-      - resources/k8s-deployments/red
-      - resources/k8s-jobs/executions
-      - resources/k8s-jobs/red
-      - resources/k8s-namespaces/red
-      - resources/k8s-nodes/cpu-memory-disk
-      - resources/k8s-nodes/status
-      - resources/k8s-pods/cpu-memory
-      - resources/k8s-pods/status
-      - resources/k8s-pods/red
-      - resources/k8s-replica-sets/replicas
-      - resources/k8s-replica-sets/red
-      - resources/k8s-stateful-sets/replicas
-      - resources/k8s-stateful-sets/red
-      - resources/faas/red
-    ViewType:
-      type: string
-      description: 'The view type describes where this view configuration is intended to be applied in the UI.
-
-        '
-      enum:
-      - resources
-      - services
-      - spans
-      - logs
-      - metrics
-      - failed_checks
-      - web_events
-      - sql
-      - profiles
-      - gcp_cloud_run_services
-      - gcp_cloud_run_jobs
-      - gcp_pubsub
-      - gcp_cloud_storage
-      - gcp_cloud_sql_instances
-      - aws_lambda
-      - slos
-    ViewApiListItem:
-      properties:
-        id:
-          type: string
-        origin:
-          type: string
-        dataset:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/ViewType'
-      required:
-      - id
-      - dataset
-      - type
     OrderingDirection:
       type: string
       enum:
       - ascending
       - descending
       default: ascending
+    OrderingKey:
+      type: string
+      description: Any attribute key to order by.
     ViewPermission:
       properties:
         teamId:
@@ -382,6 +246,94 @@ components:
             $ref: '#/components/schemas/ViewAction'
       required:
       - actions
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    AxisScale:
+      type: string
+      enum:
+      - linear
+      - log10
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    OrderingCriteria:
+      type: array
+      description: Any supported attribute keys to order by.
+      items:
+        $ref: '#/components/schemas/OrderingCriterion'
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ViewTable:
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ViewTableColumn'
+        sort:
+          $ref: '#/components/schemas/OrderingCriteria'
+      required:
+      - columns
+      - sort
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    ViewVisualization:
+      properties:
+        yAxisScale:
+          description: 'The Y axis scale for the visualization.
+
+            '
+          $ref: '#/components/schemas/AxisScale'
+        metric:
+          deprecated: true
+          $ref: '#/components/schemas/ViewVisualizationMetric'
+        renderer:
+          deprecated: true
+          $ref: '#/components/schemas/ViewVisualizationRenderer'
+        renderers:
+          type: array
+          description: 'A set of visualizations (charts) to render as part of this view. We currently only expect
+
+            to render a single
+
+            '
+          items:
+            $ref: '#/components/schemas/ViewVisualizationRenderer'
+      required:
+      - type
+      - renderers
     ViewSpec:
       properties:
         type:
@@ -450,6 +402,47 @@ components:
       required:
       - type
       - display
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    ViewTableColumn:
+      properties:
+        key:
+          type: string
+          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
+
+            '
+        label:
+          type: string
+        colSize:
+          type: string
+          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
+
+            and similar variants.
+
+            '
+      required:
+      - key
     ViewSpecServiceMapProperties:
       properties:
         layout:
@@ -486,62 +479,169 @@ components:
       - selectedMetric
       - particles
       - nodeSizing
-    AttributeFilterStringValue:
-      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+    ViewType:
       type: string
-    ViewTable:
+      description: 'The view type describes where this view configuration is intended to be applied in the UI.
+
+        '
+      enum:
+      - resources
+      - services
+      - spans
+      - logs
+      - metrics
+      - failed_checks
+      - web_events
+      - sql
+      - profiles
+      - gcp_cloud_run_services
+      - gcp_cloud_run_jobs
+      - gcp_pubsub
+      - gcp_cloud_storage
+      - gcp_cloud_sql_instances
+      - aws_lambda
+      - slos
+    ViewDefinition:
       properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/ViewTableColumn'
-        sort:
-          $ref: '#/components/schemas/OrderingCriteria'
-      required:
-      - columns
-      - sort
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
+        kind:
           type: string
-        traceId:
-          type: string
+          enum:
+          - Dash0View
+        metadata:
+          $ref: '#/components/schemas/ViewMetadata'
+        spec:
+          $ref: '#/components/schemas/ViewSpec'
       required:
-      - code
-      - message
-    OrderingKey:
-      type: string
-      description: Any attribute key to order by.
-    ViewVisualization:
+      - kind
+      - metadata
+      - spec
+    OrderingCriterion:
+      description: Any combination of a supported key to order by and a direction.
       properties:
-        yAxisScale:
-          description: 'The Y axis scale for the visualization.
+        key:
+          $ref: '#/components/schemas/OrderingKey'
+        direction:
+          $ref: '#/components/schemas/OrderingDirection'
+      required:
+      - key
+      - direction
+    ViewDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
 
             '
-          $ref: '#/components/schemas/AxisScale'
-        metric:
-          deprecated: true
-          $ref: '#/components/schemas/ViewVisualizationMetric'
-        renderer:
-          deprecated: true
-          $ref: '#/components/schemas/ViewVisualizationRenderer'
-        renderers:
-          type: array
-          description: 'A set of visualizations (charts) to render as part of this view. We currently only expect
+          type: string
+        description:
+          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
 
-            to render a single
+            team members understand the purpose of the view.
 
             '
-          items:
-            $ref: '#/components/schemas/ViewVisualizationRenderer'
+          type: string
       required:
-      - type
-      - renderers
+      - name
+    ViewAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    ViewAction:
+      type: string
+      enum:
+      - views:read
+      - views:write
+      - views:delete
+    ViewVisualizationMetric:
+      type: string
+      enum:
+      - logs_total
+      - logs_rate
+      - spans_total
+      - spans_rate
+      - spans_errors_total
+      - spans_errors_rate
+      - spans_errors_percentage
+      - spans_duration_p99
+      - spans_duration_p95
+      - spans_duration_p90
+      - spans_duration_p75
+      - spans_duration_p50
+      - spans_duration_avg
     AttributeFilterKey:
       type: string
       description: The attribute key to be filtered.
+    ViewMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/ViewLabels'
+        annotations:
+          $ref: '#/components/schemas/ViewAnnotations'
+      required:
+      - name
+    ViewLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          type: string
+          enum:
+          - external
+          - builtin
+          - userdefined
+    ViewVisualizationRenderer:
+      type: string
+      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
+
+        The matching prioritizes precise matches before wildcard matches.
+
+        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
+
+        '
+      enum:
+      - traces-explorer/*/outliers
+      - traces-explorer/*/red
+      - logging/*/stacked_bar
+      - resources/*/table-tree
+      - resources/overview/overview
+      - resources/services/red
+      - resources/operations/red
+      - resources/names/red
+      - resources/k8s-cron-jobs/executions
+      - resources/k8s-cron-jobs/red
+      - resources/k8s-daemon-sets/scheduled-nodes
+      - resources/k8s-daemon-sets/red
+      - resources/k8s-deployments/replicas
+      - resources/k8s-deployments/red
+      - resources/k8s-jobs/executions
+      - resources/k8s-jobs/red
+      - resources/k8s-namespaces/red
+      - resources/k8s-nodes/cpu-memory-disk
+      - resources/k8s-nodes/status
+      - resources/k8s-pods/cpu-memory
+      - resources/k8s-pods/status
+      - resources/k8s-pods/red
+      - resources/k8s-replica-sets/replicas
+      - resources/k8s-replica-sets/red
+      - resources/k8s-stateful-sets/replicas
+      - resources/k8s-stateful-sets/red
+      - resources/faas/red
     AttributeFilterOperator:
       type: string
       enum:
@@ -626,134 +726,30 @@ components:
         - `is_any` - matches any value, ignoring whether the key exists or not
 
         '
-    ViewAction:
-      type: string
-      enum:
-      - views:read
-      - views:write
-      - views:delete
-    ViewVisualizationMetric:
-      type: string
-      enum:
-      - logs_total
-      - logs_rate
-      - spans_total
-      - spans_rate
-      - spans_errors_total
-      - spans_errors_rate
-      - spans_errors_percentage
-      - spans_duration_p99
-      - spans_duration_p95
-      - spans_duration_p90
-      - spans_duration_p75
-      - spans_duration_p50
-      - spans_duration_avg
-    OrderingCriterion:
-      description: Any combination of a supported key to order by and a direction.
+    ViewApiListItem:
       properties:
-        key:
-          $ref: '#/components/schemas/OrderingKey'
-        direction:
-          $ref: '#/components/schemas/OrderingDirection'
+        id:
+          type: string
+        origin:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ViewType'
       required:
-      - key
-      - direction
-    AttributeFilter:
-      type: object
+      - id
+      - dataset
+      - type
+    Error:
       properties:
-        key:
-          $ref: '#/components/schemas/AttributeFilterKey'
-        operator:
-          $ref: '#/components/schemas/AttributeFilterOperator'
-        value:
-          oneOf:
-          - $ref: '#/components/schemas/AttributeFilterStringValue'
-          - $ref: '#/components/schemas/AttributeFilterAnyValue'
-        values:
-          type: array
-          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
-
-            '
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/AttributeFilterStringValue'
-            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
       required:
-      - key
-      - operator
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    FilterCriteria:
-      type: array
-      items:
-        $ref: '#/components/schemas/AttributeFilter'
-      example:
-      - key: service.name
-        operator: is
-        value: foo
-    ViewLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          type: string
-          enum:
-          - external
-          - builtin
-          - userdefined
-    OrderingCriteria:
-      type: array
-      description: Any supported attribute keys to order by.
-      items:
-        $ref: '#/components/schemas/OrderingCriterion'
-    ViewTableColumn:
-      properties:
-        key:
-          type: string
-          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
-
-            '
-        label:
-          type: string
-        colSize:
-          type: string
-          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
-
-            and similar variants.
-
-            '
-      required:
-      - key
-    ViewDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0View
-        metadata:
-          $ref: '#/components/schemas/ViewMetadata'
-        spec:
-          $ref: '#/components/schemas/ViewSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    ViewAnnotations:
-      properties:
-        dash0.com/deleted-at:
-          type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
+      - code
+      - message
