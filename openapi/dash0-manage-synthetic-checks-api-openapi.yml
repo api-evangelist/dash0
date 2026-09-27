@@ -265,12 +265,102 @@ paths:
       operationId: post_api-synthetic-checks-test
 components:
   schemas:
-    SslCertificateAssertionSpec:
+    NumericAssertionOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - gt
+      - lt
+      - gte
+      - lte
+      - is_one_of
+      - is_not_one_of
+    SyntheticCheckRetriesFixed:
       properties:
+        kind:
+          type: string
+          enum:
+          - fixed
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesFixedSpec'
+      required:
+      - kind
+      - spec
+    SyntheticCheckRetriesExponential:
+      properties:
+        kind:
+          type: string
+          enum:
+          - exponential
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckRetriesExponentialSpec'
+      required:
+      - kind
+      - spec
+    HttpResponseJsonBodyAssertionSpec:
+      properties:
+        jsonPath:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
         value:
+          type: string
+      required:
+      - jsonPath
+      - operator
+      - value
+    TimingAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - timing
+        spec:
+          $ref: '#/components/schemas/TimingAssertionSpec'
+      required:
+      - kind
+      - spec
+    HttpHeaders:
+      type: array
+      items:
+        $ref: '#/components/schemas/NameValuePair'
+    SyntheticCheckRetriesLinearSpec:
+      properties:
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 10
+        delay:
+          $ref: '#/components/schemas/Duration'
+        maximumDelay:
           $ref: '#/components/schemas/Duration'
       required:
-      - value
+      - attempts
+      - delay
+      - maximumDelay
+    SyntheticHttpCheckAssertions:
+      properties:
+        criticalAssertions:
+          $ref: '#/components/schemas/HttpCheckAssertions'
+        degradedAssertions:
+          $ref: '#/components/schemas/HttpCheckAssertions'
+      required:
+      - criticalAssertions
+      - degradedAssertions
+    HttpRequestMethod:
+      type: string
+      enum:
+      - get
+      - post
+      - put
+      - delete
+      - head
+      - patch
+    HttpQueryParameters:
+      type: array
+      items:
+        $ref: '#/components/schemas/NameValuePair'
     SyntheticHttpCheckPlugin:
       properties:
         kind:
@@ -282,16 +372,6 @@ components:
       required:
       - kind
       - spec
-    SyntheticCheckRetriesOffSpec:
-      properties: {}
-    SyntheticCheckSchedulingStrategy:
-      type: string
-      description: 'Whether to run checks against all specified locations for every run, or just a single location per run.
-
-        '
-      enum:
-      - all_locations
-      - random_location
     StringAssertionOperator:
       type: string
       enum:
@@ -309,18 +389,304 @@ components:
       - does_not_start_with
       - ends_with
       - does_not_end_with
-    SyntheticCheckMetadata:
+    HttpResponseStatusCodeAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - status_code
+        spec:
+          $ref: '#/components/schemas/HttpResponseStatusCodeAssertionSpec'
+      required:
+      - kind
+      - spec
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    HttpCheckAssertions:
+      type: array
+      items:
+        $ref: '#/components/schemas/HttpCheckAssertion'
+    SyntheticCheckSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/SyntheticCheckDisplay'
+        plugin:
+          $ref: '#/components/schemas/SyntheticCheckPlugin'
+        schedule:
+          $ref: '#/components/schemas/SyntheticCheckSchedule'
+        retries:
+          $ref: '#/components/schemas/SyntheticCheckRetries'
+        notifications:
+          $ref: '#/components/schemas/SyntheticCheckNotifications'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticCheckPermission'
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+        enabled:
+          type: boolean
+      required:
+      - type
+      - plugin
+      - schedule
+      - retries
+      - notifications
+      - enabled
+    NameValuePair:
       properties:
         name:
           type: string
-        description:
+        value:
           type: string
-        labels:
-          $ref: '#/components/schemas/SyntheticCheckLabels'
-        annotations:
-          $ref: '#/components/schemas/SyntheticCheckAnnotations'
       required:
       - name
+      - value
+    SyntheticHttpCheckPluginSpec:
+      properties:
+        request:
+          $ref: '#/components/schemas/HttpRequestSpec'
+        assertions:
+          $ref: '#/components/schemas/SyntheticHttpCheckAssertions'
+      required:
+      - request
+      - assertions
+    HttpResponseTextBodyAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    SyntheticCheckRetries:
+      anyOf:
+      - $ref: '#/components/schemas/SyntheticCheckRetriesOff'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesFixed'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesLinear'
+      - $ref: '#/components/schemas/SyntheticCheckRetriesExponential'
+    SyntheticChecksApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        dataset:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - dataset
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SyntheticCheckLocation:
+      type: string
+      description: A geographic location identifier from which synthetic checks can be executed.
+      minLength: 1
+      maxLength: 128
+    SpanEvent:
+      type: object
+      properties:
+        timeUnixNano:
+          type: string
+          format: uint64
+        name:
+          type: string
+        attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+        droppedAttributesCount:
+          type: integer
+          format: int64
+      required:
+      - timeUnixNano
+      - name
+      - attributes
+    TimingType:
+      type: string
+      enum:
+      - total
+      - dns
+      - connection
+      - ssl
+      - request
+      - response
+    SslCertificateAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - ssl_certificate
+        spec:
+          $ref: '#/components/schemas/SslCertificateAssertionSpec'
+      required:
+      - kind
+      - spec
+    HttpResponseJsonBodyAssertion:
+      properties:
+        kind:
+          type: string
+          enum:
+          - json_body
+        spec:
+          $ref: '#/components/schemas/HttpResponseJsonBodyAssertionSpec'
+      required:
+      - kind
+      - spec
+    TestSyntheticCheckResponse:
+      properties:
+        syntheticCheckAttempt:
+          $ref: '#/components/schemas/SyntheticCheckAttemptDetails'
+      required:
+      - syntheticCheckAttempt
+    KeyValue:
+      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+      - key
+      - value
+    FailedHttpCheckAssertion:
+      description: Information about a failed HTTP check assertion
+      properties:
+        assertion:
+          $ref: '#/components/schemas/HttpCheckAssertion'
+          description: The assertion that
+        actualValue:
+          type: string
+          description: The actual value that was received in the response
+        explanation:
+          type: string
+          description: A human-readable message explaining why the assertion failed
+      required:
+      - assertion
+      - explanation
+    SyntheticCheckDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0SyntheticCheck
+        metadata:
+          $ref: '#/components/schemas/SyntheticCheckMetadata'
+        spec:
+          $ref: '#/components/schemas/SyntheticCheckSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    HttpRequestSpec:
+      properties:
+        method:
+          $ref: '#/components/schemas/HttpRequestMethod'
+        url:
+          type: string
+        redirects:
+          $ref: '#/components/schemas/HttpRedirects'
+        tls:
+          $ref: '#/components/schemas/TlsSettings'
+        tracing:
+          $ref: '#/components/schemas/TracingSettings'
+        headers:
+          $ref: '#/components/schemas/HttpHeaders'
+        queryParameters:
+          $ref: '#/components/schemas/HttpQueryParameters'
+        basicAuthentication:
+          $ref: '#/components/schemas/HttpBasicAuthentication'
+        body:
+          $ref: '#/components/schemas/HttpRequestBody'
+      required:
+      - method
+      - url
+      - redirects
+      - tls
+      - tracing
+      - headers
+      - queryParameters
+    HttpCheckAssertion:
+      anyOf:
+      - $ref: '#/components/schemas/HttpResponseStatusCodeAssertion'
+      - $ref: '#/components/schemas/HttpResponseHeaderAssertion'
+      - $ref: '#/components/schemas/HttpResponseJsonBodyAssertion'
+      - $ref: '#/components/schemas/HttpResponseTextBodyAssertion'
+      - $ref: '#/components/schemas/TimingAssertion'
+      - $ref: '#/components/schemas/ErrorAssertion'
+      - $ref: '#/components/schemas/SslCertificateAssertion'
+    HttpRequestBody:
+      properties:
+        kind:
+          $ref: '#/components/schemas/HttpRequestBodyKind'
+        spec:
+          properties:
+            content:
+              type: string
+              maxLength: 2048
+          required:
+          - content
+      required:
+      - kind
+      - spec
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
     SyntheticCheckAttempt:
       properties:
         syntheticCheckId:
@@ -405,230 +771,50 @@ components:
       - failedDegradedAssertions
       - passedCriticalAssertions
       - passedDegradedAssertions
+    HttpBasicAuthentication:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - username
+      - password
     ErrorAssertionSpec:
       properties:
         value:
           $ref: '#/components/schemas/SyntheticHttpErrorType'
       required:
       - value
-    KeyValue:
-      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
-      type: object
+    SyntheticCheckRetriesExponentialSpec:
       properties:
-        key:
-          type: string
-        value:
-          $ref: '#/components/schemas/AnyValue'
+        attempts:
+          type: integer
+          minimum: 0
+          maximum: 10
+        delay:
+          $ref: '#/components/schemas/Duration'
+        maximumDelay:
+          $ref: '#/components/schemas/Duration'
       required:
-      - key
-      - value
-    SyntheticHttpErrorType:
-      type: string
-      enum:
-      - unknown
-      - dns
-      - tcp
-      - tls
-      - timeout
-    TestSyntheticCheckResponse:
+      - attempts
+      - delay
+      - maximumDelay
+    SyntheticCheckAnnotations:
       properties:
-        syntheticCheckAttempt:
-          $ref: '#/components/schemas/SyntheticCheckAttemptDetails'
-      required:
-      - syntheticCheckAttempt
-    HttpResponseStatusCodeAssertion:
-      properties:
-        kind:
+        dash0.com/deleted-at:
           type: string
-          enum:
-          - status_code
-        spec:
-          $ref: '#/components/schemas/HttpResponseStatusCodeAssertionSpec'
-      required:
-      - kind
-      - spec
-    SyntheticCheckRetriesExponential:
-      properties:
-        kind:
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
           type: string
-          enum:
-          - exponential
-        spec:
-          $ref: '#/components/schemas/SyntheticCheckRetriesExponentialSpec'
-      required:
-      - kind
-      - spec
-    SyntheticHttpCheckAssertions:
-      properties:
-        criticalAssertions:
-          $ref: '#/components/schemas/HttpCheckAssertions'
-        degradedAssertions:
-          $ref: '#/components/schemas/HttpCheckAssertions'
-      required:
-      - criticalAssertions
-      - degradedAssertions
-    HttpResponseJsonBodyAssertion:
-      properties:
-        kind:
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
           type: string
-          enum:
-          - json_body
-        spec:
-          $ref: '#/components/schemas/HttpResponseJsonBodyAssertionSpec'
-      required:
-      - kind
-      - spec
-    HttpRequestBody:
-      properties:
-        kind:
-          $ref: '#/components/schemas/HttpRequestBodyKind'
-        spec:
-          properties:
-            content:
-              type: string
-              maxLength: 2048
-          required:
-          - content
-      required:
-      - kind
-      - spec
-    SyntheticCheckLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-        custom:
-          type: object
-          deprecated: true
-          additionalProperties:
-            type: string
     Dataset:
       type: string
       pattern: ^[a-zA-Z0-9_-]{3,26}$
       description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    TimingAssertion:
-      properties:
-        kind:
-          type: string
-          enum:
-          - timing
-        spec:
-          $ref: '#/components/schemas/TimingAssertionSpec'
-      required:
-      - kind
-      - spec
-    FailedHttpCheckAssertion:
-      description: Information about a failed HTTP check assertion
-      properties:
-        assertion:
-          $ref: '#/components/schemas/HttpCheckAssertion'
-          description: The assertion that
-        actualValue:
-          type: string
-          description: The actual value that was received in the response
-        explanation:
-          type: string
-          description: A human-readable message explaining why the assertion failed
-      required:
-      - assertion
-      - explanation
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    FixedTime:
-      type: string
-      format: date-time
-      description: 'A fixed point in time represented as an RFC 3339 date-time string.
-
-
-        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
-
-
-        **Examples**:
-
-        - `2024-01-15T14:30:00Z`
-
-        - `2024-01-15T14:30:00+08:00`
-
-        '
-    HttpResponseHeaderAssertionSpec:
-      properties:
-        key:
-          type: string
-        operator:
-          $ref: '#/components/schemas/StringAssertionOperator'
-        value:
-          type: string
-      required:
-      - key
-      - operator
-      - value
-    TlsSettings:
-      properties:
-        allowInsecure:
-          type: boolean
-      required:
-      - allowInsecure
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    HttpQueryParameters:
-      type: array
-      items:
-        $ref: '#/components/schemas/NameValuePair'
-    TimingType:
-      type: string
-      enum:
-      - total
-      - dns
-      - connection
-      - ssl
-      - request
-      - response
-    NumericAssertionOperator:
-      type: string
-      enum:
-      - is
-      - is_not
-      - gt
-      - lt
-      - gte
-      - lte
-      - is_one_of
-      - is_not_one_of
-    TestSyntheticCheckRequest:
-      properties:
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-        definition:
-          $ref: '#/components/schemas/SyntheticCheckDefinition'
-      required:
-      - definition
     SyntheticCheckSchedule:
       properties:
         strategy:
@@ -648,12 +834,37 @@ components:
       - strategy
       - interval
       - locations
-    SyntheticCheckAction:
+    SyntheticCheckSchedulingStrategy:
       type: string
+      description: 'Whether to run checks against all specified locations for every run, or just a single location per run.
+
+        '
       enum:
-      - synthetic_check:read
-      - synthetic_check:write
-      - synthetic_check:delete
+      - all_locations
+      - random_location
+    HttpResponseHeaderAssertionSpec:
+      properties:
+        key:
+          type: string
+        operator:
+          $ref: '#/components/schemas/StringAssertionOperator'
+        value:
+          type: string
+      required:
+      - key
+      - operator
+      - value
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
     SyntheticCheckAttemptDetails:
       allOf:
       - $ref: '#/components/schemas/SyntheticCheckAttempt'
@@ -672,7 +883,7 @@ components:
         required:
         - spanAttributes
         - events
-    SyntheticCheckRetriesLinearSpec:
+    SyntheticCheckRetriesFixedSpec:
       properties:
         attempts:
           type: integer
@@ -680,26 +891,51 @@ components:
           maximum: 10
         delay:
           $ref: '#/components/schemas/Duration'
-        maximumDelay:
-          $ref: '#/components/schemas/Duration'
       required:
       - attempts
       - delay
-      - maximumDelay
-    SyntheticCheckDefinition:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    HttpResponseTextBodyAssertion:
       properties:
         kind:
           type: string
           enum:
-          - Dash0SyntheticCheck
-        metadata:
-          $ref: '#/components/schemas/SyntheticCheckMetadata'
+          - text_body
         spec:
-          $ref: '#/components/schemas/SyntheticCheckSpec'
+          $ref: '#/components/schemas/HttpResponseTextBodyAssertionSpec'
       required:
       - kind
-      - metadata
       - spec
+    SyntheticCheckPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/SyntheticCheckAction'
+      required:
+      - actions
+    TestSyntheticCheckRequest:
+      properties:
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        definition:
+          $ref: '#/components/schemas/SyntheticCheckDefinition'
+      required:
+      - definition
+    SyntheticCheckRetriesOffSpec:
+      properties: {}
     TimingAssertionSpec:
       properties:
         type:
@@ -712,23 +948,30 @@ components:
       - type
       - operator
       - value
-    SyntheticCheckRetries:
-      anyOf:
-      - $ref: '#/components/schemas/SyntheticCheckRetriesOff'
-      - $ref: '#/components/schemas/SyntheticCheckRetriesFixed'
-      - $ref: '#/components/schemas/SyntheticCheckRetriesLinear'
-      - $ref: '#/components/schemas/SyntheticCheckRetriesExponential'
-    SyntheticCheckRetriesFixedSpec:
+    HttpResponseHeaderAssertion:
       properties:
-        attempts:
-          type: integer
-          minimum: 0
-          maximum: 10
-        delay:
+        kind:
+          type: string
+          enum:
+          - response_header
+        spec:
+          $ref: '#/components/schemas/HttpResponseHeaderAssertionSpec'
+      required:
+      - kind
+      - spec
+    HttpRequestBodyKind:
+      type: string
+      enum:
+      - json
+      - graphql
+      - form
+      - raw
+    SslCertificateAssertionSpec:
+      properties:
+        value:
           $ref: '#/components/schemas/Duration'
       required:
-      - attempts
-      - delay
+      - value
     SyntheticCheckNotifications:
       properties:
         channels:
@@ -751,75 +994,6 @@ components:
             format: uuid
       required:
       - channels
-    SyntheticCheckAnnotations:
-      properties:
-        dash0.com/deleted-at:
-          type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
-    SyntheticCheckLocation:
-      type: string
-      description: A geographic location identifier from which synthetic checks can be executed.
-      minLength: 1
-      maxLength: 128
-    SyntheticCheckSpec:
-      properties:
-        display:
-          $ref: '#/components/schemas/SyntheticCheckDisplay'
-        plugin:
-          $ref: '#/components/schemas/SyntheticCheckPlugin'
-        schedule:
-          $ref: '#/components/schemas/SyntheticCheckSchedule'
-        retries:
-          $ref: '#/components/schemas/SyntheticCheckRetries'
-        notifications:
-          $ref: '#/components/schemas/SyntheticCheckNotifications'
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyntheticCheckPermission'
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-        enabled:
-          type: boolean
-      required:
-      - type
-      - plugin
-      - schedule
-      - retries
-      - notifications
-      - enabled
-    HttpResponseStatusCodeAssertionSpec:
-      properties:
-        operator:
-          $ref: '#/components/schemas/NumericAssertionOperator'
-        value:
-          type: string
-      required:
-      - operator
-      - value
-    SyntheticCheckRetriesOff:
-      properties:
-        kind:
-          type: string
-          enum:
-          - 'off'
-        spec:
-          $ref: '#/components/schemas/SyntheticCheckRetriesOffSpec'
-      required:
-      - kind
-      - spec
-    HttpCheckAssertions:
-      type: array
-      items:
-        $ref: '#/components/schemas/HttpCheckAssertion'
     ErrorAssertion:
       properties:
         kind:
@@ -831,237 +1005,12 @@ components:
       required:
       - kind
       - spec
-    HttpResponseTextBodyAssertion:
+    TlsSettings:
       properties:
-        kind:
-          type: string
-          enum:
-          - text_body
-        spec:
-          $ref: '#/components/schemas/HttpResponseTextBodyAssertionSpec'
-      required:
-      - kind
-      - spec
-    SyntheticCheckRetriesExponentialSpec:
-      properties:
-        attempts:
-          type: integer
-          minimum: 0
-          maximum: 10
-        delay:
-          $ref: '#/components/schemas/Duration'
-        maximumDelay:
-          $ref: '#/components/schemas/Duration'
-      required:
-      - attempts
-      - delay
-      - maximumDelay
-    HttpHeaders:
-      type: array
-      items:
-        $ref: '#/components/schemas/NameValuePair'
-    TracingSettings:
-      properties:
-        addTracingHeaders:
+        allowInsecure:
           type: boolean
       required:
-      - addTracingHeaders
-    HttpRequestBodyKind:
-      type: string
-      enum:
-      - json
-      - graphql
-      - form
-      - raw
-    HttpRequestMethod:
-      type: string
-      enum:
-      - get
-      - post
-      - put
-      - delete
-      - head
-      - patch
-    HttpRequestSpec:
-      properties:
-        method:
-          $ref: '#/components/schemas/HttpRequestMethod'
-        url:
-          type: string
-        redirects:
-          $ref: '#/components/schemas/HttpRedirects'
-        tls:
-          $ref: '#/components/schemas/TlsSettings'
-        tracing:
-          $ref: '#/components/schemas/TracingSettings'
-        headers:
-          $ref: '#/components/schemas/HttpHeaders'
-        queryParameters:
-          $ref: '#/components/schemas/HttpQueryParameters'
-        basicAuthentication:
-          $ref: '#/components/schemas/HttpBasicAuthentication'
-        body:
-          $ref: '#/components/schemas/HttpRequestBody'
-      required:
-      - method
-      - url
-      - redirects
-      - tls
-      - tracing
-      - headers
-      - queryParameters
-    SyntheticCheckPlugin:
-      anyOf:
-      - $ref: '#/components/schemas/SyntheticHttpCheckPlugin'
-    SyntheticCheckDisplay:
-      properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
-          type: string
-      required:
-      - name
-    HttpResponseJsonBodyAssertionSpec:
-      properties:
-        jsonPath:
-          type: string
-        operator:
-          $ref: '#/components/schemas/StringAssertionOperator'
-        value:
-          type: string
-      required:
-      - jsonPath
-      - operator
-      - value
-    SyntheticHttpCheckPluginSpec:
-      properties:
-        request:
-          $ref: '#/components/schemas/HttpRequestSpec'
-        assertions:
-          $ref: '#/components/schemas/SyntheticHttpCheckAssertions'
-      required:
-      - request
-      - assertions
-    HttpBasicAuthentication:
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-      - username
-      - password
-    HttpCheckAssertion:
-      anyOf:
-      - $ref: '#/components/schemas/HttpResponseStatusCodeAssertion'
-      - $ref: '#/components/schemas/HttpResponseHeaderAssertion'
-      - $ref: '#/components/schemas/HttpResponseJsonBodyAssertion'
-      - $ref: '#/components/schemas/HttpResponseTextBodyAssertion'
-      - $ref: '#/components/schemas/TimingAssertion'
-      - $ref: '#/components/schemas/ErrorAssertion'
-      - $ref: '#/components/schemas/SslCertificateAssertion'
-    SyntheticCheckPermission:
-      properties:
-        teamId:
-          type: string
-        userId:
-          type: string
-        role:
-          type: string
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/SyntheticCheckAction'
-      required:
-      - actions
-    SpanEvent:
-      type: object
-      properties:
-        timeUnixNano:
-          type: string
-          format: uint64
-        name:
-          type: string
-        attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyValue'
-        droppedAttributesCount:
-          type: integer
-          format: int64
-      required:
-      - timeUnixNano
-      - name
-      - attributes
-    NameValuePair:
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-      required:
-      - name
-      - value
-    HttpResponseTextBodyAssertionSpec:
-      properties:
-        operator:
-          $ref: '#/components/schemas/StringAssertionOperator'
-        value:
-          type: string
-      required:
-      - operator
-      - value
-    HttpRedirects:
-      type: string
-      enum:
-      - follow
-      - disabled
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
-    Duration:
-      type: string
-      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
-    HttpResponseHeaderAssertion:
-      properties:
-        kind:
-          type: string
-          enum:
-          - response_header
-        spec:
-          $ref: '#/components/schemas/HttpResponseHeaderAssertionSpec'
-      required:
-      - kind
-      - spec
-    SyntheticCheckRetriesFixed:
-      properties:
-        kind:
-          type: string
-          enum:
-          - fixed
-        spec:
-          $ref: '#/components/schemas/SyntheticCheckRetriesFixedSpec'
-      required:
-      - kind
-      - spec
+      - allowInsecure
     SyntheticCheckRetriesLinear:
       properties:
         kind:
@@ -1073,40 +1022,91 @@ components:
       required:
       - kind
       - spec
-    SyntheticChecksApiListItem:
+    SyntheticCheckLabels:
       properties:
-        id:
+        dash0.com/id:
           type: string
-        origin:
+        dash0.com/origin:
           type: string
-        source:
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
           $ref: '#/components/schemas/CrdSource'
-        dataset:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - dataset
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    SslCertificateAssertion:
+        custom:
+          type: object
+          deprecated: true
+          additionalProperties:
+            type: string
+    SyntheticCheckPlugin:
+      anyOf:
+      - $ref: '#/components/schemas/SyntheticHttpCheckPlugin'
+    SyntheticCheckRetriesOff:
       properties:
         kind:
           type: string
           enum:
-          - ssl_certificate
+          - 'off'
         spec:
-          $ref: '#/components/schemas/SslCertificateAssertionSpec'
+          $ref: '#/components/schemas/SyntheticCheckRetriesOffSpec'
       required:
       - kind
       - spec
+    HttpResponseStatusCodeAssertionSpec:
+      properties:
+        operator:
+          $ref: '#/components/schemas/NumericAssertionOperator'
+        value:
+          type: string
+      required:
+      - operator
+      - value
+    SyntheticHttpErrorType:
+      type: string
+      enum:
+      - unknown
+      - dns
+      - tcp
+      - tls
+      - timeout
+    HttpRedirects:
+      type: string
+      enum:
+      - follow
+      - disabled
+    SyntheticCheckMetadata:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SyntheticCheckLabels'
+        annotations:
+          $ref: '#/components/schemas/SyntheticCheckAnnotations'
+      required:
+      - name
+    SyntheticCheckAction:
+      type: string
+      enum:
+      - synthetic_check:read
+      - synthetic_check:write
+      - synthetic_check:delete
+    SyntheticCheckDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    TracingSettings:
+      properties:
+        addTracingHeaders:
+          type: boolean
+      required:
+      - addTracingHeaders

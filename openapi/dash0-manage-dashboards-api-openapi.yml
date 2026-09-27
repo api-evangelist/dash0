@@ -220,74 +220,10 @@ paths:
       operationId: post_api-import-dashboard
 components:
   schemas:
-    DashboardApiListItem:
-      properties:
-        id:
-          type: string
-        origin:
-          type: string
-        dataset:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-      required:
-      - id
-      - dataset
-      - tags
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    DashboardDefinition:
-      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
-
-        '
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dashboard
-        metadata:
-          $ref: '#/components/schemas/DashboardMetadata'
-        spec:
-          type: object
-      required:
-      - kind
-      - metadata
-      - spec
-    DashboardMetadata:
-      properties:
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        version:
-          type: integer
-          format: int64
-          minimum: 0
-        project:
-          type: string
-        dash0Extensions:
-          $ref: '#/components/schemas/DashboardMetadataExtensions'
-        labels:
-          $ref: '#/components/schemas/DashboardLabels'
-        annotations:
-          $ref: '#/components/schemas/DashboardAnnotations'
-      required:
-      - name
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     CrdSource:
       description: 'Origin of a Dash0 resource.
 
@@ -306,6 +242,17 @@ components:
       - terraform
       - operator
       - api
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
     DashboardMetadataExtensions:
       properties:
         tags:
@@ -332,6 +279,13 @@ components:
         createdBy:
           type: string
           description: The member ID of the user who created this dashboard or dashboard version.
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
     DashboardAnnotations:
       properties:
         dash0.com/deleted-at:
@@ -343,22 +297,68 @@ components:
         dash0.com/sharing:
           description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
           type: string
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    Error:
+    DashboardApiListItem:
       properties:
-        code:
-          type: integer
-        message:
+        id:
           type: string
-        traceId:
+        origin:
           type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
       required:
-      - code
-      - message
+      - id
+      - dataset
+      - tags
     DashboardLabels:
       properties:
         dash0.com/source:
           $ref: '#/components/schemas/CrdSource'
+    DashboardMetadata:
+      properties:
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+        project:
+          type: string
+        dash0Extensions:
+          $ref: '#/components/schemas/DashboardMetadataExtensions'
+        labels:
+          $ref: '#/components/schemas/DashboardLabels'
+        annotations:
+          $ref: '#/components/schemas/DashboardAnnotations'
+      required:
+      - name
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
+      required:
+      - kind
+      - metadata
+      - spec

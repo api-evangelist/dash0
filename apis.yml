@@ -53,6 +53,7 @@ tags:
 - Prometheus
 - DevOps
 - Company
+- A2A
 tags_raw:
 - Observability
 - OpenTelemetry
@@ -65,6 +66,7 @@ tags_raw:
 - DevOps
 - Company
 - Apis
+- A2A
 apis:
 - aid: dash0:dash0-edge-collectors-api
   name: Dash0 Edge Collectors API

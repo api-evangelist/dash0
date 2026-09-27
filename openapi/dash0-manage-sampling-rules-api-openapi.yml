@@ -195,89 +195,12 @@ paths:
       operationId: post_api-sampling-rules
 components:
   schemas:
-    SamplingConditionAnd:
-      properties:
-        kind:
-          type: string
-          enum:
-          - and
-        spec:
-          $ref: '#/components/schemas/SamplingConditionAndSpec'
-      required:
-      - kind
-      - spec
-    SamplingSpec:
-      properties:
-        enabled:
-          type: boolean
-        display:
-          $ref: '#/components/schemas/SamplingDisplay'
-        conditions:
-          $ref: '#/components/schemas/SamplingCondition'
-        rateLimit:
-          $ref: '#/components/schemas/SamplingRateLimit'
-      required:
-      - enabled
-      - conditions
-    SamplingConditionAndSpec:
-      properties:
-        conditions:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/SamplingCondition'
-      required:
-      - conditions
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    SamplingDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0Sampling
-        metadata:
-          $ref: '#/components/schemas/SamplingMetadata'
-        spec:
-          $ref: '#/components/schemas/SamplingSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    SamplingMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/SamplingLabels'
-      required:
-      - name
     SamplingConditionOttlSpec:
       properties:
         ottl:
           type: string
       required:
       - ottl
-    SamplingConditionOttl:
-      properties:
-        kind:
-          type: string
-          enum:
-          - ottl
-        spec:
-          $ref: '#/components/schemas/SamplingConditionOttlSpec'
-      required:
-      - kind
-      - spec
     SamplingDisplay:
       properties:
         name:
@@ -289,44 +212,17 @@ components:
           type: string
       required:
       - name
-    SamplingConditionErrorSpec:
-      properties: {}
-      required: []
-    SamplingCondition:
-      anyOf:
-      - $ref: '#/components/schemas/SamplingConditionAnd'
-      - $ref: '#/components/schemas/SamplingConditionOttl'
-      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
-      - $ref: '#/components/schemas/SamplingConditionError'
-    SamplingLabels:
+    SamplingConditionProbabilistic:
       properties:
-        dash0.com/id:
+        kind:
           type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-        custom:
-          type: object
-          additionalProperties:
-            type: string
-    SamplingConditionProbabilisticSpec:
-      properties:
-        rate:
-          type: number
-          minimum: 0
-          maximum: 1
-          description: 'A value between 0 and 1 reflecting the percentage of traces that should be sampled probabilistically.
-
-            This sampling decision is made deterministically by inspecting the trace ID.
-
-            '
+          enum:
+          - probabilistic
+        spec:
+          $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
       required:
-      - rate
+      - kind
+      - spec
     SamplingRateLimit:
       description: 'Rate limit is helpful to avoid ingesting extremely large amounts of spans when the sampling conditions are
 
@@ -353,14 +249,14 @@ components:
             '
       required:
       - rate
-    GetSamplingRulesResponse:
+    SamplingMetadata:
       properties:
-        samplingRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/SamplingDefinition'
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SamplingLabels'
       required:
-      - samplingRules
+      - name
     SamplingConditionError:
       description: 'Matches spans that have the have `otel.span.status.code=ERROR`
 
@@ -393,6 +289,67 @@ components:
       - terraform
       - operator
       - api
+    SamplingLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    SamplingCondition:
+      anyOf:
+      - $ref: '#/components/schemas/SamplingConditionAnd'
+      - $ref: '#/components/schemas/SamplingConditionOttl'
+      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
+      - $ref: '#/components/schemas/SamplingConditionError'
+    SamplingSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/SamplingDisplay'
+        conditions:
+          $ref: '#/components/schemas/SamplingCondition'
+        rateLimit:
+          $ref: '#/components/schemas/SamplingRateLimit'
+      required:
+      - enabled
+      - conditions
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    GetSamplingRulesResponse:
+      properties:
+        samplingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SamplingDefinition'
+      required:
+      - samplingRules
+    SamplingDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Sampling
+        metadata:
+          $ref: '#/components/schemas/SamplingMetadata'
+        spec:
+          $ref: '#/components/schemas/SamplingSpec'
+      required:
+      - kind
+      - metadata
+      - spec
     Error:
       properties:
         code:
@@ -404,14 +361,57 @@ components:
       required:
       - code
       - message
-    SamplingConditionProbabilistic:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    SamplingConditionOttl:
       properties:
         kind:
           type: string
           enum:
-          - probabilistic
+          - ottl
         spec:
-          $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
+          $ref: '#/components/schemas/SamplingConditionOttlSpec'
       required:
       - kind
       - spec
+    SamplingConditionAndSpec:
+      properties:
+        conditions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SamplingCondition'
+      required:
+      - conditions
+    SamplingConditionProbabilisticSpec:
+      properties:
+        rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: 'A value between 0 and 1 reflecting the percentage of traces that should be sampled probabilistically.
+
+            This sampling decision is made deterministically by inspecting the trace ID.
+
+            '
+      required:
+      - rate
+    SamplingConditionAnd:
+      properties:
+        kind:
+          type: string
+          enum:
+          - and
+        spec:
+          $ref: '#/components/schemas/SamplingConditionAndSpec'
+      required:
+      - kind
+      - spec
+    SamplingConditionErrorSpec:
+      properties: {}
+      required: []

@@ -217,15 +217,47 @@ paths:
       operationId: post_api-import-view
 components:
   schemas:
-    OrderingDirection:
-      type: string
-      enum:
-      - ascending
-      - descending
-      default: ascending
-    OrderingKey:
-      type: string
-      description: Any attribute key to order by.
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    ViewDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+        description:
+          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
+
+            team members understand the purpose of the view.
+
+            '
+          type: string
+      required:
+      - name
     ViewPermission:
       properties:
         teamId:
@@ -246,69 +278,6 @@ components:
             $ref: '#/components/schemas/ViewAction'
       required:
       - actions
-    FilterCriteria:
-      type: array
-      items:
-        $ref: '#/components/schemas/AttributeFilter'
-      example:
-      - key: service.name
-        operator: is
-        value: foo
-    AttributeFilterStringValue:
-      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
-      type: string
-    AxisScale:
-      type: string
-      enum:
-      - linear
-      - log10
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    OrderingCriteria:
-      type: array
-      description: Any supported attribute keys to order by.
-      items:
-        $ref: '#/components/schemas/OrderingCriterion'
-    AttributeFilterAnyValue:
-      description: AttributeFilterAnyValue may contain any AnyValue value.
-      $ref: '#/components/schemas/AnyValue'
-    ViewTable:
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/ViewTableColumn'
-        sort:
-          $ref: '#/components/schemas/OrderingCriteria'
-      required:
-      - columns
-      - sort
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
     ViewVisualization:
       properties:
         yAxisScale:
@@ -334,151 +303,82 @@ components:
       required:
       - type
       - renderers
-    ViewSpec:
+    ViewTable:
       properties:
-        type:
-          description: 'Views can exist in a variety of locations within the Dash0. The type defines
-
-            where the view can be used, and consequently where it would appear as a selectable
-
-            option.
-
-            '
-          $ref: '#/components/schemas/ViewType'
-        display:
-          $ref: '#/components/schemas/ViewDisplay'
-        permissions:
+        columns:
           type: array
           items:
-            $ref: '#/components/schemas/ViewPermission'
-        groupBy:
-          description: 'A set of attribute keys to group the view by. This property may be missing to indicate that
-
-            no configuration was historically made for this view, i.e., the view was saved before the
-
-            grouping capability was added. In that case, you can assume a default grouping should be used.
-
-            '
-          type: array
-          items:
-            type: string
-        filter:
-          description: 'The filter for the whole view.
-
-            '
-          $ref: '#/components/schemas/FilterCriteria'
-        implicitFilter:
-          description: 'An implicit filter the user cannot change that will always be applied to the view. It will not
-
-            be shown in the UI.
-
-            '
-          $ref: '#/components/schemas/FilterCriteria'
-        table:
-          $ref: '#/components/schemas/ViewTable'
-        visualizations:
-          type: array
-          description: 'A visualization configuration for the view. We only support a single visualization for now per view.
-
-            '
-          items:
-            $ref: '#/components/schemas/ViewVisualization'
-        serviceMapProperties:
-          $ref: '#/components/schemas/ViewSpecServiceMapProperties'
-        query:
-          type: string
-          description: 'The SQL query associated with this view. Only applicable when type is "sql".
-
-            When the view is loaded, this query is used to populate the editor and auto-executed.
-
-            '
-        serviceName:
-          type: string
-          description: 'The selected service name for this view. Only applicable when type is "profiles".
-
-            When the view is loaded, this service is pre-selected in the filter bar.
-
-            '
+            $ref: '#/components/schemas/ViewTableColumn'
+        sort:
+          $ref: '#/components/schemas/OrderingCriteria'
       required:
-      - type
-      - display
-    AttributeFilter:
+      - columns
+      - sort
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    ViewDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0View
+        metadata:
+          $ref: '#/components/schemas/ViewMetadata'
+        spec:
+          $ref: '#/components/schemas/ViewSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
       type: object
       properties:
-        key:
-          $ref: '#/components/schemas/AttributeFilterKey'
-        operator:
-          $ref: '#/components/schemas/AttributeFilterOperator'
-        value:
-          oneOf:
-          - $ref: '#/components/schemas/AttributeFilterStringValue'
-          - $ref: '#/components/schemas/AttributeFilterAnyValue'
-        values:
-          type: array
-          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
-
-            '
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/AttributeFilterStringValue'
-            - $ref: '#/components/schemas/AttributeFilterAnyValue'
-      required:
-      - key
-      - operator
-    ViewTableColumn:
-      properties:
-        key:
+        stringValue:
           type: string
-          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
-
-            '
-        label:
-          type: string
-        colSize:
-          type: string
-          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
-
-            and similar variants.
-
-            '
-      required:
-      - key
-    ViewSpecServiceMapProperties:
-      properties:
-        layout:
-          type: string
-          enum:
-          - flow
-          - force
-        externalServices:
-          type: string
-          enum:
-          - all
-          - group
-          - hide
-        selectedMetric:
-          type: string
-        particles:
+        boolValue:
           type: boolean
-        nodeSizing:
-          type: boolean
-        expandedGroups:
-          description: 'A list of expanded group identifiers in the service map. When external services are grouped,
-
-            individual groups can be expanded to show all services within. This list stores which groups
-
-            are currently expanded.
-
-            '
-          type: array
-          items:
-            type: string
-      required:
-      - layout
-      - externalServices
-      - selectedMetric
-      - particles
-      - nodeSizing
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    ViewVisualizationMetric:
+      type: string
+      enum:
+      - logs_total
+      - logs_rate
+      - spans_total
+      - spans_rate
+      - spans_errors_total
+      - spans_errors_rate
+      - spans_errors_percentage
+      - spans_duration_p99
+      - spans_duration_p95
+      - spans_duration_p90
+      - spans_duration_p75
+      - spans_duration_p50
+      - spans_duration_avg
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    OrderingCriteria:
+      type: array
+      description: Any supported attribute keys to order by.
+      items:
+        $ref: '#/components/schemas/OrderingCriterion'
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     ViewType:
       type: string
       description: 'The view type describes where this view configuration is intended to be applied in the UI.
@@ -501,84 +401,55 @@ components:
       - gcp_cloud_sql_instances
       - aws_lambda
       - slos
-    ViewDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0View
-        metadata:
-          $ref: '#/components/schemas/ViewMetadata'
-        spec:
-          $ref: '#/components/schemas/ViewSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    OrderingCriterion:
-      description: Any combination of a supported key to order by and a direction.
+    ViewTableColumn:
       properties:
         key:
-          $ref: '#/components/schemas/OrderingKey'
-        direction:
-          $ref: '#/components/schemas/OrderingDirection'
+          type: string
+          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
+
+            '
+        label:
+          type: string
+        colSize:
+          type: string
+          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
+
+            and similar variants.
+
+            '
       required:
       - key
-      - direction
-    ViewDisplay:
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    Error:
       properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
+        code:
+          type: integer
+        message:
           type: string
-        description:
-          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
-
-            team members understand the purpose of the view.
-
-            '
+        traceId:
           type: string
       required:
-      - name
-    ViewAnnotations:
+      - code
+      - message
+    AxisScale:
+      type: string
+      enum:
+      - linear
+      - log10
+    ErrorResponse:
+      type: object
       properties:
-        dash0.com/deleted-at:
-          type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
-    ViewAction:
-      type: string
-      enum:
-      - views:read
-      - views:write
-      - views:delete
-    ViewVisualizationMetric:
-      type: string
-      enum:
-      - logs_total
-      - logs_rate
-      - spans_total
-      - spans_rate
-      - spans_errors_total
-      - spans_errors_rate
-      - spans_errors_percentage
-      - spans_duration_p99
-      - spans_duration_p95
-      - spans_duration_p90
-      - spans_duration_p75
-      - spans_duration_p50
-      - spans_duration_avg
-    AttributeFilterKey:
-      type: string
-      description: The attribute key to be filtered.
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
     ViewMetadata:
       properties:
         name:
@@ -589,59 +460,6 @@ components:
           $ref: '#/components/schemas/ViewAnnotations'
       required:
       - name
-    ViewLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          type: string
-          enum:
-          - external
-          - builtin
-          - userdefined
-    ViewVisualizationRenderer:
-      type: string
-      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
-
-        The matching prioritizes precise matches before wildcard matches.
-
-        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
-
-        '
-      enum:
-      - traces-explorer/*/outliers
-      - traces-explorer/*/red
-      - logging/*/stacked_bar
-      - resources/*/table-tree
-      - resources/overview/overview
-      - resources/services/red
-      - resources/operations/red
-      - resources/names/red
-      - resources/k8s-cron-jobs/executions
-      - resources/k8s-cron-jobs/red
-      - resources/k8s-daemon-sets/scheduled-nodes
-      - resources/k8s-daemon-sets/red
-      - resources/k8s-deployments/replicas
-      - resources/k8s-deployments/red
-      - resources/k8s-jobs/executions
-      - resources/k8s-jobs/red
-      - resources/k8s-namespaces/red
-      - resources/k8s-nodes/cpu-memory-disk
-      - resources/k8s-nodes/status
-      - resources/k8s-pods/cpu-memory
-      - resources/k8s-pods/status
-      - resources/k8s-pods/red
-      - resources/k8s-replica-sets/replicas
-      - resources/k8s-replica-sets/red
-      - resources/k8s-stateful-sets/replicas
-      - resources/k8s-stateful-sets/red
-      - resources/faas/red
     AttributeFilterOperator:
       type: string
       enum:
@@ -726,6 +544,95 @@ components:
         - `is_any` - matches any value, ignoring whether the key exists or not
 
         '
+    ViewVisualizationRenderer:
+      type: string
+      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
+
+        The matching prioritizes precise matches before wildcard matches.
+
+        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
+
+        '
+      enum:
+      - traces-explorer/*/outliers
+      - traces-explorer/*/red
+      - logging/*/stacked_bar
+      - resources/*/table-tree
+      - resources/overview/overview
+      - resources/services/red
+      - resources/operations/red
+      - resources/names/red
+      - resources/k8s-cron-jobs/executions
+      - resources/k8s-cron-jobs/red
+      - resources/k8s-daemon-sets/scheduled-nodes
+      - resources/k8s-daemon-sets/red
+      - resources/k8s-deployments/replicas
+      - resources/k8s-deployments/red
+      - resources/k8s-jobs/executions
+      - resources/k8s-jobs/red
+      - resources/k8s-namespaces/red
+      - resources/k8s-nodes/cpu-memory-disk
+      - resources/k8s-nodes/status
+      - resources/k8s-pods/cpu-memory
+      - resources/k8s-pods/status
+      - resources/k8s-pods/red
+      - resources/k8s-replica-sets/replicas
+      - resources/k8s-replica-sets/red
+      - resources/k8s-stateful-sets/replicas
+      - resources/k8s-stateful-sets/red
+      - resources/faas/red
+    ViewAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
+    ViewLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          type: string
+          enum:
+          - external
+          - builtin
+          - userdefined
+    ViewAction:
+      type: string
+      enum:
+      - views:read
+      - views:write
+      - views:delete
+    OrderingKey:
+      type: string
+      description: Any attribute key to order by.
+    OrderingDirection:
+      type: string
+      enum:
+      - ascending
+      - descending
+      default: ascending
+    OrderingCriterion:
+      description: Any combination of a supported key to order by and a direction.
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderingKey'
+        direction:
+          $ref: '#/components/schemas/OrderingDirection'
+      required:
+      - key
+      - direction
     ViewApiListItem:
       properties:
         id:
@@ -742,14 +649,107 @@ components:
       - id
       - dataset
       - type
-    Error:
+    ViewSpec:
       properties:
-        code:
-          type: integer
-        message:
+        type:
+          description: 'Views can exist in a variety of locations within the Dash0. The type defines
+
+            where the view can be used, and consequently where it would appear as a selectable
+
+            option.
+
+            '
+          $ref: '#/components/schemas/ViewType'
+        display:
+          $ref: '#/components/schemas/ViewDisplay'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ViewPermission'
+        groupBy:
+          description: 'A set of attribute keys to group the view by. This property may be missing to indicate that
+
+            no configuration was historically made for this view, i.e., the view was saved before the
+
+            grouping capability was added. In that case, you can assume a default grouping should be used.
+
+            '
+          type: array
+          items:
+            type: string
+        filter:
+          description: 'The filter for the whole view.
+
+            '
+          $ref: '#/components/schemas/FilterCriteria'
+        implicitFilter:
+          description: 'An implicit filter the user cannot change that will always be applied to the view. It will not
+
+            be shown in the UI.
+
+            '
+          $ref: '#/components/schemas/FilterCriteria'
+        table:
+          $ref: '#/components/schemas/ViewTable'
+        visualizations:
+          type: array
+          description: 'A visualization configuration for the view. We only support a single visualization for now per view.
+
+            '
+          items:
+            $ref: '#/components/schemas/ViewVisualization'
+        serviceMapProperties:
+          $ref: '#/components/schemas/ViewSpecServiceMapProperties'
+        query:
           type: string
-        traceId:
+          description: 'The SQL query associated with this view. Only applicable when type is "sql".
+
+            When the view is loaded, this query is used to populate the editor and auto-executed.
+
+            '
+        serviceName:
           type: string
+          description: 'The selected service name for this view. Only applicable when type is "profiles".
+
+            When the view is loaded, this service is pre-selected in the filter bar.
+
+            '
       required:
-      - code
-      - message
+      - type
+      - display
+    ViewSpecServiceMapProperties:
+      properties:
+        layout:
+          type: string
+          enum:
+          - flow
+          - force
+        externalServices:
+          type: string
+          enum:
+          - all
+          - group
+          - hide
+        selectedMetric:
+          type: string
+        particles:
+          type: boolean
+        nodeSizing:
+          type: boolean
+        expandedGroups:
+          description: 'A list of expanded group identifiers in the service map. When external services are grouped,
+
+            individual groups can be expanded to show all services within. This list stores which groups
+
+            are currently expanded.
+
+            '
+          type: array
+          items:
+            type: string
+      required:
+      - layout
+      - externalServices
+      - selectedMetric
+      - particles
+      - nodeSizing
