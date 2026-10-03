@@ -220,6 +220,17 @@ paths:
       operationId: post_api-import-dashboard
 components:
   schemas:
+    DashboardLabels:
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
     Dataset:
       type: string
       pattern: ^[a-zA-Z0-9_-]{3,26}$
@@ -242,17 +253,37 @@ components:
       - terraform
       - operator
       - api
-    Error:
+    DashboardApiListItem:
       properties:
-        code:
-          type: integer
-        message:
+        id:
           type: string
-        traceId:
+        origin:
           type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
       required:
-      - code
-      - message
+      - id
+      - dataset
+      - tags
+    DashboardAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          type: string
     DashboardMetadataExtensions:
       properties:
         tags:
@@ -279,48 +310,34 @@ components:
         createdBy:
           type: string
           description: The member ID of the user who created this dashboard or dashboard version.
-    ErrorResponse:
-      type: object
+    Error:
       properties:
-        error:
-          $ref: '#/components/schemas/Error'
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
       required:
-      - error
-    DashboardAnnotations:
+      - code
+      - message
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
       properties:
-        dash0.com/deleted-at:
+        kind:
           type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
-    DashboardApiListItem:
-      properties:
-        id:
-          type: string
-        origin:
-          type: string
-        dataset:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
       required:
-      - id
-      - dataset
-      - tags
-    DashboardLabels:
-      properties:
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
+      - kind
+      - metadata
+      - spec
     DashboardMetadata:
       properties:
         name:
@@ -345,20 +362,3 @@ components:
           $ref: '#/components/schemas/DashboardAnnotations'
       required:
       - name
-    DashboardDefinition:
-      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
-
-        '
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dashboard
-        metadata:
-          $ref: '#/components/schemas/DashboardMetadata'
-        spec:
-          type: object
-      required:
-      - kind
-      - metadata
-      - spec

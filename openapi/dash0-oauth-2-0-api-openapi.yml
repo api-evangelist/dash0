@@ -243,6 +243,105 @@ paths:
       operationId: post_oauth-token
 components:
   schemas:
+    OAuthGrantType:
+      type: string
+      enum:
+      - authorization_code
+      - refresh_token
+      description: '- `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).
+
+        - `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).
+
+        '
+    OAuthClientRegistrationRequest:
+      properties:
+        client_name:
+          type: string
+          description: Human-readable name of the client.
+        redirect_uris:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Array of allowed redirect URIs.
+        grant_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OAuthGrantType'
+          description: Grant types the client intends to use.
+        response_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OAuthResponseType'
+          description: Response types the client intends to use.
+        token_endpoint_auth_method:
+          $ref: '#/components/schemas/OAuthTokenEndpointAuthMethod'
+          description: 'Defaults to `none` if not specified. Only public clients are supported.
+
+            '
+        scope:
+          type: string
+          description: Space-separated list of scopes the client is requesting.
+        client_uri:
+          type: string
+          format: uri
+          description: URL of the client's home page.
+        logo_uri:
+          type: string
+          format: uri
+          description: URL of the client's logo image.
+      required:
+      - client_name
+      - redirect_uris
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    OAuthTokenEndpointAuthMethod:
+      type: string
+      enum:
+      - none
+      description: '- `none`: Public client, no client authentication (used by CLI/MCP clients).
+
+        Only public clients are supported. This deviates from RFC 7591 which defaults
+
+        to `client_secret_basic` when omitted.
+
+        '
+    DatasetRestriction:
+      type: string
+      enum:
+      - restricted
+      - unrestricted
+    OAuthTokenRequest:
+      type: object
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/OAuthGrantType'
+        code:
+          type: string
+          description: The authorization code (required for authorization_code grant).
+        redirect_uri:
+          type: string
+          format: uri
+          description: Must match the redirect_uri used in the authorization request (required for authorization_code grant).
+        client_id:
+          type: string
+          description: The client identifier.
+        code_verifier:
+          type: string
+          description: PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).
+        refresh_token:
+          type: string
+          description: The refresh token (required for refresh_token grant).
+        scope:
+          type: string
+          description: Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.
+      required:
+      - grant_type
     OAuthTokenErrorResponse:
       properties:
         error:
@@ -263,120 +362,6 @@ components:
           description: URI identifying a human-readable web page with error information.
       required:
       - error
-    OAuthTokenEndpointAuthMethod:
-      type: string
-      enum:
-      - none
-      description: '- `none`: Public client, no client authentication (used by CLI/MCP clients).
-
-        Only public clients are supported. This deviates from RFC 7591 which defaults
-
-        to `client_secret_basic` when omitted.
-
-        '
-    OAuthResponseType:
-      type: string
-      enum:
-      - code
-      description: '- `code`: The authorization code response type (RFC 6749 section 4.1.1).
-
-        '
-    OAuthGrantType:
-      type: string
-      enum:
-      - authorization_code
-      - refresh_token
-      description: '- `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).
-
-        - `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).
-
-        '
-    DatasetRestriction:
-      type: string
-      enum:
-      - restricted
-      - unrestricted
-    OAuthProtectedResourceMetadata:
-      properties:
-        resource:
-          type: string
-          format: uri
-          description: The resource server's resource identifier (its canonical URI).
-        authorization_servers:
-          type: array
-          items:
-            type: string
-            format: uri
-          description: Array of authorization server issuer identifiers that can issue tokens accepted by this resource.
-        scopes_supported:
-          type: array
-          items:
-            type: string
-          description: List of scopes supported by this resource server.
-        bearer_methods_supported:
-          type: array
-          items:
-            type: string
-          description: Methods supported for sending bearer tokens to this resource (e.g., "header").
-        resource_documentation:
-          type: string
-          format: uri
-          description: URL of documentation for this protected resource.
-      required:
-      - resource
-      - authorization_servers
-    OAuthRevocationRequest:
-      type: object
-      properties:
-        token:
-          type: string
-          description: The token to be revoked.
-        token_type_hint:
-          $ref: '#/components/schemas/OAuthTokenType'
-          description: 'Hint about the type of the token being revoked. Helps the server optimize lookup.
-
-            '
-      required:
-      - token
-    OAuthTokenType:
-      type: string
-      enum:
-      - access_token
-      - refresh_token
-      description: '- `access_token`: An OAuth 2.0 access token.
-
-        - `refresh_token`: An OAuth 2.0 refresh token.
-
-        '
-    OAuthTokenResponse:
-      properties:
-        access_token:
-          type: string
-          description: The access token issued by the authorization server.
-        token_type:
-          type: string
-          description: The type of token issued (always "Bearer").
-          example: Bearer
-        expires_in:
-          type: integer
-          format: int64
-          description: Lifetime of the access token in seconds.
-        refresh_token:
-          type: string
-          description: The refresh token for obtaining new access tokens.
-        scope:
-          type: string
-          description: Space-separated list of granted scopes.
-        dataset_restriction:
-          $ref: '#/components/schemas/DatasetRestriction'
-        datasets:
-          type: array
-          items:
-            type: string
-      required:
-      - access_token
-      - token_type
-      - expires_in
     Error:
       properties:
         code:
@@ -388,13 +373,6 @@ components:
       required:
       - code
       - message
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
     OAuthClientRegistrationResponse:
       properties:
         client_id:
@@ -448,46 +426,65 @@ components:
       description: '- `S256`: SHA-256 based code challenge method for PKCE (RFC 7636 section 4.2).
 
         '
-    OAuthClientRegistrationRequest:
+    OAuthResponseType:
+      type: string
+      enum:
+      - code
+      description: '- `code`: The authorization code response type (RFC 6749 section 4.1.1).
+
+        '
+    OAuthRevocationRequest:
+      type: object
       properties:
-        client_name:
+        token:
           type: string
-          description: Human-readable name of the client.
-        redirect_uris:
+          description: The token to be revoked.
+        token_type_hint:
+          $ref: '#/components/schemas/OAuthTokenType'
+          description: 'Hint about the type of the token being revoked. Helps the server optimize lookup.
+
+            '
+      required:
+      - token
+    OAuthTokenType:
+      type: string
+      enum:
+      - access_token
+      - refresh_token
+      description: '- `access_token`: An OAuth 2.0 access token.
+
+        - `refresh_token`: An OAuth 2.0 refresh token.
+
+        '
+    OAuthTokenResponse:
+      properties:
+        access_token:
+          type: string
+          description: The access token issued by the authorization server.
+        token_type:
+          type: string
+          description: The type of token issued (always "Bearer").
+          example: Bearer
+        expires_in:
+          type: integer
+          format: int64
+          description: Lifetime of the access token in seconds.
+        refresh_token:
+          type: string
+          description: The refresh token for obtaining new access tokens.
+        scope:
+          type: string
+          description: Space-separated list of granted scopes.
+        dataset_restriction:
+          $ref: '#/components/schemas/DatasetRestriction'
+        datasets:
           type: array
           items:
             type: string
-            format: uri
-          description: Array of allowed redirect URIs.
-        grant_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthGrantType'
-          description: Grant types the client intends to use.
-        response_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthResponseType'
-          description: Response types the client intends to use.
-        token_endpoint_auth_method:
-          $ref: '#/components/schemas/OAuthTokenEndpointAuthMethod'
-          description: 'Defaults to `none` if not specified. Only public clients are supported.
-
-            '
-        scope:
-          type: string
-          description: Space-separated list of scopes the client is requesting.
-        client_uri:
-          type: string
-          format: uri
-          description: URL of the client's home page.
-        logo_uri:
-          type: string
-          format: uri
-          description: URL of the client's logo image.
       required:
-      - client_name
-      - redirect_uris
+      - access_token
+      - token_type
+      - expires_in
     OAuthAuthorizationServerMetadata:
       properties:
         issuer:
@@ -548,29 +545,32 @@ components:
       - authorization_endpoint
       - token_endpoint
       - response_types_supported
-    OAuthTokenRequest:
-      type: object
+    OAuthProtectedResourceMetadata:
       properties:
-        grant_type:
-          $ref: '#/components/schemas/OAuthGrantType'
-        code:
-          type: string
-          description: The authorization code (required for authorization_code grant).
-        redirect_uri:
+        resource:
           type: string
           format: uri
-          description: Must match the redirect_uri used in the authorization request (required for authorization_code grant).
-        client_id:
+          description: The resource server's resource identifier (its canonical URI).
+        authorization_servers:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Array of authorization server issuer identifiers that can issue tokens accepted by this resource.
+        scopes_supported:
+          type: array
+          items:
+            type: string
+          description: List of scopes supported by this resource server.
+        bearer_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Methods supported for sending bearer tokens to this resource (e.g., "header").
+        resource_documentation:
           type: string
-          description: The client identifier.
-        code_verifier:
-          type: string
-          description: PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).
-        refresh_token:
-          type: string
-          description: The refresh token (required for refresh_token grant).
-        scope:
-          type: string
-          description: Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.
+          format: uri
+          description: URL of documentation for this protected resource.
       required:
-      - grant_type
+      - resource
+      - authorization_servers

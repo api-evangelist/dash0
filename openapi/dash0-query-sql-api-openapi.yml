@@ -54,6 +54,152 @@ paths:
       operationId: post_api-sql
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    TimeReference:
+      x-go-type: any
+      oneOf:
+      - $ref: '#/components/schemas/FixedTime'
+      - $ref: '#/components/schemas/FixedTimeUnix'
+      - $ref: '#/components/schemas/RelativeTime'
+    KeyValue:
+      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+      - key
+      - value
+    ExecuteSqlRequest:
+      properties:
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        query:
+          type: string
+      required:
+      - timeRange
+      - query
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    FixedTimeUnix:
+      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
+      type: string
+    ExecuteSqlResponse:
+      properties:
+        executionTime:
+          $ref: '#/components/schemas/FixedTime'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+        error:
+          type: string
+        queryError:
+          $ref: '#/components/schemas/QueryError'
+        progress:
+          $ref: '#/components/schemas/Progress'
+        resultRows:
+          $ref: '#/components/schemas/ResultRows'
+        warnings:
+          $ref: '#/components/schemas/D0QLWarnings'
+      required:
+      - executionTime
+      - timeRange
+      - warnings
+    D0QLWarnings:
+      type: array
+      items:
+        type: string
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    TimeRange:
+      properties:
+        from:
+          $ref: '#/components/schemas/FixedTime'
+        to:
+          $ref: '#/components/schemas/FixedTime'
+      required:
+      - from
+      - to
+    Progress:
+      properties:
+        rowsRead:
+          type: integer
+          format: uint64
+        bytesRead:
+          type: integer
+          format: uint64
+        totalRowsToRead:
+          type: integer
+          format: uint64
+        executionTimeMillis:
+          type: integer
+          format: uint64
+      required:
+      - rowsRead
+      - bytesRead
+      - totalRowsToRead
+      - executionTimeMillis
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    ResultRow:
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+      required:
+      - values
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
     TimeReferenceRange:
       description: 'A range of time between two time references.
 
@@ -69,39 +215,6 @@ components:
       example:
         from: now-30m
         to: now
-    TimeReference:
-      x-go-type: any
-      oneOf:
-      - $ref: '#/components/schemas/FixedTime'
-      - $ref: '#/components/schemas/FixedTimeUnix'
-      - $ref: '#/components/schemas/RelativeTime'
-    FixedTimeUnix:
-      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
-      type: string
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    TimeRange:
-      properties:
-        from:
-          $ref: '#/components/schemas/FixedTime'
-        to:
-          $ref: '#/components/schemas/FixedTime'
-      required:
-      - from
-      - to
-    ExecuteSqlRequest:
-      properties:
-        timeRange:
-          $ref: '#/components/schemas/TimeReferenceRange'
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-        query:
-          type: string
-      required:
-      - timeRange
-      - query
     RelativeTime:
       type: string
       pattern: ^now.*$
@@ -137,6 +250,10 @@ components:
         - `M` - months
 
         '
+    ResultRows:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResultRow'
     QueryError:
       description: 'Structured error information for query errors. Present alongside the error string when the error is related to the user''s query (syntax, semantic, or execution errors). Not present for system-level errors (unauthorized access, unexpected failures).
 
@@ -154,120 +271,3 @@ components:
       required:
       - title
       - description
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    Progress:
-      properties:
-        rowsRead:
-          type: integer
-          format: uint64
-        bytesRead:
-          type: integer
-          format: uint64
-        totalRowsToRead:
-          type: integer
-          format: uint64
-        executionTimeMillis:
-          type: integer
-          format: uint64
-      required:
-      - rowsRead
-      - bytesRead
-      - totalRowsToRead
-      - executionTimeMillis
-    ResultRows:
-      type: array
-      items:
-        $ref: '#/components/schemas/ResultRow'
-    ResultRow:
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyValue'
-      required:
-      - values
-    KeyValue:
-      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          $ref: '#/components/schemas/AnyValue'
-      required:
-      - key
-      - value
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    D0QLWarnings:
-      type: array
-      items:
-        type: string
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    ExecuteSqlResponse:
-      properties:
-        executionTime:
-          $ref: '#/components/schemas/FixedTime'
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
-        error:
-          type: string
-        queryError:
-          $ref: '#/components/schemas/QueryError'
-        progress:
-          $ref: '#/components/schemas/Progress'
-        resultRows:
-          $ref: '#/components/schemas/ResultRows'
-        warnings:
-          $ref: '#/components/schemas/D0QLWarnings'
-      required:
-      - executionTime
-      - timeRange
-      - warnings
-    FixedTime:
-      type: string
-      format: date-time
-      description: 'A fixed point in time represented as an RFC 3339 date-time string.
-
-
-        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
-
-
-        **Examples**:
-
-        - `2024-01-15T14:30:00Z`
-
-        - `2024-01-15T14:30:00+08:00`
-
-        '

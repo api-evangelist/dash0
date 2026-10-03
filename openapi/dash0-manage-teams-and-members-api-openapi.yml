@@ -278,20 +278,35 @@ paths:
       operationId: put_api-teams-originorid-display
 components:
   schemas:
-    TeamDefinition:
+    AccessibleAsset:
       properties:
-        kind:
+        id:
           type: string
-          enum:
-          - Dash0Team
-        metadata:
-          $ref: '#/components/schemas/TeamMetadata'
-        spec:
-          $ref: '#/components/schemas/TeamSpec'
+        name:
+          type: string
+        type:
+          description: returns for views the information which type of view it is
+          type: string
+        permittedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        createdAt:
+          $ref: '#/components/schemas/FixedTime'
+        creator:
+          $ref: '#/components/schemas/MemberDefinition'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        hasAccess:
+          description: returns the information if the logged-in user has access to this asset
+          type: boolean
       required:
-      - kind
-      - metadata
-      - spec
+      - id
+      - name
+      - permittedActions
+      - createdAt
+      - dataset
+      - hasAccess
     TeamDisplay:
       properties:
         name:
@@ -301,47 +316,6 @@ components:
       required:
       - name
       - color
-    TeamMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/TeamLabels'
-      required:
-      - name
-    MemberDisplay:
-      properties:
-        email:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        imageUrl:
-          type: string
-    TeamLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-    InviteMemberRequest:
-      properties:
-        emailAddress:
-          type: string
-        role:
-          type: string
-      required:
-      - emailAddress
-      - role
-    MemberSpec:
-      properties:
-        display:
-          $ref: '#/components/schemas/MemberDisplay'
-      required:
-      - display
     CrdSource:
       description: 'Origin of a Dash0 resource.
 
@@ -360,6 +334,117 @@ components:
       - terraform
       - operator
       - api
+    TeamDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Team
+        metadata:
+          $ref: '#/components/schemas/TeamMetadata'
+        spec:
+          $ref: '#/components/schemas/TeamSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    TeamSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/TeamDisplay'
+        members:
+          type: array
+          items:
+            type: string
+      required:
+      - display
+      - members
+    InviteMemberRequest:
+      properties:
+        emailAddress:
+          type: string
+        role:
+          type: string
+      required:
+      - emailAddress
+      - role
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    MemberDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Member
+        metadata:
+          $ref: '#/components/schemas/MemberMetadata'
+        spec:
+          $ref: '#/components/schemas/MemberSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    MemberLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/joinedAt:
+          type: string
+          format: date-time
+    Action:
+      type: string
+      description: 'Not defined as an enum, because we will eventually support wildcards like `ingest:*`.
+
+        '
+    Gradient:
+      description: A color gradient from one color to another.
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      required:
+      - from
+      - to
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    TeamMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TeamLabels'
+      required:
+      - name
+    TeamLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    MemberDisplay:
+      properties:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        imageUrl:
+          type: string
     GetTeamResponse:
       properties:
         team:
@@ -396,71 +481,14 @@ components:
       - syntheticChecks
       - views
       - datasets
-    AccessibleAsset:
+    MemberMetadata:
       properties:
-        id:
-          type: string
         name:
           type: string
-        type:
-          description: returns for views the information which type of view it is
-          type: string
-        permittedActions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-        createdAt:
-          $ref: '#/components/schemas/FixedTime'
-        creator:
-          $ref: '#/components/schemas/MemberDefinition'
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-        hasAccess:
-          description: returns the information if the logged-in user has access to this asset
-          type: boolean
+        labels:
+          $ref: '#/components/schemas/MemberLabels'
       required:
-      - id
       - name
-      - permittedActions
-      - createdAt
-      - dataset
-      - hasAccess
-    TeamSpec:
-      properties:
-        display:
-          $ref: '#/components/schemas/TeamDisplay'
-        members:
-          type: array
-          items:
-            type: string
-      required:
-      - display
-      - members
-    Action:
-      type: string
-      description: 'Not defined as an enum, because we will eventually support wildcards like `ingest:*`.
-
-        '
-    FixedTime:
-      type: string
-      format: date-time
-      description: 'A fixed point in time represented as an RFC 3339 date-time string.
-
-
-        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
-
-
-        **Examples**:
-
-        - `2024-01-15T14:30:00Z`
-
-        - `2024-01-15T14:30:00+08:00`
-
-        '
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     AddTeamMembersRequest:
       properties:
         memberIds:
@@ -472,63 +500,6 @@ components:
             type: string
       required:
       - memberIds
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    Gradient:
-      description: A color gradient from one color to another.
-      properties:
-        from:
-          type: string
-        to:
-          type: string
-      required:
-      - from
-      - to
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    MemberDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0Member
-        metadata:
-          $ref: '#/components/schemas/MemberMetadata'
-        spec:
-          $ref: '#/components/schemas/MemberSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    MemberMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/MemberLabels'
-      required:
-      - name
-    MemberLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/joinedAt:
-          type: string
-          format: date-time
     TeamsListItem:
       properties:
         id:
@@ -559,3 +530,32 @@ components:
       - color
       - members
       - totalMemberCount
+    MemberSpec:
+      properties:
+        display:
+          $ref: '#/components/schemas/MemberDisplay'
+      required:
+      - display
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error

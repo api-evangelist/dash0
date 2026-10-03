@@ -619,124 +619,24 @@ paths:
       operationId: get_api-prometheus-api-v1-status-runtimeinfo
 components:
   schemas:
-    PrometheusMetadataResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: object
-          description: Metric metadata keyed by metric name. Each metric maps to a list of metadata entries.
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/PrometheusMetricMetadata'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusLabelNamesOrValuesRequest:
-      properties:
-        start:
-          type: string
-          format: rfc3339 | unix_timestamp
-        end:
-          type: string
-          format: rfc3339 | unix_timestamp
-        match[]:
-          type: array
-          items:
-            type: string
-            format: series_selector
-        limit:
-          type: integer
-          format: int64
-          minimum: 1
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-    PrometheusQueryResponse:
-      properties:
-        status:
-          type: string
-        data:
-          $ref: '#/components/schemas/PrometheusQueryResult'
-        warnings:
-          type: array
-          items:
-            type: string
-        infos:
-          type: array
-          items:
-            type: string
-          description: 'Info-level annotations produced while evaluating the query (Prometheus 3.0+),
+    PrometheusResultType:
+      type: string
+      enum:
+      - matrix
+      - vector
+      - scalar
+      - string
+      description: 'The shape of the `result` field, mirroring Prometheus:
 
-            kept separate from `warnings`.
+        - `vector`: instant-vector result (array of samples), returned by instant queries.
 
-            '
-      required:
-      - status
-    PrometheusBuildInfoResponse:
-      properties:
-        status:
-          type: string
-        data:
-          $ref: '#/components/schemas/PrometheusBuildInfo'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusQueryResult:
-      properties:
-        resultType:
-          $ref: '#/components/schemas/PrometheusResultType'
-        result:
-          anyOf:
-          - $ref: '#/components/schemas/MetricSample'
-          - $ref: '#/components/schemas/MetricSample'
-          - $ref: '#/components/schemas/PrometheusVectorResult'
-          - $ref: '#/components/schemas/PrometheusMatrixResult'
-      required:
-      - resultType
-      - result
-    PrometheusMatrixResult:
-      type: array
-      items:
-        $ref: '#/components/schemas/PrometheusMatrixSampleResult'
-    PrometheusLabelNamesOrValuesResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: array
-          items:
-            type: string
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusMetadataRequest:
-      properties:
-        limit:
-          type: integer
-          format: int64
-        limit_per_metric:
-          type: integer
-          format: int64
-        metric:
-          type: string
-        start:
-          type: string
-          format: rfc3339 | unix_timestamp
-        end:
-          type: string
-          format: rfc3339 | unix_timestamp
-        dataset:
-          $ref: '#/components/schemas/Dataset'
+        - `matrix`: range-vector result (array of series with value ranges), returned by range queries.
+
+        - `scalar`: a single scalar value.
+
+        - `string`: a single string value.
+
+        '
     MetricSample:
       type: array
       prefixItems:
@@ -748,77 +648,31 @@ components:
 
           '
       - $ref: '#/components/schemas/MetricValue'
-    PrometheusSeriesResponse:
+    PrometheusQueryRangeRequest:
       properties:
-        status:
+        query:
           type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PrometheusMetric'
-        warnings:
-          type: array
-          items:
-            type: string
+        start:
+          type: string
+          format: rfc3339 | unix_timestamp
+        end:
+          type: string
+          format: rfc3339 | unix_timestamp
+        step:
+          type: string
+          format: duration | float_seconds
+        timeout:
+          type: string
+          format: duration
+        limit:
+          type: integer
+          format: int64
+          minimum: 1
+        dataset:
+          $ref: '#/components/schemas/Dataset'
       required:
-      - status
-    PrometheusMetric:
-      type: object
-      additionalProperties:
-        type: string
-    PrometheusBuildInfo:
-      type: object
-      description: 'Build information about the Prometheus-compatible server. Only `version` is populated —
-
-        with the upstream Prometheus version Dash0 is compatible with, for client feature
-
-        detection. The remaining fields are retained for upstream API compatibility but are
-
-        always empty; Dash0 does not expose build internals.
-
-        '
-      properties:
-        version:
-          type: string
-          description: The upstream Prometheus version Dash0 is compatible with.
-        revision:
-          type: string
-          description: Not exposed by Dash0; always empty.
-        branch:
-          type: string
-          description: Not exposed by Dash0; always empty.
-        buildUser:
-          type: string
-          description: Not exposed by Dash0; always empty.
-        buildDate:
-          type: string
-          description: Not exposed by Dash0; always empty.
-        goVersion:
-          type: string
-          description: Not exposed by Dash0; always empty.
-    MetricValue:
-      type: string
-      description: 'JSON does not support special float values such as NaN, Inf, and -Inf, so sample
-
-        values are transferred as quoted JSON strings rather than raw numbers.
-
-        '
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    PrometheusFormatQueryResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
+      - query
+      - step
     PrometheusRuntimeInfo:
       type: object
       description: 'Runtime information about the Prometheus-compatible server. Dash0 is not a single
@@ -877,12 +731,6 @@ components:
         storageRetention:
           type: string
           description: The data retention period.
-    PrometheusFormatQueryRequest:
-      properties:
-        query:
-          type: string
-      required:
-      - query
     PrometheusVectorSampleResult:
       type: object
       properties:
@@ -893,79 +741,6 @@ components:
       required:
       - metric
       - value
-    PrometheusRuntimeInfoResponse:
-      properties:
-        status:
-          type: string
-        data:
-          $ref: '#/components/schemas/PrometheusRuntimeInfo'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusResultType:
-      type: string
-      enum:
-      - matrix
-      - vector
-      - scalar
-      - string
-      description: 'The shape of the `result` field, mirroring Prometheus:
-
-        - `vector`: instant-vector result (array of samples), returned by instant queries.
-
-        - `matrix`: range-vector result (array of series with value ranges), returned by range queries.
-
-        - `scalar`: a single scalar value.
-
-        - `string`: a single string value.
-
-        '
-    PrometheusVectorResult:
-      type: array
-      items:
-        $ref: '#/components/schemas/PrometheusVectorSampleResult'
-    PrometheusMatrixSampleResult:
-      type: object
-      properties:
-        metric:
-          $ref: '#/components/schemas/PrometheusMetric'
-        values:
-          $ref: '#/components/schemas/MetricSamples'
-      required:
-      - metric
-      - values
-    MetricSamples:
-      type: array
-      items:
-        $ref: '#/components/schemas/MetricSample'
-    PrometheusQueryRangeRequest:
-      properties:
-        query:
-          type: string
-        start:
-          type: string
-          format: rfc3339 | unix_timestamp
-        end:
-          type: string
-          format: rfc3339 | unix_timestamp
-        step:
-          type: string
-          format: duration | float_seconds
-        timeout:
-          type: string
-          format: duration
-        limit:
-          type: integer
-          format: int64
-          minimum: 1
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-      required:
-      - query
-      - step
     PrometheusMetricMetadata:
       type: object
       properties:
@@ -982,6 +757,125 @@ components:
         unit:
           type: string
           description: The metric unit, if known.
+    PrometheusVectorResult:
+      type: array
+      items:
+        $ref: '#/components/schemas/PrometheusVectorSampleResult'
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    PrometheusMatrixSampleResult:
+      type: object
+      properties:
+        metric:
+          $ref: '#/components/schemas/PrometheusMetric'
+        values:
+          $ref: '#/components/schemas/MetricSamples'
+      required:
+      - metric
+      - values
+    PrometheusMetadataRequest:
+      properties:
+        limit:
+          type: integer
+          format: int64
+        limit_per_metric:
+          type: integer
+          format: int64
+        metric:
+          type: string
+        start:
+          type: string
+          format: rfc3339 | unix_timestamp
+        end:
+          type: string
+          format: rfc3339 | unix_timestamp
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+    MetricValue:
+      type: string
+      description: 'JSON does not support special float values such as NaN, Inf, and -Inf, so sample
+
+        values are transferred as quoted JSON strings rather than raw numbers.
+
+        '
+    PrometheusBuildInfoResponse:
+      properties:
+        status:
+          type: string
+        data:
+          $ref: '#/components/schemas/PrometheusBuildInfo'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusRuntimeInfoResponse:
+      properties:
+        status:
+          type: string
+        data:
+          $ref: '#/components/schemas/PrometheusRuntimeInfo'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusFormatQueryResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    MetricSamples:
+      type: array
+      items:
+        $ref: '#/components/schemas/MetricSample'
+    PrometheusQueryResult:
+      properties:
+        resultType:
+          $ref: '#/components/schemas/PrometheusResultType'
+        result:
+          anyOf:
+          - $ref: '#/components/schemas/MetricSample'
+          - $ref: '#/components/schemas/MetricSample'
+          - $ref: '#/components/schemas/PrometheusVectorResult'
+          - $ref: '#/components/schemas/PrometheusMatrixResult'
+      required:
+      - resultType
+      - result
+    PrometheusLabelNamesOrValuesRequest:
+      properties:
+        start:
+          type: string
+          format: rfc3339 | unix_timestamp
+        end:
+          type: string
+          format: rfc3339 | unix_timestamp
+        match[]:
+          type: array
+          items:
+            type: string
+            format: series_selector
+        limit:
+          type: integer
+          format: int64
+          minimum: 1
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+    PrometheusMatrixResult:
+      type: array
+      items:
+        $ref: '#/components/schemas/PrometheusMatrixSampleResult'
     PrometheusQueryRequest:
       properties:
         query:
@@ -1000,6 +894,61 @@ components:
           $ref: '#/components/schemas/Dataset'
       required:
       - query
+    PrometheusSeriesResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusMetric'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusLabelNamesOrValuesResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            type: string
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusMetadataResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          description: Metric metadata keyed by metric name. Each metric maps to a list of metadata entries.
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/PrometheusMetricMetadata'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusFormatQueryRequest:
+      properties:
+        query:
+          type: string
+      required:
+      - query
+    PrometheusMetric:
+      type: object
+      additionalProperties:
+        type: string
     PrometheusErrorResponse:
       properties:
         status:
@@ -1025,3 +974,54 @@ components:
       - status
       - errorType
       - error
+    PrometheusQueryResponse:
+      properties:
+        status:
+          type: string
+        data:
+          $ref: '#/components/schemas/PrometheusQueryResult'
+        warnings:
+          type: array
+          items:
+            type: string
+        infos:
+          type: array
+          items:
+            type: string
+          description: 'Info-level annotations produced while evaluating the query (Prometheus 3.0+),
+
+            kept separate from `warnings`.
+
+            '
+      required:
+      - status
+    PrometheusBuildInfo:
+      type: object
+      description: 'Build information about the Prometheus-compatible server. Only `version` is populated —
+
+        with the upstream Prometheus version Dash0 is compatible with, for client feature
+
+        detection. The remaining fields are retained for upstream API compatibility but are
+
+        always empty; Dash0 does not expose build internals.
+
+        '
+      properties:
+        version:
+          type: string
+          description: The upstream Prometheus version Dash0 is compatible with.
+        revision:
+          type: string
+          description: Not exposed by Dash0; always empty.
+        branch:
+          type: string
+          description: Not exposed by Dash0; always empty.
+        buildUser:
+          type: string
+          description: Not exposed by Dash0; always empty.
+        buildDate:
+          type: string
+          description: Not exposed by Dash0; always empty.
+        goVersion:
+          type: string
+          description: Not exposed by Dash0; always empty.

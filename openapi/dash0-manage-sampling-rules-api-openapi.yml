@@ -195,34 +195,113 @@ paths:
       operationId: post_api-sampling-rules
 components:
   schemas:
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SamplingConditionError:
+      description: 'Matches spans that have the have `otel.span.status.code=ERROR`
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - error
+        spec:
+          $ref: '#/components/schemas/SamplingConditionErrorSpec'
+      required:
+      - kind
+      - spec
+    SamplingConditionAnd:
+      properties:
+        kind:
+          type: string
+          enum:
+          - and
+        spec:
+          $ref: '#/components/schemas/SamplingConditionAndSpec'
+      required:
+      - kind
+      - spec
+    SamplingSpec:
+      properties:
+        enabled:
+          type: boolean
+        display:
+          $ref: '#/components/schemas/SamplingDisplay'
+        conditions:
+          $ref: '#/components/schemas/SamplingCondition'
+        rateLimit:
+          $ref: '#/components/schemas/SamplingRateLimit'
+      required:
+      - enabled
+      - conditions
+    SamplingDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Sampling
+        metadata:
+          $ref: '#/components/schemas/SamplingMetadata'
+        spec:
+          $ref: '#/components/schemas/SamplingSpec'
+      required:
+      - kind
+      - metadata
+      - spec
     SamplingConditionOttlSpec:
       properties:
         ottl:
           type: string
       required:
       - ottl
-    SamplingDisplay:
-      properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
-          type: string
-      required:
-      - name
-    SamplingConditionProbabilistic:
+    SamplingConditionOttl:
       properties:
         kind:
           type: string
           enum:
-          - probabilistic
+          - ottl
         spec:
-          $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
+          $ref: '#/components/schemas/SamplingConditionOttlSpec'
       required:
       - kind
       - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SamplingLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
     SamplingRateLimit:
       description: 'Rate limit is helpful to avoid ingesting extremely large amounts of spans when the sampling conditions are
 
@@ -249,107 +328,15 @@ components:
             '
       required:
       - rate
-    SamplingMetadata:
+    SamplingConditionAndSpec:
       properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/SamplingLabels'
-      required:
-      - name
-    SamplingConditionError:
-      description: 'Matches spans that have the have `otel.span.status.code=ERROR`
-
-        '
-      properties:
-        kind:
-          type: string
-          enum:
-          - error
-        spec:
-          $ref: '#/components/schemas/SamplingConditionErrorSpec'
-      required:
-      - kind
-      - spec
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
-    SamplingLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-        custom:
-          type: object
-          additionalProperties:
-            type: string
-    SamplingCondition:
-      anyOf:
-      - $ref: '#/components/schemas/SamplingConditionAnd'
-      - $ref: '#/components/schemas/SamplingConditionOttl'
-      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
-      - $ref: '#/components/schemas/SamplingConditionError'
-    SamplingSpec:
-      properties:
-        enabled:
-          type: boolean
-        display:
-          $ref: '#/components/schemas/SamplingDisplay'
         conditions:
-          $ref: '#/components/schemas/SamplingCondition'
-        rateLimit:
-          $ref: '#/components/schemas/SamplingRateLimit'
-      required:
-      - enabled
-      - conditions
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    GetSamplingRulesResponse:
-      properties:
-        samplingRules:
           type: array
+          minItems: 1
           items:
-            $ref: '#/components/schemas/SamplingDefinition'
+            $ref: '#/components/schemas/SamplingCondition'
       required:
-      - samplingRules
-    SamplingDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0Sampling
-        metadata:
-          $ref: '#/components/schemas/SamplingMetadata'
-        spec:
-          $ref: '#/components/schemas/SamplingSpec'
-      required:
-      - kind
-      - metadata
-      - spec
+      - conditions
     Error:
       properties:
         code:
@@ -361,33 +348,37 @@ components:
       required:
       - code
       - message
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    SamplingConditionOttl:
+    SamplingCondition:
+      anyOf:
+      - $ref: '#/components/schemas/SamplingConditionAnd'
+      - $ref: '#/components/schemas/SamplingConditionOttl'
+      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
+      - $ref: '#/components/schemas/SamplingConditionError'
+    SamplingConditionProbabilistic:
       properties:
         kind:
           type: string
           enum:
-          - ottl
+          - probabilistic
         spec:
-          $ref: '#/components/schemas/SamplingConditionOttlSpec'
+          $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
       required:
       - kind
       - spec
-    SamplingConditionAndSpec:
+    SamplingConditionErrorSpec:
+      properties: {}
+      required: []
+    SamplingDisplay:
       properties:
-        conditions:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/SamplingCondition'
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
       required:
-      - conditions
+      - name
     SamplingConditionProbabilisticSpec:
       properties:
         rate:
@@ -401,17 +392,26 @@ components:
             '
       required:
       - rate
-    SamplingConditionAnd:
+    SamplingMetadata:
       properties:
-        kind:
+        name:
           type: string
-          enum:
-          - and
-        spec:
-          $ref: '#/components/schemas/SamplingConditionAndSpec'
+        labels:
+          $ref: '#/components/schemas/SamplingLabels'
       required:
-      - kind
-      - spec
-    SamplingConditionErrorSpec:
-      properties: {}
-      required: []
+      - name
+    GetSamplingRulesResponse:
+      properties:
+        samplingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SamplingDefinition'
+      required:
+      - samplingRules
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error

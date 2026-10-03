@@ -188,10 +188,39 @@ paths:
       operationId: post_api-recording-rules
 components:
   schemas:
+    PrometheusRule:
+      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
+
+        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
+
+        Groups may contain recording rules, alerting rules, or both.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/PrometheusRuleApiVersion'
+        kind:
+          $ref: '#/components/schemas/PrometheusRuleKind'
+        metadata:
+          $ref: '#/components/schemas/PrometheusRuleMetadata'
+        spec:
+          $ref: '#/components/schemas/PrometheusRuleSpec'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
     Dataset:
       type: string
       pattern: ^[a-zA-Z0-9_-]{3,26}$
       description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    PrometheusRuleKind:
+      description: 'Kind of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - PrometheusRule
     PrometheusRuleGroup:
       description: 'A group of rules evaluated together at a common interval. Follows the Prometheus
 
@@ -296,60 +325,42 @@ components:
       required:
       - name
       - rules
-    PrometheusRuleMetadata:
-      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
+    PrometheusRuleSpec:
+      description: 'Spec of the PrometheusRule resource containing rule groups.
 
         '
       properties:
-        name:
-          description: Resource name.
-          type: string
-        labels:
-          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
+        groups:
+          description: 'Rule groups. Each group is evaluated independently at its own interval.
 
-
-            - `dash0.com/id`: Internal ID (read-only, server-set).
-
-            - `dash0.com/origin`: External identifier for API-managed resources.
-
-            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
-
-            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
-
-            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
+            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
 
             '
-          type: object
-          additionalProperties:
-            type: string
-        annotations:
-          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
-
-
-            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
-
-            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
-
-            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
-
-            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
-
-            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
-
-            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
-
-            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
-
-            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
-
-            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusRuleGroup'
+          minItems: 1
+          maxItems: 1
       required:
-      - name
+      - groups
+    PrometheusRuleApiVersion:
+      description: 'API version of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - monitoring.coreos.com/v1
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
     PrometheusRuleDefinition:
       description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
 
@@ -415,42 +426,60 @@ components:
             type: string
       required:
       - expr
-    PrometheusRuleSpec:
-      description: 'Spec of the PrometheusRule resource containing rule groups.
+    PrometheusRuleMetadata:
+      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
 
         '
       properties:
-        groups:
-          description: 'Rule groups. Each group is evaluated independently at its own interval.
+        name:
+          description: Resource name.
+          type: string
+        labels:
+          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
 
-            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
+
+            - `dash0.com/id`: Internal ID (read-only, server-set).
+
+            - `dash0.com/origin`: External identifier for API-managed resources.
+
+            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
+
+            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
+
+            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
 
             '
-          type: array
-          items:
-            $ref: '#/components/schemas/PrometheusRuleGroup'
-          minItems: 1
-          maxItems: 1
-      required:
-      - groups
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    PrometheusRuleKind:
-      description: 'Kind of the PrometheusRule CRD.
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
 
-        '
-      type: string
-      enum:
-      - PrometheusRule
+
+            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
+
+            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
+
+            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
+
+            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
+
+            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
+
+            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
+
+            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
+
+            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
+
+            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - name
     ErrorResponse:
       type: object
       properties:
@@ -458,32 +487,3 @@ components:
           $ref: '#/components/schemas/Error'
       required:
       - error
-    PrometheusRule:
-      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
-
-        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
-
-        Groups may contain recording rules, alerting rules, or both.
-
-        '
-      properties:
-        apiVersion:
-          $ref: '#/components/schemas/PrometheusRuleApiVersion'
-        kind:
-          $ref: '#/components/schemas/PrometheusRuleKind'
-        metadata:
-          $ref: '#/components/schemas/PrometheusRuleMetadata'
-        spec:
-          $ref: '#/components/schemas/PrometheusRuleSpec'
-      required:
-      - apiVersion
-      - kind
-      - metadata
-      - spec
-    PrometheusRuleApiVersion:
-      description: 'API version of the PrometheusRule CRD.
-
-        '
-      type: string
-      enum:
-      - monitoring.coreos.com/v1
