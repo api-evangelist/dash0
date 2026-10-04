@@ -188,39 +188,6 @@ paths:
       operationId: post_api-recording-rules
 components:
   schemas:
-    PrometheusRule:
-      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
-
-        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
-
-        Groups may contain recording rules, alerting rules, or both.
-
-        '
-      properties:
-        apiVersion:
-          $ref: '#/components/schemas/PrometheusRuleApiVersion'
-        kind:
-          $ref: '#/components/schemas/PrometheusRuleKind'
-        metadata:
-          $ref: '#/components/schemas/PrometheusRuleMetadata'
-        spec:
-          $ref: '#/components/schemas/PrometheusRuleSpec'
-      required:
-      - apiVersion
-      - kind
-      - metadata
-      - spec
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    PrometheusRuleKind:
-      description: 'Kind of the PrometheusRule CRD.
-
-        '
-      type: string
-      enum:
-      - PrometheusRule
     PrometheusRuleGroup:
       description: 'A group of rules evaluated together at a common interval. Follows the Prometheus
 
@@ -343,24 +310,6 @@ components:
           maxItems: 1
       required:
       - groups
-    PrometheusRuleApiVersion:
-      description: 'API version of the PrometheusRule CRD.
-
-        '
-      type: string
-      enum:
-      - monitoring.coreos.com/v1
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
     PrometheusRuleDefinition:
       description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
 
@@ -426,6 +375,42 @@ components:
             type: string
       required:
       - expr
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    PrometheusRuleApiVersion:
+      description: 'API version of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - monitoring.coreos.com/v1
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    PrometheusRuleKind:
+      description: 'Kind of the PrometheusRule CRD.
+
+        '
+      type: string
+      enum:
+      - PrometheusRule
     PrometheusRuleMetadata:
       description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
 
@@ -480,10 +465,25 @@ components:
             type: string
       required:
       - name
-    ErrorResponse:
-      type: object
+    PrometheusRule:
+      description: 'A resource following the monitoring.coreos.com/v1 PrometheusRule CRD format.
+
+        A PrometheusRule contains one or more rule groups, each evaluated at a common interval.
+
+        Groups may contain recording rules, alerting rules, or both.
+
+        '
       properties:
-        error:
-          $ref: '#/components/schemas/Error'
+        apiVersion:
+          $ref: '#/components/schemas/PrometheusRuleApiVersion'
+        kind:
+          $ref: '#/components/schemas/PrometheusRuleKind'
+        metadata:
+          $ref: '#/components/schemas/PrometheusRuleMetadata'
+        spec:
+          $ref: '#/components/schemas/PrometheusRuleSpec'
       required:
-      - error
+      - apiVersion
+      - kind
+      - metadata
+      - spec

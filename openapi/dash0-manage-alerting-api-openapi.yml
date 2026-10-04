@@ -367,6 +367,27 @@ paths:
       operationId: post_api-import-check-rules
 components:
   schemas:
+    CheckThresholds:
+      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
+
+        '
+      properties:
+        degraded:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a degraded state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
+        failed:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a failed state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+            '
     ErrorResponse:
       type: object
       properties:
@@ -374,59 +395,6 @@ components:
           $ref: '#/components/schemas/Error'
       required:
       - error
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
-    PrometheusAlertRuleBulkCreateRequest:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          minItems: 1
-          maxItems: 1000
-          items:
-            $ref: '#/components/schemas/PrometheusAlertRule'
-    PrometheusAlertRuleMetadataLabels:
-      type: object
-      description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
-
-        emitted alert. Currently includes `dash0.com/source`
-
-        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
-
-        '
-      properties:
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-    PrometheusAlertRuleMetadata:
-      type: object
-      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
-
-        '
-      properties:
-        labels:
-          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
     Error:
       properties:
         code:
@@ -438,14 +406,6 @@ components:
       required:
       - code
       - message
-    PrometheusAlertRuleBulkCreateResponse:
-      type: object
-      required:
-      - created
-      properties:
-        created:
-          type: integer
-          description: Number of check rules that were newly created.
     PrometheusAlertRule:
       description: 'Check rules represent a periodically evaluated expression to determine the health of a resource.
 
@@ -599,27 +559,26 @@ components:
     Duration:
       type: string
       pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
-    CheckThresholds:
-      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
+    PrometheusAlertRuleMetadata:
+      type: object
+      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
 
         '
       properties:
-        degraded:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a degraded state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
-        failed:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a failed state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
+        labels:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
+    PrometheusAlertRuleBulkCreateResponse:
+      type: object
+      required:
+      - created
+      properties:
+        created:
+          type: integer
+          description: Number of check rules that were newly created.
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     PrometheusAlertRuleApiListItem:
       description: The ID, origin, dataset, and the name of a check rule.
       properties:
@@ -646,3 +605,44 @@ components:
       required:
       - id
       - dataset
+    PrometheusAlertRuleMetadataLabels:
+      type: object
+      description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
+
+        emitted alert. Currently includes `dash0.com/source`
+
+        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
+
+        '
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    PrometheusAlertRuleBulkCreateRequest:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/PrometheusAlertRule'
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api

@@ -203,24 +203,6 @@ paths:
       operationId: post_api-time-series-aggregations
 components:
   schemas:
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
     TimeSeriesAggregationLabels:
       properties:
         dash0.com/id:
@@ -237,156 +219,6 @@ components:
           type: object
           additionalProperties:
             type: string
-    TimeSeriesAggregationMetricNameMatch:
-      properties:
-        metricNameMatcher:
-          $ref: '#/components/schemas/Matcher'
-        otherFilters:
-          $ref: '#/components/schemas/FilterCriteria'
-          x-go-type-skip-optional-pointer: true
-      required:
-      - metricNameMatcher
-    TimeSeriesAggregationAttributeModification:
-      properties:
-        kind:
-          type: string
-          enum:
-          - drop_attributes
-          - keep_attributes
-        spec:
-          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationSpec'
-      required:
-      - kind
-      - spec
-    TimeSeriesAggregationSpec:
-      properties:
-        enabled:
-          type: boolean
-        priority:
-          description: 'Precedence when more than one rule matches a metric. Lower values are evaluated first
-
-            (higher precedence). Defaults to 0. Rules with equal priority are ordered deterministically
-
-            by creation time, then by id.
-
-            '
-          type: integer
-        display:
-          $ref: '#/components/schemas/TimeSeriesAggregationDisplay'
-        match:
-          $ref: '#/components/schemas/TimeSeriesAggregationMetricNameMatch'
-        sample:
-          $ref: '#/components/schemas/TimeSeriesAggregationSample'
-        attributeModifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeSeriesAggregationAttributeModification'
-      required:
-      - enabled
-      - match
-      - sample
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    TimeSeriesAggregationSample:
-      properties:
-        interval:
-          description: 'The frequency at which metric data points are aggregated via these rules. This is a required parameter.
-
-            If you don''t which to downsample your metrics, then set this to the scrape/export interval of your
-
-            metrics. Otherwise, use a larger number to reduce the granularity of your metrics.
-
-            '
-          $ref: '#/components/schemas/Duration'
-        delay:
-          description: 'The amount of time to account for delays in scraping, exporting, and data arrival. We suggest to always
-
-            add a little bit of a delay to account for this. But you can increase it in case you have larger delays in
-
-            your scrape and export processes.
-
-            '
-          $ref: '#/components/schemas/Duration'
-          default: 20s
-        staleAfter:
-          description: 'Duration after which a time series with no new data is considered stale and removed from memory.
-
-            When a stale time series is removed and new data arrives later, it is treated as a fresh start:
-
-            for cumulative metrics, no delta is computed against the old baseline, and the new value is
-
-            exported as-is. This prevents incorrect delta calculations after long gaps in data.
-
-            Default is 5 times the interval.
-
-            '
-          $ref: '#/components/schemas/Duration'
-      required:
-      - interval
-    AttributeFilterKey:
-      type: string
-      description: The attribute key to be filtered.
-    TimeSeriesAggregationAnnotations:
-      properties:
-        dash0.com/created-at:
-          description: Timestamp when the aggregation was created. Set by the server; read-only.
-          type: string
-          format: date-time
-        dash0.com/updated-at:
-          description: Timestamp of the last update. Set by the server; read-only.
-          type: string
-          format: date-time
-        dash0.com/deleted-at:
-          description: Timestamp when the aggregation was soft-deleted. Set by the server; read-only. Absent unless the aggregation is deleted.
-          type: string
-          format: date-time
-    TimeSeriesAggregationAttributeModificationContext:
-      type: string
-      enum:
-      - resource
-      - scope
-      - datapoint
-    TimeSeriesAggregationAttributeModificationSpec:
-      properties:
-        context:
-          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationContext'
-        keyMatcher:
-          $ref: '#/components/schemas/Matcher'
-      required:
-      - keyMatcher
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    TimeSeriesAggregationDisplay:
-      properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
-          type: string
-      required:
-      - name
-    Duration:
-      type: string
-      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
     Error:
       properties:
         code:
@@ -490,18 +322,46 @@ components:
         - `is_any` - matches any value, ignoring whether the key exists or not
 
         '
-    TimeSeriesAggregationListResponse:
+    TimeSeriesAggregationMetricNameMatch:
+      properties:
+        metricNameMatcher:
+          $ref: '#/components/schemas/Matcher'
+        otherFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          x-go-type-skip-optional-pointer: true
+      required:
+      - metricNameMatcher
+    TimeSeriesAggregationAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the aggregation was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Timestamp when the aggregation was soft-deleted. Set by the server; read-only. Absent unless the aggregation is deleted.
+          type: string
+          format: date-time
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
       type: object
       properties:
-        timeSeriesAggregations:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
-      required:
-      - timeSeriesAggregations
-    AttributeFilterAnyValue:
-      description: AttributeFilterAnyValue may contain any AnyValue value.
-      $ref: '#/components/schemas/AnyValue'
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
     AttributeFilter:
       type: object
       properties:
@@ -525,16 +385,28 @@ components:
       required:
       - key
       - operator
-    TimeSeriesAggregationMetadata:
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    TimeSeriesAggregationListResponse:
+      type: object
       properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/TimeSeriesAggregationLabels'
-        annotations:
-          $ref: '#/components/schemas/TimeSeriesAggregationAnnotations'
+        timeSeriesAggregations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
       required:
-      - name
+      - timeSeriesAggregations
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
     TimeSeriesAggregationDefinition:
       properties:
         kind:
@@ -549,9 +421,90 @@ components:
       - kind
       - metadata
       - spec
-    AttributeFilterStringValue:
-      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+    TimeSeriesAggregationSpec:
+      properties:
+        enabled:
+          type: boolean
+        priority:
+          description: 'Precedence when more than one rule matches a metric. Lower values are evaluated first
+
+            (higher precedence). Defaults to 0. Rules with equal priority are ordered deterministically
+
+            by creation time, then by id.
+
+            '
+          type: integer
+        display:
+          $ref: '#/components/schemas/TimeSeriesAggregationDisplay'
+        match:
+          $ref: '#/components/schemas/TimeSeriesAggregationMetricNameMatch'
+        sample:
+          $ref: '#/components/schemas/TimeSeriesAggregationSample'
+        attributeModifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationAttributeModification'
+      required:
+      - enabled
+      - match
+      - sample
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'
+    TimeSeriesAggregationAttributeModificationContext:
       type: string
+      enum:
+      - resource
+      - scope
+      - datapoint
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    TimeSeriesAggregationDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    TimeSeriesAggregationAttributeModificationSpec:
+      properties:
+        context:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationContext'
+        keyMatcher:
+          $ref: '#/components/schemas/Matcher'
+      required:
+      - keyMatcher
+    TimeSeriesAggregationAttributeModification:
+      properties:
+        kind:
+          type: string
+          enum:
+          - drop_attributes
+          - keep_attributes
+        spec:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationSpec'
+      required:
+      - kind
+      - spec
+    TimeSeriesAggregationMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TimeSeriesAggregationLabels'
+        annotations:
+          $ref: '#/components/schemas/TimeSeriesAggregationAnnotations'
+      required:
+      - name
     Matcher:
       type: object
       properties:
@@ -572,10 +525,57 @@ components:
             - $ref: '#/components/schemas/AttributeFilterAnyValue'
       required:
       - operator
-    ErrorResponse:
-      type: object
+    TimeSeriesAggregationSample:
       properties:
-        error:
-          $ref: '#/components/schemas/Error'
+        interval:
+          description: 'The frequency at which metric data points are aggregated via these rules. This is a required parameter.
+
+            If you don''t which to downsample your metrics, then set this to the scrape/export interval of your
+
+            metrics. Otherwise, use a larger number to reduce the granularity of your metrics.
+
+            '
+          $ref: '#/components/schemas/Duration'
+        delay:
+          description: 'The amount of time to account for delays in scraping, exporting, and data arrival. We suggest to always
+
+            add a little bit of a delay to account for this. But you can increase it in case you have larger delays in
+
+            your scrape and export processes.
+
+            '
+          $ref: '#/components/schemas/Duration'
+          default: 20s
+        staleAfter:
+          description: 'Duration after which a time series with no new data is considered stale and removed from memory.
+
+            When a stale time series is removed and new data arrives later, it is treated as a fresh start:
+
+            for cumulative metrics, no delta is computed against the old baseline, and the new value is
+
+            exported as-is. This prevents incorrect delta calculations after long gaps in data.
+
+            Default is 5 times the interval.
+
+            '
+          $ref: '#/components/schemas/Duration'
       required:
-      - error
+      - interval
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api

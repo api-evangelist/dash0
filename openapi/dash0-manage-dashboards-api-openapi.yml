@@ -220,39 +220,6 @@ paths:
       operationId: post_api-import-dashboard
 components:
   schemas:
-    DashboardLabels:
-      properties:
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
     DashboardApiListItem:
       properties:
         id:
@@ -273,6 +240,52 @@ components:
       - id
       - dataset
       - tags
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    DashboardMetadata:
+      properties:
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+        project:
+          type: string
+        dash0Extensions:
+          $ref: '#/components/schemas/DashboardMetadataExtensions'
+        labels:
+          $ref: '#/components/schemas/DashboardLabels'
+        annotations:
+          $ref: '#/components/schemas/DashboardAnnotations'
+      required:
+      - name
+    DashboardLabels:
+      properties:
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
     DashboardAnnotations:
       properties:
         dash0.com/deleted-at:
@@ -284,6 +297,27 @@ components:
         dash0.com/sharing:
           description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
           type: string
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
+      required:
+      - kind
+      - metadata
+      - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     DashboardMetadataExtensions:
       properties:
         tags:
@@ -310,55 +344,21 @@ components:
         createdBy:
           type: string
           description: The member ID of the user who created this dashboard or dashboard version.
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    DashboardDefinition:
-      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
 
         '
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dashboard
-        metadata:
-          $ref: '#/components/schemas/DashboardMetadata'
-        spec:
-          type: object
-      required:
-      - kind
-      - metadata
-      - spec
-    DashboardMetadata:
-      properties:
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        version:
-          type: integer
-          format: int64
-          minimum: 0
-        project:
-          type: string
-        dash0Extensions:
-          $ref: '#/components/schemas/DashboardMetadataExtensions'
-        labels:
-          $ref: '#/components/schemas/DashboardLabels'
-        annotations:
-          $ref: '#/components/schemas/DashboardAnnotations'
-      required:
-      - name
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api

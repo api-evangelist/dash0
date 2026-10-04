@@ -220,24 +220,6 @@ paths:
       operationId: post_api-spam-filters
 components:
   schemas:
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
     SpamFilterAnnotations:
       description: 'Spam filters use hard delete (removed from the dataset settings array),
 
@@ -261,128 +243,6 @@ components:
           enum:
           - 'true'
           - 'false'
-    SpamFilterMetadata:
-      properties:
-        name:
-          type: string
-          description: 'Human-readable name for the spam filter.
-
-            '
-        labels:
-          $ref: '#/components/schemas/SpamFilterLabels'
-        annotations:
-          $ref: '#/components/schemas/SpamFilterAnnotations'
-      required:
-      - name
-    SpamFilterCreateRequest:
-      anyOf:
-      - $ref: '#/components/schemas/SpamFilterDefinition'
-      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
-    SpamFilterSpec:
-      description: 'v1alpha1 spam filter specification. The `filter` field defines structured
-
-        criteria that the server compiles into an OTTL condition for evaluation.
-
-        '
-      properties:
-        contexts:
-          type: array
-          description: 'The signal types this spam filter applies to.
-
-            '
-          items:
-            $ref: '#/components/schemas/TelemetryFilterContext'
-          maxItems: 1
-        filter:
-          $ref: '#/components/schemas/FilterCriteria'
-          description: 'Structured filter criteria. The server compiles this into an OTTL condition
-
-            for evaluation.
-
-            '
-      required:
-      - contexts
-      - filter
-    SpamFilterLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-          description: 'External identifier for this spam filter. Must be unique per
-
-            organization and dataset when set. Used by Infrastructure-as-Code
-
-            tools (Terraform, Kubernetes operator). Auto-generated as
-
-            `api-<uuid>` on POST if not provided.
-
-            '
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-        custom:
-          type: object
-          additionalProperties:
-            type: string
-    SpamFilterSpecV1Alpha2:
-      description: 'v1alpha2 spam filter specification. The `filter` field defines structured
-
-        criteria that the server compiles into an OTTL condition for evaluation.
-
-        '
-      properties:
-        context:
-          $ref: '#/components/schemas/TelemetryFilterContext'
-          description: 'The signal type this spam filter applies to.
-
-            '
-        filter:
-          $ref: '#/components/schemas/FilterCriteria'
-          description: 'Structured filter criteria. The server compiles this into an OTTL condition
-
-            for evaluation.
-
-            '
-      required:
-      - context
-      - filter
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    AttributeFilterKey:
-      type: string
-      description: The attribute key to be filtered.
-    TelemetryFilterContext:
-      type: string
-      enum:
-      - datapoint
-      - span
-      - log
-      - web_event
-    SpamFilterResponse:
-      anyOf:
-      - $ref: '#/components/schemas/SpamFilterDefinition'
-      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
     SpamFilterApiVersionV1Alpha2:
       type: string
       enum:
@@ -398,34 +258,6 @@ components:
       required:
       - code
       - message
-    SpamFilterDefinitionV1Alpha2:
-      description: 'v1alpha2 spam filter definition. Uses `context` (scalar) in the spec.
-
-        '
-      properties:
-        apiVersion:
-          $ref: '#/components/schemas/SpamFilterApiVersionV1Alpha2'
-        kind:
-          type: string
-          enum:
-          - Dash0SpamFilter
-        metadata:
-          $ref: '#/components/schemas/SpamFilterMetadata'
-        spec:
-          $ref: '#/components/schemas/SpamFilterSpecV1Alpha2'
-      required:
-      - apiVersion
-      - kind
-      - metadata
-      - spec
-    GetSpamFiltersResponse:
-      properties:
-        spamFilters:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpamFilterDefinition'
-      required:
-      - spamFilters
     FilterCriteria:
       type: array
       items:
@@ -434,10 +266,6 @@ components:
       - key: service.name
         operator: is
         value: foo
-    SpamFilterApiVersionV1Alpha1:
-      type: string
-      enum:
-      - v1alpha1
     AttributeFilterOperator:
       type: string
       enum:
@@ -522,6 +350,105 @@ components:
         - `is_any` - matches any value, ignoring whether the key exists or not
 
         '
+    SpamFilterSpec:
+      description: 'v1alpha1 spam filter specification. The `filter` field defines structured
+
+        criteria that the server compiles into an OTTL condition for evaluation.
+
+        '
+      properties:
+        contexts:
+          type: array
+          description: 'The signal types this spam filter applies to.
+
+            '
+          items:
+            $ref: '#/components/schemas/TelemetryFilterContext'
+          maxItems: 1
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Structured filter criteria. The server compiles this into an OTTL condition
+
+            for evaluation.
+
+            '
+      required:
+      - contexts
+      - filter
+    SpamFilterLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+          description: 'External identifier for this spam filter. Must be unique per
+
+            organization and dataset when set. Used by Infrastructure-as-Code
+
+            tools (Terraform, Kubernetes operator). Auto-generated as
+
+            `api-<uuid>` on POST if not provided.
+
+            '
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    SpamFilterCreateRequest:
+      anyOf:
+      - $ref: '#/components/schemas/SpamFilterDefinition'
+      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
+    SpamFilterSpecV1Alpha2:
+      description: 'v1alpha2 spam filter specification. The `filter` field defines structured
+
+        criteria that the server compiles into an OTTL condition for evaluation.
+
+        '
+      properties:
+        context:
+          $ref: '#/components/schemas/TelemetryFilterContext'
+          description: 'The signal type this spam filter applies to.
+
+            '
+        filter:
+          $ref: '#/components/schemas/FilterCriteria'
+          description: 'Structured filter criteria. The server compiles this into an OTTL condition
+
+            for evaluation.
+
+            '
+      required:
+      - context
+      - filter
+    GetSpamFiltersResponse:
+      properties:
+        spamFilters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpamFilterDefinition'
+      required:
+      - spamFilters
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
     AttributeFilter:
       type: object
       properties:
@@ -545,9 +472,70 @@ components:
       required:
       - key
       - operator
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
     AttributeFilterAnyValue:
       description: AttributeFilterAnyValue may contain any AnyValue value.
       $ref: '#/components/schemas/AnyValue'
+    TelemetryFilterContext:
+      type: string
+      enum:
+      - datapoint
+      - span
+      - log
+      - web_event
+    SpamFilterMetadata:
+      properties:
+        name:
+          type: string
+          description: 'Human-readable name for the spam filter.
+
+            '
+        labels:
+          $ref: '#/components/schemas/SpamFilterLabels'
+        annotations:
+          $ref: '#/components/schemas/SpamFilterAnnotations'
+      required:
+      - name
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SpamFilterDefinitionV1Alpha2:
+      description: 'v1alpha2 spam filter definition. Uses `context` (scalar) in the spec.
+
+        '
+      properties:
+        apiVersion:
+          $ref: '#/components/schemas/SpamFilterApiVersionV1Alpha2'
+        kind:
+          type: string
+          enum:
+          - Dash0SpamFilter
+        metadata:
+          $ref: '#/components/schemas/SpamFilterMetadata'
+        spec:
+          $ref: '#/components/schemas/SpamFilterSpecV1Alpha2'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    SpamFilterResponse:
+      anyOf:
+      - $ref: '#/components/schemas/SpamFilterDefinition'
+      - $ref: '#/components/schemas/SpamFilterDefinitionV1Alpha2'
     SpamFilterDefinition:
       description: 'v1alpha1 spam filter definition. Uses `contexts` (array) in the spec.
 
@@ -567,13 +555,25 @@ components:
       - kind
       - metadata
       - spec
-    AttributeFilterStringValue:
-      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
       type: string
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    SpamFilterApiVersionV1Alpha1:
+      type: string
+      enum:
+      - v1alpha1

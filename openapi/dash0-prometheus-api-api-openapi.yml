@@ -619,60 +619,6 @@ paths:
       operationId: get_api-prometheus-api-v1-status-runtimeinfo
 components:
   schemas:
-    PrometheusResultType:
-      type: string
-      enum:
-      - matrix
-      - vector
-      - scalar
-      - string
-      description: 'The shape of the `result` field, mirroring Prometheus:
-
-        - `vector`: instant-vector result (array of samples), returned by instant queries.
-
-        - `matrix`: range-vector result (array of series with value ranges), returned by range queries.
-
-        - `scalar`: a single scalar value.
-
-        - `string`: a single string value.
-
-        '
-    MetricSample:
-      type: array
-      prefixItems:
-      - type: number
-        format: double
-        description: 'Seconds since unix epoch start for which the metric value is valid.
-
-          The timestamp typically denotes the end of the step.
-
-          '
-      - $ref: '#/components/schemas/MetricValue'
-    PrometheusQueryRangeRequest:
-      properties:
-        query:
-          type: string
-        start:
-          type: string
-          format: rfc3339 | unix_timestamp
-        end:
-          type: string
-          format: rfc3339 | unix_timestamp
-        step:
-          type: string
-          format: duration | float_seconds
-        timeout:
-          type: string
-          format: duration
-        limit:
-          type: integer
-          format: int64
-          minimum: 1
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-      required:
-      - query
-      - step
     PrometheusRuntimeInfo:
       type: object
       description: 'Runtime information about the Prometheus-compatible server. Dash0 is not a single
@@ -731,128 +677,17 @@ components:
         storageRetention:
           type: string
           description: The data retention period.
-    PrometheusVectorSampleResult:
-      type: object
-      properties:
-        metric:
-          $ref: '#/components/schemas/PrometheusMetric'
-        value:
-          $ref: '#/components/schemas/MetricSample'
-      required:
-      - metric
-      - value
-    PrometheusMetricMetadata:
-      type: object
-      properties:
-        type:
-          type: string
-          description: 'The metric type as reported by the source. One of `counter`, `gauge`,
-
-            `histogram`, `gaugehistogram`, `summary`, `info`, `stateset`, or `unknown`.
-
-            '
-        help:
-          type: string
-          description: A human-readable description of the metric.
-        unit:
-          type: string
-          description: The metric unit, if known.
-    PrometheusVectorResult:
+    MetricSample:
       type: array
-      items:
-        $ref: '#/components/schemas/PrometheusVectorSampleResult'
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    PrometheusMatrixSampleResult:
-      type: object
-      properties:
-        metric:
-          $ref: '#/components/schemas/PrometheusMetric'
-        values:
-          $ref: '#/components/schemas/MetricSamples'
-      required:
-      - metric
-      - values
-    PrometheusMetadataRequest:
-      properties:
-        limit:
-          type: integer
-          format: int64
-        limit_per_metric:
-          type: integer
-          format: int64
-        metric:
-          type: string
-        start:
-          type: string
-          format: rfc3339 | unix_timestamp
-        end:
-          type: string
-          format: rfc3339 | unix_timestamp
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-    MetricValue:
-      type: string
-      description: 'JSON does not support special float values such as NaN, Inf, and -Inf, so sample
+      prefixItems:
+      - type: number
+        format: double
+        description: 'Seconds since unix epoch start for which the metric value is valid.
 
-        values are transferred as quoted JSON strings rather than raw numbers.
+          The timestamp typically denotes the end of the step.
 
-        '
-    PrometheusBuildInfoResponse:
-      properties:
-        status:
-          type: string
-        data:
-          $ref: '#/components/schemas/PrometheusBuildInfo'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusRuntimeInfoResponse:
-      properties:
-        status:
-          type: string
-        data:
-          $ref: '#/components/schemas/PrometheusRuntimeInfo'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusFormatQueryResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    MetricSamples:
-      type: array
-      items:
-        $ref: '#/components/schemas/MetricSample'
-    PrometheusQueryResult:
-      properties:
-        resultType:
-          $ref: '#/components/schemas/PrometheusResultType'
-        result:
-          anyOf:
-          - $ref: '#/components/schemas/MetricSample'
-          - $ref: '#/components/schemas/MetricSample'
-          - $ref: '#/components/schemas/PrometheusVectorResult'
-          - $ref: '#/components/schemas/PrometheusMatrixResult'
-      required:
-      - resultType
-      - result
+          '
+      - $ref: '#/components/schemas/MetricValue'
     PrometheusLabelNamesOrValuesRequest:
       properties:
         start:
@@ -872,108 +707,6 @@ components:
           minimum: 1
         dataset:
           $ref: '#/components/schemas/Dataset'
-    PrometheusMatrixResult:
-      type: array
-      items:
-        $ref: '#/components/schemas/PrometheusMatrixSampleResult'
-    PrometheusQueryRequest:
-      properties:
-        query:
-          type: string
-        time:
-          type: string
-          format: rfc3339 | unix_timestamp
-        timeout:
-          type: string
-          format: duration
-        limit:
-          type: integer
-          format: int64
-          minimum: 1
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-      required:
-      - query
-    PrometheusSeriesResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PrometheusMetric'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusLabelNamesOrValuesResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: array
-          items:
-            type: string
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusMetadataResponse:
-      properties:
-        status:
-          type: string
-        data:
-          type: object
-          description: Metric metadata keyed by metric name. Each metric maps to a list of metadata entries.
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/PrometheusMetricMetadata'
-        warnings:
-          type: array
-          items:
-            type: string
-      required:
-      - status
-    PrometheusFormatQueryRequest:
-      properties:
-        query:
-          type: string
-      required:
-      - query
-    PrometheusMetric:
-      type: object
-      additionalProperties:
-        type: string
-    PrometheusErrorResponse:
-      properties:
-        status:
-          type: string
-        errorType:
-          type: string
-        error:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-        infos:
-          type: array
-          items:
-            type: string
-          description: 'Info-level annotations produced while evaluating the query (Prometheus 3.0+).
-
-            Only populated by the instant and range query endpoints.
-
-            '
-      required:
-      - status
-      - errorType
-      - error
     PrometheusQueryResponse:
       properties:
         status:
@@ -993,6 +726,36 @@ components:
             kept separate from `warnings`.
 
             '
+      required:
+      - status
+    PrometheusVectorResult:
+      type: array
+      items:
+        $ref: '#/components/schemas/PrometheusVectorSampleResult'
+    PrometheusSeriesResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusMetric'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusFormatQueryResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
       required:
       - status
     PrometheusBuildInfo:
@@ -1025,3 +788,240 @@ components:
         goVersion:
           type: string
           description: Not exposed by Dash0; always empty.
+    PrometheusMetricMetadata:
+      type: object
+      properties:
+        type:
+          type: string
+          description: 'The metric type as reported by the source. One of `counter`, `gauge`,
+
+            `histogram`, `gaugehistogram`, `summary`, `info`, `stateset`, or `unknown`.
+
+            '
+        help:
+          type: string
+          description: A human-readable description of the metric.
+        unit:
+          type: string
+          description: The metric unit, if known.
+    PrometheusQueryRangeRequest:
+      properties:
+        query:
+          type: string
+        start:
+          type: string
+          format: rfc3339 | unix_timestamp
+        end:
+          type: string
+          format: rfc3339 | unix_timestamp
+        step:
+          type: string
+          format: duration | float_seconds
+        timeout:
+          type: string
+          format: duration
+        limit:
+          type: integer
+          format: int64
+          minimum: 1
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+      required:
+      - query
+      - step
+    PrometheusErrorResponse:
+      properties:
+        status:
+          type: string
+        errorType:
+          type: string
+        error:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+        infos:
+          type: array
+          items:
+            type: string
+          description: 'Info-level annotations produced while evaluating the query (Prometheus 3.0+).
+
+            Only populated by the instant and range query endpoints.
+
+            '
+      required:
+      - status
+      - errorType
+      - error
+    PrometheusQueryResult:
+      properties:
+        resultType:
+          $ref: '#/components/schemas/PrometheusResultType'
+        result:
+          anyOf:
+          - $ref: '#/components/schemas/MetricSample'
+          - $ref: '#/components/schemas/MetricSample'
+          - $ref: '#/components/schemas/PrometheusVectorResult'
+          - $ref: '#/components/schemas/PrometheusMatrixResult'
+      required:
+      - resultType
+      - result
+    PrometheusMatrixResult:
+      type: array
+      items:
+        $ref: '#/components/schemas/PrometheusMatrixSampleResult'
+    PrometheusBuildInfoResponse:
+      properties:
+        status:
+          type: string
+        data:
+          $ref: '#/components/schemas/PrometheusBuildInfo'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusVectorSampleResult:
+      type: object
+      properties:
+        metric:
+          $ref: '#/components/schemas/PrometheusMetric'
+        value:
+          $ref: '#/components/schemas/MetricSample'
+      required:
+      - metric
+      - value
+    PrometheusMetadataResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          description: Metric metadata keyed by metric name. Each metric maps to a list of metadata entries.
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/PrometheusMetricMetadata'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    PrometheusQueryRequest:
+      properties:
+        query:
+          type: string
+        time:
+          type: string
+          format: rfc3339 | unix_timestamp
+        timeout:
+          type: string
+          format: duration
+        limit:
+          type: integer
+          format: int64
+          minimum: 1
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+      required:
+      - query
+    MetricSamples:
+      type: array
+      items:
+        $ref: '#/components/schemas/MetricSample'
+    PrometheusMatrixSampleResult:
+      type: object
+      properties:
+        metric:
+          $ref: '#/components/schemas/PrometheusMetric'
+        values:
+          $ref: '#/components/schemas/MetricSamples'
+      required:
+      - metric
+      - values
+    MetricValue:
+      type: string
+      description: 'JSON does not support special float values such as NaN, Inf, and -Inf, so sample
+
+        values are transferred as quoted JSON strings rather than raw numbers.
+
+        '
+    PrometheusResultType:
+      type: string
+      enum:
+      - matrix
+      - vector
+      - scalar
+      - string
+      description: 'The shape of the `result` field, mirroring Prometheus:
+
+        - `vector`: instant-vector result (array of samples), returned by instant queries.
+
+        - `matrix`: range-vector result (array of series with value ranges), returned by range queries.
+
+        - `scalar`: a single scalar value.
+
+        - `string`: a single string value.
+
+        '
+    PrometheusLabelNamesOrValuesResponse:
+      properties:
+        status:
+          type: string
+        data:
+          type: array
+          items:
+            type: string
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusRuntimeInfoResponse:
+      properties:
+        status:
+          type: string
+        data:
+          $ref: '#/components/schemas/PrometheusRuntimeInfo'
+        warnings:
+          type: array
+          items:
+            type: string
+      required:
+      - status
+    PrometheusMetadataRequest:
+      properties:
+        limit:
+          type: integer
+          format: int64
+        limit_per_metric:
+          type: integer
+          format: int64
+        metric:
+          type: string
+        start:
+          type: string
+          format: rfc3339 | unix_timestamp
+        end:
+          type: string
+          format: rfc3339 | unix_timestamp
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+    PrometheusFormatQueryRequest:
+      properties:
+        query:
+          type: string
+      required:
+      - query
+    PrometheusMetric:
+      type: object
+      additionalProperties:
+        type: string
