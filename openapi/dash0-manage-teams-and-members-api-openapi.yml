@@ -278,44 +278,6 @@ paths:
       operationId: put_api-teams-originorid-display
 components:
   schemas:
-    Action:
-      type: string
-      description: 'Not defined as an enum, because we will eventually support wildcards like `ingest:*`.
-
-        '
-    TeamDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0Team
-        metadata:
-          $ref: '#/components/schemas/TeamMetadata'
-        spec:
-          $ref: '#/components/schemas/TeamSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    MemberMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/MemberLabels'
-      required:
-      - name
     TeamSpec:
       properties:
         display:
@@ -327,79 +289,23 @@ components:
       required:
       - display
       - members
-    MemberSpec:
+    MemberDisplay:
       properties:
-        display:
-          $ref: '#/components/schemas/MemberDisplay'
-      required:
-      - display
-    AddTeamMembersRequest:
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        imageUrl:
+          type: string
+    MemberLabels:
       properties:
-        memberIds:
-          description: 'Add an existing organization member to this team.
-
-            '
-          type: array
-          items:
-            type: string
-      required:
-      - memberIds
-    TeamsListItem:
-      properties:
-        id:
+        dash0.com/id:
           type: string
-        origin:
+        dash0.com/joinedAt:
           type: string
-        source:
-          $ref: '#/components/schemas/CrdSource'
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Gradient'
-        members:
-          description: 'A sample of five members. You can inspect the total member count via `totalMemberCount`. This array
-
-            is restricted to at most five members, because this could otherwise be too much data.
-
-            '
-          type: array
-          maxItems: 5
-          items:
-            $ref: '#/components/schemas/MemberDefinition'
-        totalMemberCount:
-          type: integer
-      required:
-      - id
-      - name
-      - color
-      - members
-      - totalMemberCount
-    Gradient:
-      description: A color gradient from one color to another.
-      properties:
-        from:
-          type: string
-        to:
-          type: string
-      required:
-      - from
-      - to
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    InviteMemberRequest:
-      properties:
-        emailAddress:
-          type: string
-        role:
-          type: string
-      required:
-      - emailAddress
-      - role
+          format: date-time
     FixedTime:
       type: string
       format: date-time
@@ -416,106 +322,12 @@ components:
         - `2024-01-15T14:30:00+08:00`
 
         '
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    TeamMetadata:
+    MemberSpec:
       properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/TeamLabels'
+        display:
+          $ref: '#/components/schemas/MemberDisplay'
       required:
-      - name
-    MemberDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0Member
-        metadata:
-          $ref: '#/components/schemas/MemberMetadata'
-        spec:
-          $ref: '#/components/schemas/MemberSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    TeamDisplay:
-      properties:
-        name:
-          type: string
-        color:
-          $ref: '#/components/schemas/Gradient'
-      required:
-      - name
-      - color
-    TeamLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-    AccessibleAsset:
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          description: returns for views the information which type of view it is
-          type: string
-        permittedActions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-        createdAt:
-          $ref: '#/components/schemas/FixedTime'
-        creator:
-          $ref: '#/components/schemas/MemberDefinition'
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-        hasAccess:
-          description: returns the information if the logged-in user has access to this asset
-          type: boolean
-      required:
-      - id
-      - name
-      - permittedActions
-      - createdAt
-      - dataset
-      - hasAccess
-    MemberDisplay:
-      properties:
-        email:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        imageUrl:
-          type: string
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
+      - display
     GetTeamResponse:
       properties:
         team:
@@ -552,10 +364,198 @@ components:
       - syntheticChecks
       - views
       - datasets
-    MemberLabels:
+    Gradient:
+      description: A color gradient from one color to another.
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      required:
+      - from
+      - to
+    InviteMemberRequest:
+      properties:
+        emailAddress:
+          type: string
+        role:
+          type: string
+      required:
+      - emailAddress
+      - role
+    Action:
+      type: string
+      description: 'Not defined as an enum, because we will eventually support wildcards like `ingest:*`.
+
+        '
+    MemberMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/MemberLabels'
+      required:
+      - name
+    TeamDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Team
+        metadata:
+          $ref: '#/components/schemas/TeamMetadata'
+        spec:
+          $ref: '#/components/schemas/TeamSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    Error:
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        traceId:
+          type: string
+      required:
+      - code
+      - message
+    AddTeamMembersRequest:
+      properties:
+        memberIds:
+          description: 'Add an existing organization member to this team.
+
+            '
+          type: array
+          items:
+            type: string
+      required:
+      - memberIds
+    TeamLabels:
       properties:
         dash0.com/id:
           type: string
-        dash0.com/joinedAt:
+        dash0.com/origin:
           type: string
-          format: date-time
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    TeamDisplay:
+      properties:
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/Gradient'
+      required:
+      - name
+      - color
+    CrdSource:
+      description: 'Origin of a Dash0 resource.
+
+        - `ui`: created interactively in the Dash0 UI.
+
+        - `terraform`: managed via the Dash0 Terraform provider.
+
+        - `operator`: managed via the Dash0 Kubernetes operator.
+
+        - `api`: created directly through the internal API.
+
+        '
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - api
+    TeamMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TeamLabels'
+      required:
+      - name
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    TeamsListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        source:
+          $ref: '#/components/schemas/CrdSource'
+        name:
+          type: string
+        color:
+          $ref: '#/components/schemas/Gradient'
+        members:
+          description: 'A sample of five members. You can inspect the total member count via `totalMemberCount`. This array
+
+            is restricted to at most five members, because this could otherwise be too much data.
+
+            '
+          type: array
+          maxItems: 5
+          items:
+            $ref: '#/components/schemas/MemberDefinition'
+        totalMemberCount:
+          type: integer
+      required:
+      - id
+      - name
+      - color
+      - members
+      - totalMemberCount
+    MemberDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0Member
+        metadata:
+          $ref: '#/components/schemas/MemberMetadata'
+        spec:
+          $ref: '#/components/schemas/MemberSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AccessibleAsset:
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          description: returns for views the information which type of view it is
+          type: string
+        permittedActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+        createdAt:
+          $ref: '#/components/schemas/FixedTime'
+        creator:
+          $ref: '#/components/schemas/MemberDefinition'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        hasAccess:
+          description: returns the information if the logged-in user has access to this asset
+          type: boolean
+      required:
+      - id
+      - name
+      - permittedActions
+      - createdAt
+      - dataset
+      - hasAccess
