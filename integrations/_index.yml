@@ -130,3 +130,82 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: dash0-go-module-proxy
+  label: Go module proxy
+  partner_name: Go module proxy
+  category: official SDK (Go)
+  type: register
+  channel: package-registry
+  evidence: https://pkg.go.dev/github.com/dash0hq/dash0-cli
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/dash0hq/dash0-cli
+      version: v1.18.0
+      released: '2026-09-14'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/dash0hq/dash0-cli
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    - name: github.com/dash0hq/terraform-provider-dash0
+      version: v1.20.0
+      released: '2026-10-15'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/dash0hq/terraform-provider-dash0
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: dash0-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/@dash0/sdk-web
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@dash0/sdk-web'
+      version: 0.27.0
+      released: '2026-09-24'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@dash0/sdk-web
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0
+      matched_by: github-org
+    - name: '@dash0hq/sdk-web'
+      version: 0.6.1
+      released: '2026-04-29'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@dash0hq/sdk-web
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null

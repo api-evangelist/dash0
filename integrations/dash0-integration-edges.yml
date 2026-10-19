@@ -2,13 +2,20 @@ generated: '2026-10-13'
 method: searched
 checked:
 - https://a2aregistry.org/api/agents
+- https://api.nuget.org/v3
 - https://aws.amazon.com/marketplace/
 - https://azuremarketplace.microsoft.com/
+- https://crates.io/api/v1
 - https://focus.finops.org/data-generators/
 - https://github.com/cncf/k8s-conformance
 - https://github.com/cncf/landscape
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
+- https://proxy.golang.org
+- https://pypi.org/pypi
+- https://registry.npmjs.org
+- https://repo1.maven.org/maven2
+- https://rubygems.org/api/v1
 - slack/integrations/slack-integration-edges.yml
 marketplace_apps: []
 edges:
@@ -158,6 +165,84 @@ edges:
   detected: '2026-10-18'
   detected_by: mirror-platform-listings.py
   category: Slack app
+- partner_name: Go module proxy
+  partner: null
+  partner_match: null
+  type: register
+  direction: provider-built
+  category: official SDK (Go)
+  evidence: https://pkg.go.dev/github.com/dash0hq/dash0-cli
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/dash0hq/dash0-cli
+      version: v1.18.0
+      released: '2026-09-14'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/dash0hq/dash0-cli
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    - name: github.com/dash0hq/terraform-provider-dash0
+      version: v1.20.0
+      released: '2026-10-15'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/dash0hq/terraform-provider-dash0
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
+- partner_name: npm registry
+  partner: npm
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (JavaScript/TypeScript)
+  evidence: https://www.npmjs.com/package/@dash0/sdk-web
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@dash0/sdk-web'
+      version: 0.27.0
+      released: '2026-09-24'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@dash0/sdk-web
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0
+      matched_by: github-org
+    - name: '@dash0hq/sdk-web'
+      version: 0.6.1
+      released: '2026-04-29'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/@dash0hq/sdk-web
+      repo_leg: github-org:dash0hq
+      publisher_leg: org:dash0hq
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  detected_by: sweep-official-sdks.py
+  first_seen: '2026-10-18'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
