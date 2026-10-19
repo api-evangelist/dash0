@@ -1,0 +1,12 @@
+{
+ "url": "https://api.eu-central-1.aws.dash0.com/openapi.json",
+ "final": "https://api.eu-central-1.aws.dash0.com/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 641433,
+ "sha256": "96654dd5c84f13c04804b8a1e66961ff6575e45bc89236eecb579115af617da1",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

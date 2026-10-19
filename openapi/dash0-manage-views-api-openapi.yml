@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Manage Views API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,153 +53,6 @@ servers:
 tags:
 - name: Manage Views
 paths:
-  /api/views/{originOrId}:
-    delete:
-      summary: Delete a specific view by origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: View origin or id.
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Delete a specific view.
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Views
-      operationId: delete_api-views-originorid
-    get:
-      summary: Receive a specific view by its origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: View origin or id.
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Receive a specific view.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ViewDefinition'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Views
-      operationId: get_api-views-originorid
-    put:
-      summary: Update or insert a specific view by its origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: View origin or id.
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ViewDefinition'
-      responses:
-        '200':
-          description: Update a specific view.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ViewDefinition'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Views
-      operationId: put_api-views-originorid
-  /api/views:
-    get:
-      summary: Receive a list of views
-      description: Receive a list of your organization views
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Receive a list of views.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ViewApiListItem'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Views
-      operationId: get_api-views
-    post:
-      summary: Create a view
-      description: Create a view.
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ViewDefinition'
-      responses:
-        '200':
-          description: The created view.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ViewDefinition'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Views
-      operationId: post_api-views
   /api/import/view:
     post:
       summary: Import a view
@@ -214,26 +93,329 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Views
-      operationId: post_api-import-view
+      operationId: postApiImportView
+      x-operation-id-source: derived
+  /api/views:
+    get:
+      summary: Receive a list of views
+      description: Receive a list of your organization views
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a list of views.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ViewApiListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Views
+      operationId: getApiViews
+      x-operation-id-source: derived
+    post:
+      summary: Create a view
+      description: Create a view.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewDefinition'
+      responses:
+        '200':
+          description: The created view.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Views
+      operationId: postApiViews
+      x-operation-id-source: derived
+  /api/views/{originOrId}:
+    delete:
+      summary: Delete a specific view by origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: View origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Delete a specific view.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Views
+      operationId: deleteApiViewsByOriginOrId
+      x-operation-id-source: derived
+    get:
+      summary: Receive a specific view by its origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: View origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a specific view.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Views
+      operationId: getApiViewsByOriginOrId
+      x-operation-id-source: derived
+    put:
+      summary: Update or insert a specific view by its origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: View origin or id.
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewDefinition'
+      responses:
+        '200':
+          description: Update a specific view.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ViewDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Views
+      operationId: putApiViewsByOriginOrId
+      x-operation-id-source: derived
 components:
   schemas:
-    ViewAnnotations:
+    Error:
       properties:
-        dash0.com/deleted-at:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
           type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
           type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
           type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    ViewPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          description: 'Use role identifiers such as `admin` and `basic_member` to reference user groups.
+
+            '
+          type: string
+        actions:
+          description: 'Outlines possible actions that matching views can take with this view.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/ViewAction'
+      required:
+      - actions
+    OrderingDirection:
+      type: string
+      enum:
+      - ascending
+      - descending
+      default: ascending
     ViewAction:
       type: string
       enum:
       - views:read
       - views:write
       - views:delete
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    ViewVisualizationMetric:
+      type: string
+      enum:
+      - logs_total
+      - logs_rate
+      - spans_total
+      - spans_rate
+      - spans_errors_total
+      - spans_errors_rate
+      - spans_errors_percentage
+      - spans_duration_p99
+      - spans_duration_p95
+      - spans_duration_p90
+      - spans_duration_p75
+      - spans_duration_p50
+      - spans_duration_avg
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    ViewLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    OrderingCriterion:
+      description: Any combination of a supported key to order by and a direction.
+      properties:
+        key:
+          $ref: '#/components/schemas/OrderingKey'
+        direction:
+          $ref: '#/components/schemas/OrderingDirection'
+      required:
+      - key
+      - direction
+    ViewDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+        description:
+          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
+
+            team members understand the purpose of the view.
+
+            '
+          type: string
+      required:
+      - name
+    ViewDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0View
+        metadata:
+          $ref: '#/components/schemas/ViewMetadata'
+        spec:
+          $ref: '#/components/schemas/ViewSpec'
+      required:
+      - kind
+      - metadata
+      - spec
     AttributeFilter:
       type: object
       properties:
@@ -257,70 +439,6 @@ components:
       required:
       - key
       - operator
-    AxisScale:
-      type: string
-      enum:
-      - linear
-      - log10
-    ViewDisplay:
-      properties:
-        name:
-          description: 'Short-form name for the view to be shown prominently within the view list and atop
-
-            the screen when the view is selected.
-
-            '
-          type: string
-        description:
-          description: 'Long-form explanation what the view is doing. Shown within the list of views to help
-
-            team members understand the purpose of the view.
-
-            '
-          type: string
-      required:
-      - name
-    OrderingCriterion:
-      description: Any combination of a supported key to order by and a direction.
-      properties:
-        key:
-          $ref: '#/components/schemas/OrderingKey'
-        direction:
-          $ref: '#/components/schemas/OrderingDirection'
-      required:
-      - key
-      - direction
-    AttributeFilterKey:
-      type: string
-      description: The attribute key to be filtered.
-    ViewPermission:
-      properties:
-        teamId:
-          type: string
-        userId:
-          type: string
-        role:
-          description: 'Use role identifiers such as `admin` and `basic_member` to reference user groups.
-
-            '
-          type: string
-        actions:
-          description: 'Outlines possible actions that matching views can take with this view.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/ViewAction'
-      required:
-      - actions
-    FilterCriteria:
-      type: array
-      items:
-        $ref: '#/components/schemas/AttributeFilter'
-      example:
-      - key: service.name
-        operator: is
-        value: foo
     ViewTable:
       properties:
         columns:
@@ -332,69 +450,6 @@ components:
       required:
       - columns
       - sort
-    AttributeFilterStringValue:
-      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
-      type: string
-    AttributeFilterAnyValue:
-      description: AttributeFilterAnyValue may contain any AnyValue value.
-      $ref: '#/components/schemas/AnyValue'
-    OrderingDirection:
-      type: string
-      enum:
-      - ascending
-      - descending
-      default: ascending
-    ViewDefinition:
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dash0View
-        metadata:
-          $ref: '#/components/schemas/ViewMetadata'
-        spec:
-          $ref: '#/components/schemas/ViewSpec'
-      required:
-      - kind
-      - metadata
-      - spec
-    ViewVisualizationRenderer:
-      type: string
-      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
-
-        The matching prioritizes precise matches before wildcard matches.
-
-        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
-
-        '
-      enum:
-      - traces-explorer/*/outliers
-      - traces-explorer/*/red
-      - logging/*/stacked_bar
-      - resources/*/table-tree
-      - resources/overview/overview
-      - resources/services/red
-      - resources/operations/red
-      - resources/names/red
-      - resources/k8s-cron-jobs/executions
-      - resources/k8s-cron-jobs/red
-      - resources/k8s-daemon-sets/scheduled-nodes
-      - resources/k8s-daemon-sets/red
-      - resources/k8s-deployments/replicas
-      - resources/k8s-deployments/red
-      - resources/k8s-jobs/executions
-      - resources/k8s-jobs/red
-      - resources/k8s-namespaces/red
-      - resources/k8s-nodes/cpu-memory-disk
-      - resources/k8s-nodes/status
-      - resources/k8s-pods/cpu-memory
-      - resources/k8s-pods/status
-      - resources/k8s-pods/red
-      - resources/k8s-replica-sets/replicas
-      - resources/k8s-replica-sets/red
-      - resources/k8s-stateful-sets/replicas
-      - resources/k8s-stateful-sets/red
-      - resources/faas/red
     ViewSpec:
       properties:
         type:
@@ -409,6 +464,7 @@ components:
         display:
           $ref: '#/components/schemas/ViewDisplay'
         permissions:
+          description: "The explicit grants on this view.\n\nOn `PUT /api/views/{originOrId}`, three cases are distinguished:\n\n- **Omitted**: the stored grants are left untouched. Use this when the request carries\n  no opinion about access, for example a content-only update.\n- **Empty array**: the grants are reset to the ones a newly created view receives.\n  This is how a declarative caller removes grants it previously declared — omitting\n  the field would be a silent no-op.\n- **Non-empty array**: the stored grants are replaced by exactly this set.\n\nThe other write endpoints require a set carrying both write and delete, so an empty\narray is rejected there.\n"
           type: array
           items:
             $ref: '#/components/schemas/ViewPermission'
@@ -463,172 +519,22 @@ components:
       required:
       - type
       - display
-    ViewApiListItem:
-      properties:
-        id:
-          type: string
-        origin:
-          type: string
-        dataset:
-          type: string
-        name:
-          type: string
-        type:
-          $ref: '#/components/schemas/ViewType'
-      required:
-      - id
-      - dataset
-      - type
-    ViewLabels:
-      properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          type: string
-          enum:
-          - external
-          - builtin
-          - userdefined
-    ViewType:
-      type: string
-      description: 'The view type describes where this view configuration is intended to be applied in the UI.
-
-        '
-      enum:
-      - resources
-      - services
-      - spans
-      - logs
-      - metrics
-      - failed_checks
-      - web_events
-      - sql
-      - profiles
-      - gcp_cloud_run_services
-      - gcp_cloud_run_jobs
-      - gcp_pubsub
-      - gcp_cloud_storage
-      - gcp_cloud_sql_instances
-      - aws_lambda
-      - slos
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    ViewSpecServiceMapProperties:
-      properties:
-        layout:
-          type: string
-          enum:
-          - flow
-          - force
-        externalServices:
-          type: string
-          enum:
-          - all
-          - group
-          - hide
-        selectedMetric:
-          type: string
-        particles:
-          type: boolean
-        nodeSizing:
-          type: boolean
-        expandedGroups:
-          description: 'A list of expanded group identifiers in the service map. When external services are grouped,
-
-            individual groups can be expanded to show all services within. This list stores which groups
-
-            are currently expanded.
-
-            '
-          type: array
-          items:
-            type: string
-      required:
-      - layout
-      - externalServices
-      - selectedMetric
-      - particles
-      - nodeSizing
-    OrderingKey:
-      type: string
-      description: Any attribute key to order by.
-    ViewTableColumn:
-      properties:
-        key:
-          type: string
-          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
-
-            '
-        label:
-          type: string
-        colSize:
-          type: string
-          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
-
-            and similar variants.
-
-            '
-      required:
-      - key
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    AnyValue:
-      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
-      type: object
-      properties:
-        stringValue:
-          type: string
-        boolValue:
-          type: boolean
-        intValue:
-          type: string
-          format: int64
-        doubleValue:
-          type: number
-          format: double
-        bytesValue:
-          type: string
-          format: byte
-    ViewVisualizationMetric:
+    CrdSource:
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
       type: string
       enum:
-      - logs_total
-      - logs_rate
-      - spans_total
-      - spans_rate
-      - spans_errors_total
-      - spans_errors_rate
-      - spans_errors_percentage
-      - spans_duration_p99
-      - spans_duration_p95
-      - spans_duration_p90
-      - spans_duration_p75
-      - spans_duration_p50
-      - spans_duration_avg
+      - ui
+      - terraform
+      - operator
+      - dash0-cli
+      - platform
+      - identity-provider
+      - api
+    AxisScale:
+      type: string
+      enum:
+      - linear
+      - log10
     AttributeFilterOperator:
       type: string
       enum:
@@ -713,6 +619,43 @@ components:
         - `is_any` - matches any value, ignoring whether the key exists or not
 
         '
+    ViewVisualizationRenderer:
+      type: string
+      description: 'The renderer type for the visualization. The pattern matching is inspired by glob, where `*` can be used as a wildcard.
+
+        The matching prioritizes precise matches before wildcard matches.
+
+        If there are multiple renderers, select buttons will be added to allow toggling between the renderers.
+
+        '
+      enum:
+      - traces-explorer/*/outliers
+      - traces-explorer/*/red
+      - logging/*/stacked_bar
+      - resources/*/table-tree
+      - resources/overview/overview
+      - resources/services/red
+      - resources/operations/red
+      - resources/names/red
+      - resources/k8s-cron-jobs/executions
+      - resources/k8s-cron-jobs/red
+      - resources/k8s-daemon-sets/scheduled-nodes
+      - resources/k8s-daemon-sets/red
+      - resources/k8s-deployments/replicas
+      - resources/k8s-deployments/red
+      - resources/k8s-jobs/executions
+      - resources/k8s-jobs/red
+      - resources/k8s-namespaces/red
+      - resources/k8s-nodes/cpu-memory-disk
+      - resources/k8s-nodes/status
+      - resources/k8s-pods/cpu-memory
+      - resources/k8s-pods/status
+      - resources/k8s-pods/red
+      - resources/k8s-replica-sets/replicas
+      - resources/k8s-replica-sets/red
+      - resources/k8s-stateful-sets/replicas
+      - resources/k8s-stateful-sets/red
+      - resources/faas/red
     ViewMetadata:
       properties:
         name:
@@ -723,6 +666,107 @@ components:
           $ref: '#/components/schemas/ViewAnnotations'
       required:
       - name
+    ViewSpecServiceMapProperties:
+      properties:
+        layout:
+          type: string
+          enum:
+          - flow
+          - force
+        externalServices:
+          type: string
+          enum:
+          - all
+          - group
+          - hide
+        selectedMetric:
+          type: string
+        particles:
+          type: boolean
+        nodeSizing:
+          type: boolean
+        showSyntheticServices:
+          description: 'Whether the services that Dash0 synthetic checks report as are shown in the service map.
+
+            Treated as `true` when omitted.
+
+            '
+          type: boolean
+        showIndirectServices:
+          description: 'Whether services that do not match the filter, but communicate with services that do, are
+
+            shown in the service map. Treated as `true` when omitted.
+
+            '
+          type: boolean
+        expandedGroups:
+          description: 'A list of expanded group identifiers in the service map. When external services are grouped,
+
+            individual groups can be expanded to show all services within. This list stores which groups
+
+            are currently expanded.
+
+            '
+          type: array
+          items:
+            type: string
+      required:
+      - layout
+      - externalServices
+      - selectedMetric
+      - particles
+      - nodeSizing
+    ViewApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/ViewType'
+      required:
+      - id
+      - dataset
+      - type
+    ViewType:
+      type: string
+      description: 'The view type describes where this view configuration is intended to be applied in the UI.
+
+        '
+      enum:
+      - resources
+      - services
+      - spans
+      - logs
+      - metrics
+      - failed_checks
+      - web_events
+      - sql
+      - profiles
+      - gcp_cloud_run_services
+      - gcp_cloud_run_jobs
+      - gcp_pubsub
+      - gcp_cloud_storage
+      - gcp_cloud_sql_instances
+      - aws_lambda
+      - slos
+    OrderingCriteria:
+      type: array
+      description: Any supported attribute keys to order by.
+      items:
+        $ref: '#/components/schemas/OrderingCriterion'
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
     ViewVisualization:
       properties:
         yAxisScale:
@@ -748,8 +792,38 @@ components:
       required:
       - type
       - renderers
-    OrderingCriteria:
-      type: array
-      description: Any supported attribute keys to order by.
-      items:
-        $ref: '#/components/schemas/OrderingCriterion'
+    OrderingKey:
+      type: string
+      description: Any attribute key to order by.
+    ViewAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''. Sharing is honored only on assets that declare a dash0.com/origin (for example those managed by Terraform, the operator, the CLI, or the API). Setting it on an asset that declares no dash0.com/origin is rejected with a 400 — manage that asset''s access via the UI share dialog instead.'
+          type: string
+    ViewTableColumn:
+      properties:
+        key:
+          type: string
+          description: 'The key of the attribute to be displayed in this column. This can also be a built-in column name.
+
+            '
+        label:
+          type: string
+        colSize:
+          type: string
+          description: 'A CSS grid layout sizing instruction. Supports hard-coded sizing such as `7rem`, but also `min-content`
+
+            and similar variants.
+
+            '
+      required:
+      - key
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'

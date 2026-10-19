@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Query SQL API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -51,9 +77,66 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Query SQL
-      operationId: post_api-sql
+      operationId: postApiSql
+      x-operation-id-source: derived
 components:
   schemas:
+    TimeReference:
+      x-go-type: any
+      oneOf:
+      - $ref: '#/components/schemas/FixedTime'
+      - $ref: '#/components/schemas/FixedTimeUnix'
+      - $ref: '#/components/schemas/RelativeTime'
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    FixedTimeUnix:
+      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
+      type: string
+    FixedTime:
+      type: string
+      format: date-time
+      description: 'A fixed point in time represented as an RFC 3339 date-time string.
+
+
+        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
+
+
+        **Examples**:
+
+        - `2024-01-15T14:30:00Z`
+
+        - `2024-01-15T14:30:00+08:00`
+
+        '
     ErrorResponse:
       type: object
       properties:
@@ -78,164 +161,6 @@ components:
         bytesValue:
           type: string
           format: byte
-    D0QLWarnings:
-      type: array
-      items:
-        type: string
-    QueryError:
-      description: 'Structured error information for query errors. Present alongside the error string when the error is related to the user''s query (syntax, semantic, or execution errors). Not present for system-level errors (unauthorized access, unexpected failures).
-
-        '
-      properties:
-        title:
-          type: string
-          description: Short error title in plain text (no markdown), e.g. Syntax error - Invalid LIMIT clause
-        description:
-          type: string
-          description: Human-readable explanation of what went wrong and how to fix it. May contain markdown (inline code, bold, lists).
-        correctedQuery:
-          type: string
-          description: Validated and formatted corrected SQL query. Only present when an AI-suggested correction is available and passes validation.
-      required:
-      - title
-      - description
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    TimeReference:
-      x-go-type: any
-      oneOf:
-      - $ref: '#/components/schemas/FixedTime'
-      - $ref: '#/components/schemas/FixedTimeUnix'
-      - $ref: '#/components/schemas/RelativeTime'
-    TimeReferenceRange:
-      description: 'A range of time between two time references.
-
-        '
-      properties:
-        from:
-          $ref: '#/components/schemas/TimeReference'
-        to:
-          $ref: '#/components/schemas/TimeReference'
-      required:
-      - from
-      - to
-      example:
-        from: now-30m
-        to: now
-    ResultRow:
-      properties:
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/KeyValue'
-      required:
-      - values
-    ExecuteSqlRequest:
-      properties:
-        timeRange:
-          $ref: '#/components/schemas/TimeReferenceRange'
-        dataset:
-          $ref: '#/components/schemas/Dataset'
-        query:
-          type: string
-      required:
-      - timeRange
-      - query
-    KeyValue:
-      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          $ref: '#/components/schemas/AnyValue'
-      required:
-      - key
-      - value
-    ExecuteSqlResponse:
-      properties:
-        executionTime:
-          $ref: '#/components/schemas/FixedTime'
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
-        error:
-          type: string
-        queryError:
-          $ref: '#/components/schemas/QueryError'
-        progress:
-          $ref: '#/components/schemas/Progress'
-        resultRows:
-          $ref: '#/components/schemas/ResultRows'
-        warnings:
-          $ref: '#/components/schemas/D0QLWarnings'
-      required:
-      - executionTime
-      - timeRange
-      - warnings
-    TimeRange:
-      properties:
-        from:
-          $ref: '#/components/schemas/FixedTime'
-        to:
-          $ref: '#/components/schemas/FixedTime'
-      required:
-      - from
-      - to
-    Progress:
-      properties:
-        rowsRead:
-          type: integer
-          format: uint64
-        bytesRead:
-          type: integer
-          format: uint64
-        totalRowsToRead:
-          type: integer
-          format: uint64
-        executionTimeMillis:
-          type: integer
-          format: uint64
-      required:
-      - rowsRead
-      - bytesRead
-      - totalRowsToRead
-      - executionTimeMillis
-    FixedTime:
-      type: string
-      format: date-time
-      description: 'A fixed point in time represented as an RFC 3339 date-time string.
-
-
-        **Format**: `YYYY-MM-DDTHH:MM:SSZ` (UTC) or `YYYY-MM-DDTHH:MM:SS±HH:MM` (with timezone offset)
-
-
-        **Examples**:
-
-        - `2024-01-15T14:30:00Z`
-
-        - `2024-01-15T14:30:00+08:00`
-
-        '
-    FixedTimeUnix:
-      description: The time corresponding to the given unix time in seconds and nanoseconds (as decimal places) since January 1, 1970 UTC.
-      type: string
-    ResultRows:
-      type: array
-      items:
-        $ref: '#/components/schemas/ResultRow'
     RelativeTime:
       type: string
       pattern: ^now.*$
@@ -271,3 +196,125 @@ components:
         - `M` - months
 
         '
+    QueryError:
+      description: 'Structured error information for query errors. Present alongside the error string when the error is related to the user''s query (syntax, semantic, or execution errors). Not present for system-level errors (unauthorized access, unexpected failures).
+
+        '
+      properties:
+        title:
+          type: string
+          description: Short error title in plain text (no markdown), e.g. Syntax error - Invalid LIMIT clause
+        description:
+          type: string
+          description: Human-readable explanation of what went wrong and how to fix it. May contain markdown (inline code, bold, lists).
+        correctedQuery:
+          type: string
+          description: Validated and formatted corrected SQL query. Only present when an AI-suggested correction is available and passes validation.
+      required:
+      - title
+      - description
+    ResultRows:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResultRow'
+    TimeRange:
+      properties:
+        from:
+          $ref: '#/components/schemas/FixedTime'
+        to:
+          $ref: '#/components/schemas/FixedTime'
+      required:
+      - from
+      - to
+    KeyValue:
+      description: KeyValue is a key-value pair that is used to store Span attributes, Link attributes, etc.
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+      required:
+      - key
+      - value
+    D0QLWarnings:
+      type: array
+      items:
+        type: string
+    Progress:
+      properties:
+        rowsRead:
+          type: integer
+          format: uint64
+        bytesRead:
+          type: integer
+          format: uint64
+        totalRowsToRead:
+          type: integer
+          format: uint64
+        executionTimeMillis:
+          type: integer
+          format: uint64
+      required:
+      - rowsRead
+      - bytesRead
+      - totalRowsToRead
+      - executionTimeMillis
+    TimeReferenceRange:
+      description: 'A range of time between two time references.
+
+        '
+      properties:
+        from:
+          $ref: '#/components/schemas/TimeReference'
+        to:
+          $ref: '#/components/schemas/TimeReference'
+      required:
+      - from
+      - to
+      example:
+        from: now-30m
+        to: now
+    ResultRow:
+      properties:
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/KeyValue'
+      required:
+      - values
+    ExecuteSqlResponse:
+      properties:
+        executionTime:
+          $ref: '#/components/schemas/FixedTime'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+        error:
+          type: string
+        queryError:
+          $ref: '#/components/schemas/QueryError'
+        progress:
+          $ref: '#/components/schemas/Progress'
+        resultRows:
+          $ref: '#/components/schemas/ResultRows'
+        warnings:
+          $ref: '#/components/schemas/D0QLWarnings'
+      required:
+      - executionTime
+      - timeRange
+      - warnings
+    ExecuteSqlRequest:
+      properties:
+        timeRange:
+          $ref: '#/components/schemas/TimeReferenceRange'
+        dataset:
+          $ref: '#/components/schemas/Dataset'
+        query:
+          type: string
+      required:
+      - timeRange
+      - query
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

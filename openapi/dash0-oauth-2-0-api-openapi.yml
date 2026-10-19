@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 OAuth 2.0 API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,6 +53,56 @@ servers:
 tags:
 - name: OAuth 2.0
 paths:
+  /.well-known/oauth-authorization-server:
+    get:
+      summary: OAuth 2.0 Authorization Server Metadata
+      description: 'Returns the OAuth 2.0 Authorization Server Metadata document (RFC 8414).
+
+        Clients use this endpoint to discover authorization server capabilities
+
+        and endpoint locations.'
+      tags:
+      - OAuth 2.0
+      responses:
+        '200':
+          description: Authorization server metadata document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthAuthorizationServerMetadata'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getWellKnownOauthAuthorizationServer
+      x-operation-id-source: derived
+  /.well-known/oauth-protected-resource:
+    get:
+      summary: OAuth 2.0 Protected Resource Metadata
+      description: 'Returns the OAuth 2.0 Protected Resource Metadata document (RFC 9728).
+
+        MCP clients use this endpoint to discover which authorization server(s)
+
+        can issue tokens accepted by this resource server.'
+      tags:
+      - OAuth 2.0
+      responses:
+        '200':
+          description: Protected resource metadata document.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthProtectedResourceMetadata'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getWellKnownOauthProtectedResource
+      x-operation-id-source: derived
   /oauth/authorize:
     get:
       summary: OAuth 2.0 Authorization Endpoint (Unauthenticated)
@@ -102,55 +178,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      operationId: get_oauth-authorize
-  /.well-known/oauth-authorization-server:
-    get:
-      summary: OAuth 2.0 Authorization Server Metadata
-      description: 'Returns the OAuth 2.0 Authorization Server Metadata document (RFC 8414).
-
-        Clients use this endpoint to discover authorization server capabilities
-
-        and endpoint locations.'
-      tags:
-      - OAuth 2.0
-      responses:
-        '200':
-          description: Authorization server metadata document.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuthAuthorizationServerMetadata'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      operationId: get_well-known-oauth-authorization-server
-  /.well-known/oauth-protected-resource:
-    get:
-      summary: OAuth 2.0 Protected Resource Metadata
-      description: 'Returns the OAuth 2.0 Protected Resource Metadata document (RFC 9728).
-
-        MCP clients use this endpoint to discover which authorization server(s)
-
-        can issue tokens accepted by this resource server.'
-      tags:
-      - OAuth 2.0
-      responses:
-        '200':
-          description: Protected resource metadata document.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuthProtectedResourceMetadata'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      operationId: get_well-known-oauth-protected-resource
+      operationId: getOauthAuthorize
+      x-operation-id-source: derived
   /oauth/register:
     post:
       summary: Register a new OAuth client
@@ -178,7 +207,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      operationId: post_oauth-register
+      operationId: postOauthRegister
+      x-operation-id-source: derived
   /oauth/revoke:
     post:
       summary: OAuth 2.0 Token Revocation
@@ -198,13 +228,24 @@ paths:
       responses:
         '200':
           description: Token revocation request processed. Returns 200 regardless of whether the token was valid.
+        '400':
+          description: 'Revocation request failed (RFC 7009 section 2.2.1). Error presentation follows
+
+            RFC 6749 section 5.2 — e.g. missing or empty `client_id` → `invalid_request`.
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthTokenErrorResponse'
         default:
           description: In case any error happens.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      operationId: post_oauth-revoke
+      operationId: postOauthRevoke
+      x-operation-id-source: derived
   /oauth/token:
     post:
       summary: OAuth 2.0 Token Endpoint
@@ -240,9 +281,123 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-      operationId: post_oauth-token
+      operationId: postOauthToken
+      x-operation-id-source: derived
 components:
   schemas:
+    OAuthCodeChallengeMethod:
+      type: string
+      enum:
+      - S256
+      description: '- `S256`: SHA-256 based code challenge method for PKCE (RFC 7636 section 4.2).
+
+        '
+    OAuthProtectedResourceMetadata:
+      properties:
+        resource:
+          type: string
+          format: uri
+          description: The resource server's resource identifier (its canonical URI).
+        authorization_servers:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Array of authorization server issuer identifiers that can issue tokens accepted by this resource.
+        scopes_supported:
+          type: array
+          items:
+            type: string
+          description: List of scopes supported by this resource server.
+        bearer_methods_supported:
+          type: array
+          items:
+            type: string
+          description: Methods supported for sending bearer tokens to this resource (e.g., "header").
+        resource_documentation:
+          type: string
+          format: uri
+          description: URL of documentation for this protected resource.
+      required:
+      - resource
+      - authorization_servers
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    OAuthClientRegistrationResponse:
+      properties:
+        client_id:
+          type: string
+          description: Unique client identifier issued by the authorization server.
+        client_name:
+          type: string
+          description: Human-readable name of the client.
+        redirect_uris:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Array of allowed redirect URIs.
+        grant_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OAuthGrantType'
+          description: Grant types the client is registered for.
+        response_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/OAuthResponseType'
+          description: Response types the client is registered for.
+        token_endpoint_auth_method:
+          $ref: '#/components/schemas/OAuthTokenEndpointAuthMethod'
+          description: Authentication method for the token endpoint.
+        scope:
+          type: string
+          description: Space-separated list of scopes the client is registered for.
+        client_uri:
+          type: string
+          format: uri
+          description: URL of the client's home page.
+        logo_uri:
+          type: string
+          format: uri
+          description: URL of the client's logo image.
+        registration_access_token:
+          type: string
+          description: Token for managing this client registration (RFC 7592).
+      required:
+      - client_id
+      - client_name
+      - redirect_uris
+      - registration_access_token
     OAuthAuthorizationServerMetadata:
       properties:
         issuer:
@@ -303,6 +458,16 @@ components:
       - authorization_endpoint
       - token_endpoint
       - response_types_supported
+    OAuthTokenType:
+      type: string
+      enum:
+      - access_token
+      - refresh_token
+      description: '- `access_token`: An OAuth 2.0 access token.
+
+        - `refresh_token`: An OAuth 2.0 refresh token.
+
+        '
     ErrorResponse:
       type: object
       properties:
@@ -310,23 +475,48 @@ components:
           $ref: '#/components/schemas/Error'
       required:
       - error
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
+    OAuthResponseType:
+      type: string
+      enum:
       - code
-      - message
+      description: '- `code`: The authorization code response type (RFC 6749 section 4.1.1).
+
+        '
+    OAuthTokenErrorResponse:
+      properties:
+        error:
+          type: string
+          description: 'A single ASCII error code. Standard values include:
+
+            invalid_request, invalid_client, invalid_grant, unauthorized_client,
+
+            unsupported_grant_type, invalid_scope.
+
+            '
+        error_description:
+          type: string
+          description: Human-readable description providing additional information.
+        error_uri:
+          type: string
+          format: uri
+          description: URI identifying a human-readable web page with error information.
+      required:
+      - error
     OAuthRevocationRequest:
       type: object
       properties:
         token:
           type: string
           description: The token to be revoked.
+        client_id:
+          type: string
+          description: 'The identifier of the client the token was issued to. RFC 7009 section 2.1 requires the
+
+            revocation request to be authenticated as that client, so a token issued to a different
+
+            client is left untouched (the response is still 200).
+
+            '
         token_type_hint:
           $ref: '#/components/schemas/OAuthTokenType'
           description: 'Hint about the type of the token being revoked. Helps the server optimize lookup.
@@ -334,6 +524,44 @@ components:
             '
       required:
       - token
+      - client_id
+    OAuthTokenEndpointAuthMethod:
+      type: string
+      enum:
+      - none
+      description: '- `none`: Public client, no client authentication (used by CLI/MCP clients).
+
+        Only public clients are supported. This deviates from RFC 7591 which defaults
+
+        to `client_secret_basic` when omitted.
+
+        '
+    OAuthTokenRequest:
+      type: object
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/OAuthGrantType'
+        code:
+          type: string
+          description: The authorization code (required for authorization_code grant).
+        redirect_uri:
+          type: string
+          format: uri
+          description: Must match the redirect_uri used in the authorization request (required for authorization_code grant).
+        client_id:
+          type: string
+          description: The client identifier.
+        code_verifier:
+          type: string
+          description: PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).
+        refresh_token:
+          type: string
+          description: The refresh token (required for refresh_token grant).
+        scope:
+          type: string
+          description: Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.
+      required:
+      - grant_type
     OAuthTokenResponse:
       properties:
         access_token:
@@ -363,89 +591,26 @@ components:
       - access_token
       - token_type
       - expires_in
-    OAuthResponseType:
+    OAuthGrantType:
       type: string
       enum:
-      - code
-      description: '- `code`: The authorization code response type (RFC 6749 section 4.1.1).
-
-        '
-    OAuthClientRegistrationResponse:
-      properties:
-        client_id:
-          type: string
-          description: Unique client identifier issued by the authorization server.
-        client_name:
-          type: string
-          description: Human-readable name of the client.
-        redirect_uris:
-          type: array
-          items:
-            type: string
-            format: uri
-          description: Array of allowed redirect URIs.
-        grant_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthGrantType'
-          description: Grant types the client is registered for.
-        response_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/OAuthResponseType'
-          description: Response types the client is registered for.
-        token_endpoint_auth_method:
-          $ref: '#/components/schemas/OAuthTokenEndpointAuthMethod'
-          description: Authentication method for the token endpoint.
-        scope:
-          type: string
-          description: Space-separated list of scopes the client is registered for.
-        client_uri:
-          type: string
-          format: uri
-          description: URL of the client's home page.
-        logo_uri:
-          type: string
-          format: uri
-          description: URL of the client's logo image.
-        registration_access_token:
-          type: string
-          description: Token for managing this client registration (RFC 7592).
-      required:
-      - client_id
-      - client_name
-      - redirect_uris
-      - registration_access_token
-    OAuthTokenType:
-      type: string
-      enum:
-      - access_token
+      - authorization_code
       - refresh_token
-      description: '- `access_token`: An OAuth 2.0 access token.
+      description: '- `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).
 
-        - `refresh_token`: An OAuth 2.0 refresh token.
+        - `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).
 
         '
-    OAuthTokenErrorResponse:
-      properties:
-        error:
-          type: string
-          description: 'A single ASCII error code. Standard values include:
+    DatasetRestriction:
+      type: string
+      description: 'Whether the list of datasets on an auth token limits what it can reach. Clients must accept
 
-            invalid_request, invalid_client, invalid_grant, unauthorized_client,
+        values they do not recognize.
 
-            unsupported_grant_type, invalid_scope.
-
-            '
-        error_description:
-          type: string
-          description: Human-readable description providing additional information.
-        error_uri:
-          type: string
-          format: uri
-          description: URI identifying a human-readable web page with error information.
-      required:
-      - error
+        '
+      enum:
+      - restricted
+      - unrestricted
     OAuthClientRegistrationRequest:
       properties:
         client_name:
@@ -486,91 +651,3 @@ components:
       required:
       - client_name
       - redirect_uris
-    OAuthTokenEndpointAuthMethod:
-      type: string
-      enum:
-      - none
-      description: '- `none`: Public client, no client authentication (used by CLI/MCP clients).
-
-        Only public clients are supported. This deviates from RFC 7591 which defaults
-
-        to `client_secret_basic` when omitted.
-
-        '
-    OAuthGrantType:
-      type: string
-      enum:
-      - authorization_code
-      - refresh_token
-      description: '- `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).
-
-        - `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).
-
-        '
-    DatasetRestriction:
-      type: string
-      enum:
-      - restricted
-      - unrestricted
-    OAuthCodeChallengeMethod:
-      type: string
-      enum:
-      - S256
-      description: '- `S256`: SHA-256 based code challenge method for PKCE (RFC 7636 section 4.2).
-
-        '
-    OAuthTokenRequest:
-      type: object
-      properties:
-        grant_type:
-          $ref: '#/components/schemas/OAuthGrantType'
-        code:
-          type: string
-          description: The authorization code (required for authorization_code grant).
-        redirect_uri:
-          type: string
-          format: uri
-          description: Must match the redirect_uri used in the authorization request (required for authorization_code grant).
-        client_id:
-          type: string
-          description: The client identifier.
-        code_verifier:
-          type: string
-          description: PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).
-        refresh_token:
-          type: string
-          description: The refresh token (required for refresh_token grant).
-        scope:
-          type: string
-          description: Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.
-      required:
-      - grant_type
-    OAuthProtectedResourceMetadata:
-      properties:
-        resource:
-          type: string
-          format: uri
-          description: The resource server's resource identifier (its canonical URI).
-        authorization_servers:
-          type: array
-          items:
-            type: string
-            format: uri
-          description: Array of authorization server issuer identifiers that can issue tokens accepted by this resource.
-        scopes_supported:
-          type: array
-          items:
-            type: string
-          description: List of scopes supported by this resource server.
-        bearer_methods_supported:
-          type: array
-          items:
-            type: string
-          description: Methods supported for sending bearer tokens to this resource (e.g., "header").
-        resource_documentation:
-          type: string
-          format: uri
-          description: URL of documentation for this protected resource.
-      required:
-      - resource
-      - authorization_servers

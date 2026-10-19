@@ -80,7 +80,8 @@ apis:
     url: openapi/dash0-edge-collectors-api-openapi.yml
 - aid: dash0:dash0-manage-agent0-automations-api
   name: Dash0 Manage Agent0 Automations API
-  description: The Manage Agent0 Automations API from Dash0 — 2 operation(s) for manage agent0 automations.
+  description: >-
+    The Manage Agent0 Automations API from Dash0 — 2 operation(s) for manage agent0 automations.
   humanURL: https://api-docs.dash0.com/
   baseURL: https://api.eu-west-1.aws.dash0.com
   tags:
@@ -110,8 +111,8 @@ apis:
     url: openapi/dash0-manage-dashboards-api-openapi.yml
 - aid: dash0:dash0-manage-notification-channels-api
   name: Dash0 Manage Notification Channels API
-  description: The Manage Notification Channels API from Dash0 — 2 operation(s) for manage notification
-    channels.
+  description: >-
+    The Manage Notification Channels API from Dash0 — 2 operation(s) for manage notification channels.
   humanURL: https://api-docs.dash0.com/
   baseURL: https://api.eu-west-1.aws.dash0.com
   tags:
@@ -139,28 +140,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/dash0-manage-sampling-rules-api-openapi.yml
-- aid: dash0:dash0-manage-signal-to-metrics-beta-api
-  name: Dash0 Manage Signal To Metrics (BETA) API
-  description: The Manage Signal To Metrics (BETA) API from Dash0 — 4 operation(s) for manage signal to
-    metrics (beta).
-  humanURL: https://api-docs.dash0.com/
-  baseURL: https://api.eu-west-1.aws.dash0.com
-  tags:
-  - Manage Signal To Metrics (BETA)
-  properties:
-  - type: OpenAPI
-    url: openapi/dash0-manage-signal-to-metrics-beta-api-openapi.yml
-- aid: dash0:dash0-manage-slos-private-beta-api
-  name: Dash0 Manage SLOs (Private BETA) API
-  description: The Manage SLOs (Private BETA) API from Dash0 — 2 operation(s) for manage slos (private
-    beta).
-  humanURL: https://api-docs.dash0.com/
-  baseURL: https://api.eu-west-1.aws.dash0.com
-  tags:
-  - Manage SLOs (Private BETA)
-  properties:
-  - type: OpenAPI
-    url: openapi/dash0-manage-slos-private-beta-api-openapi.yml
 - aid: dash0:dash0-manage-spam-filters-api
   name: Dash0 Manage Spam Filters API
   description: The Manage Spam Filters API from Dash0 — 2 operation(s) for manage spam filters.
@@ -183,7 +162,8 @@ apis:
     url: openapi/dash0-manage-synthetic-checks-api-openapi.yml
 - aid: dash0:dash0-manage-teams-and-members-api
   name: Dash0 Manage Teams and Members API
-  description: The Manage Teams and Members API from Dash0 — 7 operation(s) for manage teams and members.
+  description: >-
+    The Manage Teams and Members API from Dash0 — 7 operation(s) for manage teams and members.
   humanURL: https://api-docs.dash0.com/
   baseURL: https://api.eu-west-1.aws.dash0.com
   tags:
@@ -191,17 +171,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/dash0-manage-teams-and-members-api-openapi.yml
-- aid: dash0:dash0-manage-time-series-aggregations-private-beta-api
-  name: Dash0 Manage Time Series Aggregations (Private BETA) API
-  description: The Manage Time Series Aggregations (Private BETA) API from Dash0 — 2 operation(s) for
-    manage time series aggregations (private beta).
-  humanURL: https://api-docs.dash0.com/
-  baseURL: https://api.eu-west-1.aws.dash0.com
-  tags:
-  - Manage Time Series Aggregations (Private BETA)
-  properties:
-  - type: OpenAPI
-    url: openapi/dash0-manage-time-series-aggregations-private-beta-api-openapi.yml
 - aid: dash0:dash0-manage-views-api
   name: Dash0 Manage Views API
   description: The Manage Views API from Dash0 — 3 operation(s) for manage views.
@@ -254,6 +223,58 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/dash0-query-telemetry-api-openapi.yml
+- aid: dash0:dash0-manage-auth-tokens-api
+  name: Dash0 Manage Auth Tokens API
+  description: The Manage Auth Tokens API from Dash0 — 2 operation(s) for manage auth tokens.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Auth Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-auth-tokens-api-openapi.yml
+- aid: dash0:dash0-manage-datasets-api
+  name: Dash0 Manage Datasets API
+  description: The Manage Datasets API from Dash0 — 2 operation(s) for manage datasets.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Datasets
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-datasets-api-openapi.yml
+- aid: dash0:dash0-manage-signal-to-metrics-api
+  name: Dash0 Manage Signal To Metrics API
+  description: >-
+    The Manage Signal To Metrics API from Dash0 — 4 operation(s) for manage signal to metrics.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Signal To Metrics
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-signal-to-metrics-api-openapi.yml
+- aid: dash0:dash0-manage-slos-api
+  name: Dash0 Manage SLOs API
+  description: The Manage SLOs API from Dash0 — 3 operation(s) for manage slos.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage SLOs
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-slos-api-openapi.yml
+- aid: dash0:dash0-manage-time-series-aggregations-api
+  name: Dash0 Manage Time Series Aggregations API
+  description: >-
+    The Manage Time Series Aggregations API from Dash0 — 2 operation(s) for manage time series aggregations.
+  humanURL: https://api-docs.dash0.com/
+  baseURL: https://api.eu-west-1.aws.dash0.com
+  tags:
+  - Manage Time Series Aggregations
+  properties:
+  - type: OpenAPI
+    url: openapi/dash0-manage-time-series-aggregations-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

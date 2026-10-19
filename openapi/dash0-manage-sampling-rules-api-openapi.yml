@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Manage Sampling Rules API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,6 +53,77 @@ servers:
 tags:
 - name: Manage Sampling Rules
 paths:
+  /api/sampling-rules:
+    get:
+      summary: List all sampling rules for the organization
+      description: Returns all sampling rules configured for your organization.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: List of sampling rules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSamplingRulesResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Sampling Rules
+      operationId: getApiSamplingRules
+      x-operation-id-source: derived
+    post:
+      summary: Create a new sampling rule
+      description: 'Create a new sampling rule for your organization. If you set
+
+        `metadata.labels["dash0.com/origin"]`, it must be unique within the organization,
+
+        across all datasets. See "Resource origins" in the introduction. A request with a
+
+        duplicate origin returns 400. To run the same rule in several datasets, put the
+
+        dataset in the origin.'
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SamplingRuleCreateRequest'
+      responses:
+        '200':
+          description: The created sampling rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SamplingRuleResponse'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Sampling Rules
+      operationId: postApiSamplingRules
+      x-operation-id-source: derived
   /api/sampling-rules/{originOrId}:
     delete:
       summary: Delete a sampling rule by origin or ID
@@ -59,7 +156,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Sampling Rules
-      operationId: delete_api-sampling-rules-originorid
+      operationId: deleteApiSamplingRulesByOriginOrId
+      x-operation-id-source: derived
     get:
       summary: Get a specific sampling rule by origin or ID
       description: Returns a specific sampling rule identified by its origin label or UUID.
@@ -80,7 +178,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SamplingDefinition'
+                $ref: '#/components/schemas/SamplingRuleResponse'
         default:
           description: In case any error happens.
           content:
@@ -89,7 +187,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Sampling Rules
-      operationId: get_api-sampling-rules-originorid
+      operationId: getApiSamplingRulesByOriginOrId
+      x-operation-id-source: derived
     put:
       summary: Update or create a sampling rule by origin or ID
       description: Updates an existing sampling rule or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.
@@ -109,14 +208,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SamplingDefinition'
+              $ref: '#/components/schemas/SamplingRuleResponse'
       responses:
         '200':
           description: The updated or created sampling rule
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SamplingDefinition'
+                $ref: '#/components/schemas/SamplingRuleResponse'
         '403':
           description: Forbidden - Admin access required
           content:
@@ -131,111 +230,50 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Sampling Rules
-      operationId: put_api-sampling-rules-originorid
-  /api/sampling-rules:
-    get:
-      summary: List all sampling rules for the organization
-      description: Returns all sampling rules configured for your organization.
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: List of sampling rules
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSamplingRulesResponse'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Sampling Rules
-      operationId: get_api-sampling-rules
-    post:
-      summary: Create a new sampling rule
-      description: Create a new sampling rule for your organization.
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SamplingDefinition'
-      responses:
-        '200':
-          description: The created sampling rule
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SamplingDefinition'
-        '403':
-          description: Forbidden - Admin access required
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Sampling Rules
-      operationId: post_api-sampling-rules
+      operationId: putApiSamplingRulesByOriginOrId
+      x-operation-id-source: derived
 components:
   schemas:
-    SamplingLabels:
+    Error:
       properties:
-        dash0.com/id:
-          type: string
-        dash0.com/origin:
-          type: string
-        dash0.com/version:
-          type: string
-        dash0.com/dataset:
-          type: string
-        dash0.com/source:
-          $ref: '#/components/schemas/CrdSource'
-        custom:
-          type: object
-          additionalProperties:
-            type: string
-    SamplingConditionOttl:
-      properties:
-        kind:
-          type: string
-          enum:
-          - ottl
-        spec:
-          $ref: '#/components/schemas/SamplingConditionOttlSpec'
-      required:
-      - kind
-      - spec
-    SamplingConditionError:
-      description: 'Matches spans that have the have `otel.span.status.code=ERROR`
+        code:
+          type: integer
+          description: 'HTTP status code.
 
-        '
-      properties:
-        kind:
+            '
+        type:
           type: string
-          enum:
-          - error
-        spec:
-          $ref: '#/components/schemas/SamplingConditionErrorSpec'
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
       required:
-      - kind
-      - spec
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    SamplingRuleCreateRequest:
+      $ref: '#/components/schemas/SamplingDefinition'
     SamplingSpec:
       properties:
         enabled:
@@ -249,14 +287,6 @@ components:
       required:
       - enabled
       - conditions
-    GetSamplingRulesResponse:
-      properties:
-        samplingRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/SamplingDefinition'
-      required:
-      - samplingRules
     SamplingDisplay:
       properties:
         name:
@@ -266,17 +296,6 @@ components:
 
             '
           type: string
-      required:
-      - name
-    SamplingConditionErrorSpec:
-      properties: {}
-      required: []
-    SamplingMetadata:
-      properties:
-        name:
-          type: string
-        labels:
-          $ref: '#/components/schemas/SamplingLabels'
       required:
       - name
     SamplingConditionAnd:
@@ -290,45 +309,10 @@ components:
       required:
       - kind
       - spec
-    SamplingCondition:
-      anyOf:
-      - $ref: '#/components/schemas/SamplingConditionAnd'
-      - $ref: '#/components/schemas/SamplingConditionOttl'
-      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
-      - $ref: '#/components/schemas/SamplingConditionError'
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    SamplingConditionProbabilisticSpec:
-      properties:
-        rate:
-          type: number
-          minimum: 0
-          maximum: 1
-          description: 'A value between 0 and 1 reflecting the percentage of traces that should be sampled probabilistically.
-
-            This sampling decision is made deterministically by inspecting the trace ID.
-
-            '
-      required:
-      - rate
-    SamplingConditionAndSpec:
-      properties:
-        conditions:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/SamplingCondition'
-      required:
-      - conditions
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     SamplingDefinition:
       properties:
         kind:
@@ -343,35 +327,28 @@ components:
       - kind
       - metadata
       - spec
+    SamplingMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/SamplingLabels'
+      required:
+      - name
     CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
       type: string
       enum:
       - ui
       - terraform
       - operator
+      - dash0-cli
+      - platform
+      - identity-provider
       - api
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - error
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    SamplingConditionErrorSpec:
+      properties: {}
+      required: []
     SamplingConditionProbabilistic:
       properties:
         kind:
@@ -380,6 +357,37 @@ components:
           - probabilistic
         spec:
           $ref: '#/components/schemas/SamplingConditionProbabilisticSpec'
+      required:
+      - kind
+      - spec
+    GetSamplingRulesResponse:
+      properties:
+        samplingRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SamplingDefinition'
+      required:
+      - samplingRules
+    SamplingConditionAndSpec:
+      properties:
+        conditions:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SamplingCondition'
+      required:
+      - conditions
+    SamplingConditionError:
+      description: 'Matches spans that have the have `otel.span.status.code=ERROR`
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - error
+        spec:
+          $ref: '#/components/schemas/SamplingConditionErrorSpec'
       required:
       - kind
       - spec
@@ -409,9 +417,57 @@ components:
             '
       required:
       - rate
+    SamplingConditionOttl:
+      properties:
+        kind:
+          type: string
+          enum:
+          - ottl
+        spec:
+          $ref: '#/components/schemas/SamplingConditionOttlSpec'
+      required:
+      - kind
+      - spec
     SamplingConditionOttlSpec:
       properties:
         ottl:
           type: string
       required:
       - ottl
+    SamplingConditionProbabilisticSpec:
+      properties:
+        rate:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: 'A value between 0 and 1 reflecting the percentage of traces that should be sampled probabilistically.
+
+            This sampling decision is made deterministically by inspecting the trace ID.
+
+            '
+      required:
+      - rate
+    SamplingLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    SamplingRuleResponse:
+      $ref: '#/components/schemas/SamplingDefinition'
+    SamplingCondition:
+      anyOf:
+      - $ref: '#/components/schemas/SamplingConditionAnd'
+      - $ref: '#/components/schemas/SamplingConditionOttl'
+      - $ref: '#/components/schemas/SamplingConditionProbabilistic'
+      - $ref: '#/components/schemas/SamplingConditionError'

@@ -1,0 +1,663 @@
+openapi: 3.2.0
+info:
+  title: Dash0 Manage Time Series Aggregations API
+  version: 1.0.0
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.'
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Time Series Aggregations
+paths:
+  /api/time-series-aggregations:
+    get:
+      summary: List all time series aggregations for the organization
+      description: Returns all time series aggregation rules configured for your organization.
+      tags:
+      - Manage Time Series Aggregations
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: List of time series aggregations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesAggregationListResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiTimeSeriesAggregations
+      x-operation-id-source: derived
+    post:
+      summary: Create a new time series aggregation
+      description: 'Create a new time series aggregation rule for your organization. If
+
+        `metadata.labels["dash0.com/origin"]` is provided, it must be unique within the
+
+        organization and dataset; a request with a duplicate origin returns 400. If no
+
+        origin is provided, the server auto-generates one.'
+      tags:
+      - Manage Time Series Aggregations
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+      responses:
+        '200':
+          description: The created time series aggregation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: postApiTimeSeriesAggregations
+      x-operation-id-source: derived
+  /api/time-series-aggregations/{originOrId}:
+    delete:
+      summary: Delete a time series aggregation by origin or ID
+      description: Deletes a specific time series aggregation identified by its origin label or UUID.
+      tags:
+      - Manage Time Series Aggregations
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Time series aggregation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successfully deleted
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: deleteApiTimeSeriesAggregationsByOriginOrId
+      x-operation-id-source: derived
+    get:
+      summary: Get a specific time series aggregation by origin or ID
+      description: Returns a specific time series aggregation identified by its origin label or UUID.
+      tags:
+      - Manage Time Series Aggregations
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Time series aggregation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: The requested time series aggregation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApiTimeSeriesAggregationsByOriginOrId
+      x-operation-id-source: derived
+    put:
+      summary: Update or create a time series aggregation by origin or ID
+      description: 'Updates an existing time series aggregation or creates a new one if it doesn''t exist.
+
+        Useful for Infrastructure-as-Code workflows.'
+      tags:
+      - Manage Time Series Aggregations
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Time series aggregation origin or UUID
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+      responses:
+        '200':
+          description: The updated or created time series aggregation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+        '403':
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: putApiTimeSeriesAggregationsByOriginOrId
+      x-operation-id-source: derived
+components:
+  schemas:
+    TimeSeriesAggregationDisplay:
+      properties:
+        name:
+          description: 'Short-form name for the view to be shown prominently within the view list and atop
+
+            the screen when the view is selected.
+
+            '
+          type: string
+      required:
+      - name
+    TimeSeriesAggregationAttributeModification:
+      properties:
+        kind:
+          type: string
+          enum:
+          - drop_attributes
+          - keep_attributes
+        spec:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationSpec'
+      required:
+      - kind
+      - spec
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    TimeSeriesAggregationDefinition:
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dash0TimeSeriesAggregation
+        metadata:
+          $ref: '#/components/schemas/TimeSeriesAggregationMetadata'
+        spec:
+          $ref: '#/components/schemas/TimeSeriesAggregationSpec'
+      required:
+      - kind
+      - metadata
+      - spec
+    AnyValue:
+      description: AnyValue is used to represent any type of attribute value. AnyValue may contain a primitive value such as a string or integer or it may contain an arbitrary nested object containing arrays, key-value lists and primitives.
+      type: object
+      properties:
+        stringValue:
+          type: string
+        boolValue:
+          type: boolean
+        intValue:
+          type: string
+          format: int64
+        doubleValue:
+          type: number
+          format: double
+        bytesValue:
+          type: string
+          format: byte
+    TimeSeriesAggregationAttributeModificationContext:
+      type: string
+      enum:
+      - resource
+      - scope
+      - datapoint
+    AttributeFilterStringValue:
+      description: AttributeFilterStringValue may contain a primitive value such as a regex pattern or string.
+      type: string
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    AttributeFilterKey:
+      type: string
+      description: The attribute key to be filtered.
+    Duration:
+      type: string
+      pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    AttributeFilter:
+      type: object
+      properties:
+        key:
+          $ref: '#/components/schemas/AttributeFilterKey'
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - key
+      - operator
+    CrdSource:
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - dash0-cli
+      - platform
+      - identity-provider
+      - api
+    TimeSeriesAggregationSample:
+      properties:
+        interval:
+          description: 'The frequency at which metric data points are aggregated via these rules. This is a required parameter.
+
+            If you don''t which to downsample your metrics, then set this to the scrape/export interval of your
+
+            metrics. Otherwise, use a larger number to reduce the granularity of your metrics.
+
+            '
+          $ref: '#/components/schemas/Duration'
+        delay:
+          description: 'The amount of time to account for delays in scraping, exporting, and data arrival. We suggest to always
+
+            add a little bit of a delay to account for this. But you can increase it in case you have larger delays in
+
+            your scrape and export processes.
+
+            '
+          $ref: '#/components/schemas/Duration'
+          default: 20s
+        staleAfter:
+          description: 'Duration after which a source time series with no new data is dropped from memory. This is a
+
+            retention bound, and not a guarantee about exported values.
+
+
+            When a source time series is dropped and new data arrives later, that source series starts
+
+            over: its first new reading becomes a subtraction base rather than an increment, so no
+
+            increment is derived across the gap. The aggregated output series itself continues, and its
+
+            cumulative total is not reset, because resetting it would be read downstream as a counter
+
+            reset.
+
+
+            A source time series may be held slightly beyond this duration while an aggregation window
+
+            that has not been exported yet still needs its last reading as a subtraction base. That is
+
+            bounded by one export cycle, so it shifts when a series is dropped rather than whether.
+
+
+            Must be at least delay plus interval, and is raised to that when a smaller value is
+
+            configured: a window is not exported until delay after it closes, so a series declared dead
+
+            sooner could never contribute to one.
+
+
+            That minimum is necessary but not sufficient. This must also be longer than the reporting
+
+            period of the sources the rule matches, or each reading is dropped before the next one
+
+            arrives and the aggregated series exports nothing at all. Only the rule''s own widths can be
+
+            validated, so this one is on you: for a source scraped every 5 minutes, a staleAfter of a
+
+            few seconds over delay plus interval is legal and useless.
+
+
+            Default is 5 times the interval, subject to that same minimum.
+
+            '
+          $ref: '#/components/schemas/Duration'
+      required:
+      - interval
+    TimeSeriesAggregationSpec:
+      properties:
+        enabled:
+          type: boolean
+        priority:
+          description: 'Precedence when more than one rule matches a metric. Lower values are evaluated first
+
+            (higher precedence). Defaults to 2, the middle of the range, so a rule can be ranked
+
+            both above and below the default without renumbering the others. Rules with equal
+
+            priority are ordered deterministically by creation time, then by id.
+
+            '
+          type: integer
+          minimum: 0
+          maximum: 4
+          default: 2
+        display:
+          $ref: '#/components/schemas/TimeSeriesAggregationDisplay'
+        match:
+          $ref: '#/components/schemas/TimeSeriesAggregationMetricNameMatch'
+        sample:
+          $ref: '#/components/schemas/TimeSeriesAggregationSample'
+        attributeModifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationAttributeModification'
+      required:
+      - enabled
+      - match
+      - sample
+    TimeSeriesAggregationListResponse:
+      type: object
+      properties:
+        timeSeriesAggregations:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAggregationDefinition'
+      required:
+      - timeSeriesAggregations
+    TimeSeriesAggregationAnnotations:
+      properties:
+        dash0.com/created-at:
+          description: Timestamp when the aggregation was created. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          description: Timestamp of the last update. Set by the server; read-only.
+          type: string
+          format: date-time
+        dash0.com/deleted-at:
+          description: Timestamp when the aggregation was soft-deleted. Set by the server; read-only. Absent unless the aggregation is deleted.
+          type: string
+          format: date-time
+    TimeSeriesAggregationAttributeModificationSpec:
+      properties:
+        context:
+          $ref: '#/components/schemas/TimeSeriesAggregationAttributeModificationContext'
+        keyMatcher:
+          $ref: '#/components/schemas/Matcher'
+      required:
+      - keyMatcher
+    AttributeFilterOperator:
+      type: string
+      enum:
+      - is
+      - is_not
+      - is_set
+      - is_not_set
+      - is_one_of
+      - is_not_one_of
+      - gt
+      - lt
+      - gte
+      - lte
+      - matches
+      - does_not_match
+      - contains
+      - does_not_contain
+      - starts_with
+      - does_not_start_with
+      - ends_with
+      - does_not_end_with
+      - is_any
+      description: 'The match operation for filtering attributes.
+
+
+        #### Equality Operators
+
+        - `is` - equals (attribute exists and has a matching value)
+
+        - `is_not` - not equals (attribute exists and has a different value)
+
+
+        #### Existence Operators
+
+        - `is_set` - is set (attribute exists)
+
+        - `is_not_set` - is not set (attribute does not exist)
+
+
+        #### Multiple Value Operators
+
+        - `is_one_of` - is any of (attribute exists and has a value that is in the specified values)
+
+        - `is_not_one_of` - is not any of (attribute exists and has a value that is not in the specified values)
+
+
+        #### Comparison Operators
+
+        - `gt` - greater than
+
+        - `lt` - less than
+
+        - `gte` - greater than or equal
+
+        - `lte` - less than or equal
+
+
+        #### Pattern Matching Operators
+
+        - `matches` - match regex expression (attribute exists and matches the regular expression)
+
+        - `does_not_match` - does not match regex expression (attribute exists and does not match the regular expression)
+
+
+        #### String Operators
+
+        - `contains` - contains (attribute exists and contains the specified value)
+
+        - `does_not_contain` - does not contain (attribute exists and does not contain the specified value)
+
+        - `starts_with` - starts with (attribute exists and starts with the specified value)
+
+        - `does_not_start_with` - does not start with (attribute exists and does not start with the specified value)
+
+        - `ends_with` - ends with (attribute exists and ends with the specified value)
+
+        - `does_not_end_with` - does not end with (attribute exists and does not end with the specified value)
+
+
+        #### Special Operators
+
+        - `is_any` - matches any value, ignoring whether the key exists or not
+
+        '
+    TimeSeriesAggregationLabels:
+      properties:
+        dash0.com/id:
+          type: string
+        dash0.com/origin:
+          type: string
+        dash0.com/version:
+          type: string
+        dash0.com/dataset:
+          type: string
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+        custom:
+          type: object
+          additionalProperties:
+            type: string
+    TimeSeriesAggregationMetricNameMatch:
+      properties:
+        metricNameMatcher:
+          $ref: '#/components/schemas/Matcher'
+        otherFilters:
+          $ref: '#/components/schemas/FilterCriteria'
+          x-go-type-skip-optional-pointer: true
+      required:
+      - metricNameMatcher
+    Matcher:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/AttributeFilterOperator'
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/AttributeFilterStringValue'
+          - $ref: '#/components/schemas/AttributeFilterAnyValue'
+        values:
+          type: array
+          description: 'List of values to match against. This parameter is mandatory for the is_one_of and is_not_one_of operators.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/AttributeFilterStringValue'
+            - $ref: '#/components/schemas/AttributeFilterAnyValue'
+      required:
+      - operator
+    TimeSeriesAggregationMetadata:
+      properties:
+        name:
+          type: string
+        labels:
+          $ref: '#/components/schemas/TimeSeriesAggregationLabels'
+        annotations:
+          $ref: '#/components/schemas/TimeSeriesAggregationAnnotations'
+      required:
+      - name
+    FilterCriteria:
+      type: array
+      items:
+        $ref: '#/components/schemas/AttributeFilter'
+      example:
+      - key: service.name
+        operator: is
+        value: foo
+    AttributeFilterAnyValue:
+      description: AttributeFilterAnyValue may contain any AnyValue value.
+      $ref: '#/components/schemas/AnyValue'

@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Manage Recording Rules API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,6 +53,73 @@ servers:
 tags:
 - name: Manage Recording Rules
 paths:
+  /api/recording-rules:
+    get:
+      summary: Retrieve a list of recording rules
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Filter by dataset.
+      - in: query
+        name: originPrefix
+        schema:
+          type: string
+        required: false
+        description: Filter by origin prefix.
+      responses:
+        '200':
+          description: List of recording rules.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: getApiRecordingRules
+      x-operation-id-source: derived
+    post:
+      summary: Create a recording rule
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+        required: false
+        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusRule'
+      responses:
+        '200':
+          description: The recording rule was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Recording Rules
+      operationId: postApiRecordingRules
+      x-operation-id-source: derived
   /api/recording-rules/{originOrId}:
     delete:
       summary: Delete a specific recording rule
@@ -53,7 +146,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Recording Rules
-      operationId: delete_api-recording-rules-originorid
+      operationId: deleteApiRecordingRulesByOriginOrId
+      x-operation-id-source: derived
     get:
       summary: Retrieve the latest version of a specific recording rule
       parameters:
@@ -83,7 +177,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Recording Rules
-      operationId: get_api-recording-rules-originorid
+      operationId: getApiRecordingRulesByOriginOrId
+      x-operation-id-source: derived
     put:
       summary: Update a specific recording rule
       parameters:
@@ -120,74 +215,59 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Recording Rules
-      operationId: put_api-recording-rules-originorid
-  /api/recording-rules:
-    get:
-      summary: Retrieve a list of recording rules
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-        required: false
-        description: Filter by dataset.
-      - in: query
-        name: originPrefix
-        schema:
-          type: string
-        required: false
-        description: Filter by origin prefix.
-      responses:
-        '200':
-          description: List of recording rules.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PrometheusRule'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Recording Rules
-      operationId: get_api-recording-rules
-    post:
-      summary: Create a recording rule
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-        required: false
-        description: Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrometheusRule'
-      responses:
-        '200':
-          description: The recording rule was created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrometheusRule'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Recording Rules
-      operationId: post_api-recording-rules
+      operationId: putApiRecordingRulesByOriginOrId
+      x-operation-id-source: derived
 components:
   schemas:
+    PrometheusRuleSpec:
+      description: 'Spec of the PrometheusRule resource containing rule groups.
+
+        '
+      properties:
+        groups:
+          description: 'Rule groups. Each group is evaluated independently at its own interval.
+
+            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/PrometheusRuleGroup'
+          minItems: 1
+          maxItems: 1
+      required:
+      - groups
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
     ErrorResponse:
       type: object
       properties:
@@ -195,28 +275,97 @@ components:
           $ref: '#/components/schemas/Error'
       required:
       - error
-    PrometheusRuleApiVersion:
-      description: 'API version of the PrometheusRule CRD.
+    PrometheusRuleMetadata:
+      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
+
+        '
+      properties:
+        name:
+          description: Resource name.
+          type: string
+        labels:
+          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
+
+
+            - `dash0.com/id`: Internal ID (read-only, server-set).
+
+            - `dash0.com/origin`: External identifier for API-managed resources.
+
+            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
+
+            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
+
+            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", "dash0-cli", "platform", or "api" (read-only, derived from origin).
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+        annotations:
+          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
+
+
+            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
+
+            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
+
+            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>". Honored only on rules that declare a dash0.com/origin (for example those managed by Terraform, the operator, the CLI, or the API); setting it on a rule that declares no dash0.com/origin is rejected with a 400.
+
+            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
+
+            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
+
+            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
+
+            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
+
+            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
+
+            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
+
+            - `dash0.com/baseline-direction`: Anomaly detector baseline direction — "above", "below", or "both". Check rules only. Lifted into the rule''s `thresholds.baseline`.
+
+            - `dash0.com/baseline-spread-floor`: Optional minimum spread as a fraction of the baseline prediction. Check rules only; use with `dash0.com/baseline-direction`.
+
+            - `dash0.com/volume-floor`: Optional minimum traffic rate for a baseline or windowed average traffic rate for a change gate. Supported for Services Metrics and Spans Metrics check rules only.
+
+            - `dash0.com/change-gate-comparison`: Change gate comparison — "absolute_delta" or "relative_factor". Check rules only. Set together with the two keys below.
+
+            - `dash0.com/change-gate-value`: The minimum change the change gate requires, interpreted according to the comparison. Check rules only.
+
+            - `dash0.com/change-gate-baseline-window`: The window the change gate derives the recent level from (e.g. "1h"). Check rules only.
+
+
+            The detector keys are the only way to configure an anomaly detector from Kubernetes: check rules
+
+            are a flat resource whose body has no `thresholds` field. All three change-gate keys must be present
+
+            and valid for a change gate to be created. Malformed or incomplete detector annotations reject
+
+            the submission. Baseline and change gate detectors are mutually exclusive. A typed
+
+            `thresholds` field on the body always wins over the matching annotation.
+
+
+            New annotation keys use the `dash0.com/` prefix. The legacy `dash0-threshold-degraded` /
+
+            `dash0-threshold-critical` forms (and their unprefixed variants) are still lifted for compatibility
+
+            but are not extended.
+
+            '
+          type: object
+          additionalProperties:
+            type: string
+      required:
+      - name
+    PrometheusRuleKind:
+      description: 'Kind of the PrometheusRule CRD.
 
         '
       type: string
       enum:
-      - monitoring.coreos.com/v1
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
+      - PrometheusRule
     PrometheusRuleGroup:
       description: 'A group of rules evaluated together at a common interval. Follows the Prometheus
 
@@ -321,85 +470,13 @@ components:
       required:
       - name
       - rules
-    PrometheusRuleKind:
-      description: 'Kind of the PrometheusRule CRD.
+    PrometheusRuleApiVersion:
+      description: 'API version of the PrometheusRule CRD.
 
         '
       type: string
       enum:
-      - PrometheusRule
-    PrometheusRuleSpec:
-      description: 'Spec of the PrometheusRule resource containing rule groups.
-
-        '
-      properties:
-        groups:
-          description: 'Rule groups. Each group is evaluated independently at its own interval.
-
-            Unlike the upstream PrometheusRule CRD, this field is required and must contain exactly one group.
-
-            '
-          type: array
-          items:
-            $ref: '#/components/schemas/PrometheusRuleGroup'
-          minItems: 1
-          maxItems: 1
-      required:
-      - groups
-    PrometheusRuleMetadata:
-      description: 'Metadata for the PrometheusRule resource, following Kubernetes metadata conventions.
-
-        '
-      properties:
-        name:
-          description: Resource name.
-          type: string
-        labels:
-          description: 'Key-value labels for the resource. Dash0 recognizes the following labels:
-
-
-            - `dash0.com/id`: Internal ID (read-only, server-set).
-
-            - `dash0.com/origin`: External identifier for API-managed resources.
-
-            - `dash0.com/version`: Version for optimistic concurrency (required on update, server-set on create).
-
-            - `dash0.com/dataset`: Dataset this resource belongs to (defaults to the default dataset).
-
-            - `dash0.com/source`: Origin source — "ui", "terraform", "operator", or "api" (read-only, derived from origin).
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-        annotations:
-          description: 'Key-value annotations for the resource. Dash0 recognizes the following annotations:
-
-
-            - `dash0.com/enabled`: Set to "false" to disable evaluation. Defaults to "true" when absent.
-
-            - `dash0.com/folder-path`: UI folder path for organising resources (e.g., "/infrastructure/hosts"). Nesting is expressed with "/" separators.
-
-            - `dash0.com/sharing`: Comma-separated list of principals to grant read access to. Supported formats: "team:<team_id>" and "user:<email>".
-
-            - `dash0.com/created-at`: Creation timestamp (read-only, server-set).
-
-            - `dash0.com/updated-at`: Last update timestamp (read-only, server-set).
-
-            - `dash0.com/deleted-at`: Soft-delete timestamp (read-only, server-set).
-
-            - `dash0.com/first-evaluation-at`: First evaluation timestamp (recording rules only, read-only, server-set).
-
-            - `dash0.com/runtime-disabled-at`: Timestamp when the recorder took the group out of evaluation because a rule was too expensive (it exceeded the query sample limit). Recording rules only, read-only, server-set. Independent of `dash0.com/enabled`. Cleared only when a cost-determining field changes (the rules or the interval) — a `dash0.com/enabled` toggle, a cosmetic edit, or a blind re-apply of the identical manifest does not re-enable the group.
-
-            - `dash0.com/runtime-disabled-reason`: Why the recorder runtime-disabled the group (currently only "max_samples"). Recording rules only, read-only, server-set.
-
-            '
-          type: object
-          additionalProperties:
-            type: string
-      required:
-      - name
+      - monitoring.coreos.com/v1
     PrometheusRuleDefinition:
       description: 'An individual rule within a group. A rule is either a recording rule (has `record`) or
 
@@ -450,16 +527,7 @@ components:
           additionalProperties:
             type: string
         annotations:
-          description: 'Annotations to attach to alerts. Only applicable to alerting rules.
-
-            Commonly used keys include `summary` and `description`.
-
-
-            Dash0 also recognizes:
-
-            - `dash0.com/notification-channel-ids`: Comma-separated list of notification channel UUIDs to notify when the alert fires.
-
-            '
+          description: "Annotations to attach to alerts. Only applicable to alerting rules.\nCommonly used keys include `summary` and `description`.\n\nDash0 also recognizes:\n- `dash0.com/notification-channel-ids`: Comma-separated list of notification channels to\n  notify when the alert fires. Each entry is a channel UUID or a channel origin, and may\n  carry the `:critical-only` suffix to notify that channel only once the check reaches\n  critical — for example\n  `dash0.com/notification-channel-ids: fbc39ea2-d6da-4c8e-b77f-730821913a3c, pagerduty-prod:critical-only`.\n  The annotation declares the routing in full: a channel it does not name is unlinked,\n  and a channel it names without the suffix notifies on every issue, including when the\n  only-on-critical trigger had been set in the UI.\n"
           type: object
           additionalProperties:
             type: string
@@ -487,3 +555,7 @@ components:
       - kind
       - metadata
       - spec
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.

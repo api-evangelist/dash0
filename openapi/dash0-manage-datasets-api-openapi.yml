@@ -1,0 +1,725 @@
+openapi: 3.2.0
+info:
+  title: Dash0 Manage Datasets API
+  version: 1.0.0
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
+
+
+    Most API endpoints enforce a maximum request body size of 256KB. Bulk
+
+    endpoints accept a larger body size per request to accommodate batched
+
+    payloads.
+
+
+    Requests exceeding the applicable limit are rejected with a
+
+    `413 Content Too Large` response.'
+servers:
+- url: https://api.eu-west-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Ireland)
+- url: https://api.eu-central-1.aws.dash0.com
+  description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
+- url: https://api.us-west-2.aws.dash0.com
+  description: API endpoint for AWS region US (Oregon)
+- url: https://api.europe-west4.gcp.dash0.com
+  description: API endpoint for GCP region EU (Netherlands)
+tags:
+- name: Manage Datasets
+paths:
+  /api/datasets:
+    get:
+      summary: List all datasets for the organization
+      description: Returns all datasets in your organization.
+      responses:
+        '200':
+          description: The organization's datasets.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetListResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Datasets
+      operationId: getApiDatasets
+      x-operation-id-source: derived
+    post:
+      summary: Create a dataset
+      description: 'Creates a dataset. The slug supplied as `metadata.labels["dash0.com/id"]` is the dataset''s
+
+        permanent identifier and cannot be changed afterwards. A slug or origin that is already in
+
+        use, as a slug or as an origin, in your organization is rejected with `400`.
+
+
+        Creating a dataset whose slug belongs to a deleted dataset restores it. A restore sets the
+
+        origin like a create: the origin in the request; else an `api-` origin for a machine
+
+        token that has no user; else none, and the old origin is dropped.
+
+
+        `spec.permissions` is ignored on create, which grants `dataset:read` to the organization''s
+
+        members. Set permissions with a subsequent update.
+
+
+        `apiVersion` is required. A missing or unsupported value returns `400`.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetCreateRequest'
+      responses:
+        '200':
+          description: The dataset was created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Datasets
+      operationId: postApiDatasets
+      x-operation-id-source: derived
+  /api/datasets/{originOrId}:
+    delete:
+      summary: Delete a specific dataset
+      description: 'Deletes the dataset. It can be restored, 30 days by default, by creating a dataset with the same
+
+        slug; after that it is gone for good. Deleting the default dataset returns 400. Deleting a
+
+        dataset that does not exist, or is already deleted, returns 200.
+
+
+        A deleted dataset keeps its origin reserved until it is purged. Creating a dataset with that
+
+        origin under another slug returns `400`.'
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Dataset origin or slug.
+      responses:
+        '200':
+          description: The dataset was deleted.
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Datasets
+      operationId: deleteApiDatasetsByOriginOrId
+      x-operation-id-source: derived
+    get:
+      summary: Retrieve a specific dataset
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Dataset origin or slug.
+      responses:
+        '200':
+          description: The requested dataset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Datasets
+      operationId: getApiDatasetsByOriginOrId
+      x-operation-id-source: derived
+    put:
+      summary: Update a specific dataset
+      description: 'Updates a dataset. Unless the caller is the Dash0 UI, a dataset that does not exist is
+
+        created instead.
+
+
+        `metadata.labels["dash0.com/version"]` is optional for API tokens, which take the stored
+
+        version. Omitting any spec field leaves its stored value unchanged. Changing the slug is
+
+        rejected with `400`. `apiVersion` is required; a missing or unsupported value returns `400`.'
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Dataset origin or slug.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetUpdateRequest'
+      responses:
+        '200':
+          description: The dataset was updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetResponse'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Datasets
+      operationId: putApiDatasetsByOriginOrId
+      x-operation-id-source: derived
+components:
+  schemas:
+    IpAddressStorageStrategy:
+      type: string
+      description: 'How end-user IP addresses are stored. Clients must accept values they do not recognize.
+
+        '
+      enum:
+      - anonymize
+      - do_not_store
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
+    DarkplaneConfig:
+      description: 'Darkplane-specific opt-ins for this dataset.
+
+        '
+      properties:
+        respectNativeCodingAgentTelemetry:
+          $ref: '#/components/schemas/RespectNativeCodingAgentTelemetry'
+          description: 'Darkplane processing of OpenTelemetry telemetry natively emitted by coding agents.
+
+            Defaults to `disabled` for new and existing datasets.
+
+            '
+    DatasetLabels:
+      properties:
+        dash0.com/id:
+          type: string
+          x-go-type-skip-optional-pointer: true
+          description: 'The dataset slug. Datasets carry no separate UUID, so the slug is both the identifier and
+
+            the path parameter. Returned on every read with the same value as `spec.slug`. Still
+
+            accepted on create in place of `spec.slug`; when both are set they must match. Immutable
+
+            after create.
+
+            '
+        dash0.com/origin:
+          type: string
+          description: 'External identifier for this dataset. Must be unique per organization when set. Used by
+
+            Infrastructure-as-Code tools (Terraform, Kubernetes operator). Auto-generated as
+
+            `api-<uuid>` on POST if not provided. Must not collide with an existing dataset slug.
+
+            A deleted dataset keeps its origin reserved until it is purged. Creating a dataset
+
+            with that origin under another slug returns 400. Restoring a deleted dataset by
+
+            creating its slug again takes the request''s origin, or an `api-<uuid>` for a machine
+
+            token with no user, or none.
+
+            '
+        dash0.com/version:
+          type: string
+          description: 'Optimistic concurrency token. Server-set on create; required on update from the Dash0 UI
+
+            and optional for machine tokens.
+
+            '
+        dash0.com/source:
+          $ref: '#/components/schemas/CrdSource'
+    GenAIAttributeRedactionSettings:
+      description: 'Fine-grained redaction policies for GenAI attributes, applied by the Collector before export.
+
+        Conversation content, tool-call I/O and tool-call error messages are controlled independently,
+
+        e.g. to keep conversation content private while still storing tool input/output.
+
+        '
+      properties:
+        conversation:
+          $ref: '#/components/schemas/GenAIAttributeRedaction'
+          description: 'Redaction of conversation content: `gen_ai.input.messages`, `gen_ai.output.messages`,
+
+            and `gen_ai.system_instructions`.
+
+            Defaults to `disabled` for new and existing datasets.
+
+            '
+        toolCalls:
+          $ref: '#/components/schemas/GenAIAttributeRedaction'
+          description: 'Redaction of tool-call input and output: `gen_ai.tool.call.arguments` and
+
+            `gen_ai.tool.call.result`.
+
+            Defaults to `disabled` for new and existing datasets.
+
+            '
+        errors:
+          $ref: '#/components/schemas/GenAIAttributeRedaction'
+          description: 'Redaction of tool-call error messages: the span status message and `exception.message`
+
+            attributes on spans, span events and log records that carry a `gen_ai.tool.name`
+
+            attribute.
+
+            Defaults to `disabled` for new and existing datasets.
+
+            '
+    DatasetAction:
+      type: string
+      enum:
+      - dataset:read
+      - dataset:write
+      - dataset:delete
+      - dataset:createSyntheticCheck
+      - dataset:createCheckRule
+      - dataset:createRecordingRuleGroup
+      - dataset:createSLO
+      - dataset:createAgent0Automation
+    DatasetProcessing:
+      description: 'Transformations Dash0 applies to ingested telemetry.
+
+        '
+      properties:
+        spanEventsToLogs:
+          type: boolean
+          description: 'Convert span events to log records correlated with the parent span via `traceId` and
+
+            `spanId`. Converted log records carry the `dash0.span_event.converted` attribute.
+
+            '
+        semanticConventionUpgrades:
+          $ref: '#/components/schemas/SemanticConventionUpgrades'
+        darkplane:
+          $ref: '#/components/schemas/DarkplaneConfig'
+          description: 'Darkplane-specific opt-ins for this dataset.
+
+            Absent opt-ins default to `disabled` for new and existing datasets.
+
+            '
+    CardholderDataRedactionSettings:
+      type: object
+      description: 'Opt-in detection and redaction of payment card numbers and related sensitive data in ingested
+
+        telemetry, applied before Dash0 persists the signal. Matching values are masked or replaced in
+
+        place; signals are never dropped. Detection is pattern-based and cannot catch encoded, encrypted,
+
+        or split card numbers, so filtering at the source remains the primary mechanism.
+
+        Absent means disabled.
+
+        '
+      properties:
+        enabled:
+          type: boolean
+          description: 'Whether cardholder-data redaction is enabled for this dataset.
+
+            '
+      required:
+      - enabled
+    DatasetRedaction:
+      properties:
+        cardholderData:
+          $ref: '#/components/schemas/CardholderDataRedactionSettings'
+          description: 'Controls detection and redaction of payment card numbers and related sensitive data
+
+            before Dash0 persists the signal. Absent means disabled for new and existing datasets.
+
+            '
+        genAi:
+          $ref: '#/components/schemas/GenAIAttributeRedactionSettings'
+          description: 'Controls redaction of supported GenAI attributes before Collector export.
+
+            Absent policies default to `disabled` for new and existing datasets.
+
+            '
+    GeoLocationStorageStrategy:
+      description: 'What kind of geolocation information we are allowed to derive and store. Clients must accept
+
+        values they do not recognize.
+
+        '
+      type: string
+      enum:
+      - up_to_city
+      - up_to_country
+      - do_not_store
+    DatasetGeoLocationPrivacy:
+      properties:
+        endUser:
+          $ref: '#/components/schemas/DatasetGeoLocationStorage'
+    DatasetPrivacy:
+      description: 'What Dash0 derives, stores and redacts for this dataset.
+
+        '
+      properties:
+        ipAddresses:
+          $ref: '#/components/schemas/DatasetIpAddressPrivacy'
+        geoLocation:
+          $ref: '#/components/schemas/DatasetGeoLocationPrivacy'
+        redaction:
+          $ref: '#/components/schemas/DatasetRedaction'
+    DatasetAnnotations:
+      properties:
+        dash0.com/created-at:
+          type: string
+          format: date-time
+        dash0.com/updated-at:
+          type: string
+          format: date-time
+    DatasetUpdateRequest:
+      $ref: '#/components/schemas/DatasetDefinition'
+    DatasetGeoLocationStorage:
+      properties:
+        storage:
+          $ref: '#/components/schemas/GeoLocationStorageStrategy'
+          description: 'How much geolocation derived from end-user IP addresses is stored. Clients must accept
+
+            values they do not recognize.
+
+            '
+    CrdSource:
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - dash0-cli
+      - platform
+      - identity-provider
+      - api
+    GenAIAttributeRedaction:
+      type: string
+      description: 'Controls whether sensitive GenAI attribute values are redacted by the Collector.
+
+
+        - `disabled`: Preserve GenAI attribute values unchanged.
+
+        - `redact`: Replace the affected GenAI attribute content with a redacted value.
+
+        '
+      enum:
+      - disabled
+      - redact
+    DatasetPermission:
+      properties:
+        teamId:
+          type: string
+        userId:
+          type: string
+        role:
+          type: string
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetAction'
+      required:
+      - actions
+    DatasetRetention:
+      description: 'How long each signal is kept. Omitted signals keep their stored retention.
+
+        '
+      properties:
+        traces:
+          $ref: '#/components/schemas/RetentionClass'
+        logs:
+          $ref: '#/components/schemas/RetentionClass'
+        metrics:
+          $ref: '#/components/schemas/RetentionClass'
+        profiles:
+          $ref: '#/components/schemas/RetentionClass'
+        webEvents:
+          $ref: '#/components/schemas/RetentionClass'
+    DatasetIpAddressStorage:
+      properties:
+        storage:
+          $ref: '#/components/schemas/IpAddressStorageStrategy'
+          description: 'How end-user IP addresses derived from the `X-FORWARDED-FOR` and `X-REAL-IP` HTTP headers
+
+            are stored. Clients must accept values they do not recognize.
+
+            '
+    DatasetListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/DatasetResponse'
+    DatasetMetadata:
+      properties:
+        name:
+          type: string
+          description: 'Human-readable name for the dataset.
+
+            '
+        labels:
+          $ref: '#/components/schemas/DatasetLabels'
+        annotations:
+          $ref: '#/components/schemas/DatasetAnnotations'
+      required:
+      - name
+    SemanticConventionUpgrades:
+      type: string
+      description: 'Choose whether or not semantic convention upgrades should be executed. Can be one of:
+
+
+        - disabled: No upgrade will be executed
+
+        - latest: We will always upgrade to the latest and greatest
+
+        - vX.X.X: A SEMVER version. We will automatically upgrade up to that version (inclusive)
+
+
+        Defaults to `latest` for new organizations.
+
+        '
+    DatasetSpec:
+      description: 'Every field is optional. A field omitted on create takes the server default; a field omitted on
+
+        update keeps its stored value. Enumerations may gain values in later versions, so clients must
+
+        accept values they do not recognize.
+
+        '
+      properties:
+        slug:
+          type: string
+          pattern: ^[a-zA-Z0-9_-]{3,26}$
+          x-go-type-skip-optional-pointer: true
+          description: 'The dataset slug, which telemetry and queries reference the dataset by. Immutable after
+
+            create. On create, `spec.slug` wins over `metadata.labels["dash0.com/id"]`; when both are
+
+            set they must match. When neither is set, POST derives the slug from `metadata.name`:
+
+            accents removed, lowercased, every run of characters outside `[a-z0-9_-]` replaced by
+
+            `-`, leading and trailing `-` removed, cut to 26 characters. A derived slug shorter than 3 characters,
+
+            equal to `default`, or already in use returns 400; set `spec.slug` instead. PUT on a
+
+            missing dataset uses the `{originOrId}` path parameter when neither is set.
+
+            '
+        preferred:
+          type: boolean
+          description: 'Whether this dataset is the organization''s preferred dataset, which the Dash0 UI opens by
+
+            default. At most one dataset per organization is preferred; setting it here clears the
+
+            flag on the previous one.
+
+            '
+        retention:
+          $ref: '#/components/schemas/DatasetRetention'
+        privacy:
+          $ref: '#/components/schemas/DatasetPrivacy'
+        processing:
+          $ref: '#/components/schemas/DatasetProcessing'
+        permissions:
+          type: array
+          description: 'Grants on this dataset, each naming exactly one `userId`, `teamId` or `role` and at least
+
+            one action. The only role that can be granted is `basic_member`: Dash0 sets the `admin`
+
+            role''s grant, so it is neither returned nor accepted. An invalid or duplicate entry
+
+            returns 400. An update replaces the grants with the listed ones; an omitted or empty list
+
+            keeps them unchanged. Ignored on create, which grants `dataset:read` to `basic_member`; a
+
+            fresh dataset reads back as that one grant. Reads list role grants, then user grants, then
+
+            team grants, each with its actions sorted, so a list written in that order reads back
+
+            unchanged.
+
+            '
+          items:
+            $ref: '#/components/schemas/DatasetPermission'
+        permittedActions:
+          type: array
+          description: 'What the calling identity may do with this dataset. Read-only and derived per request
+
+            from the caller''s role, the dataset''s permissions and its origin; values supplied on a
+
+            write are ignored.
+
+            '
+          items:
+            $ref: '#/components/schemas/DatasetAction'
+    RespectNativeCodingAgentTelemetry:
+      type: string
+      description: 'Controls whether OpenTelemetry telemetry natively emitted by coding agents
+
+        (e.g. Claude Code) is processed by Darkplane.
+
+
+        - `disabled`: Native coding-agent telemetry is not processed by Darkplane.
+
+        - `enabled`: Native coding-agent telemetry is processed by Darkplane.
+
+        '
+      enum:
+      - disabled
+      - enabled
+    DatasetDefinition:
+      properties:
+        apiVersion:
+          type: string
+          description: 'Version of the dataset document format. Required on create and update; the only supported
+
+            value is `dash0.com/v1alpha1`, and any other value returns 400. Returned on every read.
+
+            '
+          example: dash0.com/v1alpha1
+        kind:
+          type: string
+          description: 'Required on create and update; any other value returns 400.
+
+            '
+          enum:
+          - Dash0Dataset
+        metadata:
+          $ref: '#/components/schemas/DatasetMetadata'
+        spec:
+          $ref: '#/components/schemas/DatasetSpec'
+      required:
+      - apiVersion
+      - kind
+      - metadata
+      - spec
+    DatasetResponse:
+      $ref: '#/components/schemas/DatasetDefinition'
+    RetentionClass:
+      type: string
+      description: 'The retention class selected for a signal, per dataset. The value is the
+
+        total retention in days, not an increase on top of a baseline.
+
+        Customer-selectable signals (logs, spans, web events) expose the full
+
+        set; non-selectable signals (metrics, profiling) keep their platform
+
+        defaults.
+
+
+        - `30d`: 30 days total (the included baseline).
+
+        - `60d`: 60 days total.
+
+        - `90d`: 90 days total.
+
+        - `120d`: 120 days total.
+
+        - `210d`: 210 days total.
+
+        - `390d`: 390 days total.
+
+        '
+      enum:
+      - 30d
+      - 60d
+      - 90d
+      - 120d
+      - 210d
+      - 390d
+    DatasetCreateRequest:
+      $ref: '#/components/schemas/DatasetDefinition'
+    DatasetIpAddressPrivacy:
+      properties:
+        endUser:
+          $ref: '#/components/schemas/DatasetIpAddressStorage'

@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Manage Alerting API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,96 +53,6 @@ servers:
 tags:
 - name: Manage Alerting
 paths:
-  /api/alerting/check-rules/{originOrId}:
-    delete:
-      summary: Delete a specific check rule (Prometheus alert rule) by origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: Check rule origin or id
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Successful response in case the check rule was deleted
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Alerting
-      operationId: delete_api-alerting-check-rules-originorid
-    get:
-      summary: Retrieve a specific check rule (Prometheus alert rule) by its origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: Check rule origin or id
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Successful response in case the check rule could be retrieved.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrometheusAlertRule'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Alerting
-      operationId: get_api-alerting-check-rules-originorid
-    put:
-      summary: Update or insert a specific check rule (Prometheus alert rule) by origin or id
-      parameters:
-      - in: path
-        name: originOrId
-        schema:
-          type: string
-        required: true
-        description: Check rule origin or id
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PrometheusAlertRule'
-      responses:
-        '200':
-          description: Successful response in case the check rule was updated. The response contains the updated rule.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PrometheusAlertRule'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Alerting
-      operationId: put_api-alerting-check-rules-originorid
   /api/alerting/check-rules:
     get:
       summary: Retrieve a list of check rule ids
@@ -158,7 +94,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Alerting
-      operationId: get_api-alerting-check-rules
+      operationId: getApiAlertingCheckRules
+      x-operation-id-source: derived
     post:
       summary: Create a new check rule
       parameters:
@@ -189,7 +126,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Alerting
-      operationId: post_api-alerting-check-rules
+      operationId: postApiAlertingCheckRules
+      x-operation-id-source: derived
   /api/alerting/check-rules/bulk:
     post:
       summary: Bulk create check rules
@@ -256,7 +194,101 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Alerting
-      operationId: post_api-alerting-check-rules-bulk
+      operationId: postApiAlertingCheckRulesBulk
+      x-operation-id-source: derived
+  /api/alerting/check-rules/{originOrId}:
+    delete:
+      summary: Delete a specific check rule (Prometheus alert rule) by origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successful response in case the check rule was deleted
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: deleteApiAlertingCheckRulesByOriginOrId
+      x-operation-id-source: derived
+    get:
+      summary: Retrieve a specific check rule (Prometheus alert rule) by its origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Successful response in case the check rule could be retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: getApiAlertingCheckRulesByOriginOrId
+      x-operation-id-source: derived
+    put:
+      summary: Update or insert a specific check rule (Prometheus alert rule) by origin or id
+      parameters:
+      - in: path
+        name: originOrId
+        schema:
+          type: string
+        required: true
+        description: Check rule origin or id
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrometheusAlertRule'
+      responses:
+        '200':
+          description: Successful response in case the check rule was updated. The response contains the updated rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrometheusAlertRule'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Alerting
+      operationId: putApiAlertingCheckRulesByOriginOrId
+      x-operation-id-source: derived
   /api/import/check-rule:
     post:
       summary: Import a check rule
@@ -299,7 +331,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Alerting
-      operationId: post_api-import-check-rule
+      operationId: postApiImportCheckRule
+      x-operation-id-source: derived
   /api/import/check-rules:
     post:
       summary: Import multiple check rules in one batch
@@ -364,75 +397,78 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Alerting
-      operationId: post_api-import-check-rules
+      operationId: postApiImportCheckRules
+      x-operation-id-source: derived
 components:
   schemas:
-    ErrorResponse:
-      type: object
+    CheckThresholdBaseline:
+      description: 'Adaptive baseline detector configuration. Its presence on `CheckThresholds` re-interprets
+
+        `degraded` and `failed` as z-score cutoffs against the check rule''s own predicted value and
+
+        typical spread.
+
+        '
       properties:
-        error:
-          $ref: '#/components/schemas/Error'
+        direction:
+          $ref: '#/components/schemas/AnomalyDirection'
+          description: 'Which deviations from the prediction fail the check. For a hand-written expression there
+
+            is no `parsedExpression` and therefore no `thresholdComparator`, so this is the sole
+
+            source of truth for directionality.
+
+            '
+        spreadFloor:
+          type: number
+          format: double
+          minimum: 0
+          exclusiveMinimum: true
+          description: 'Optional minimum seasonal spread, expressed as a fraction of the prediction. The server
+
+            default is used when omitted. For example, `0.05` makes a sensitivity cutoff of `3`
+
+            require at least a 15% deviation when the measured spread is smaller.
+
+            '
+        volumeFloor:
+          type: number
+          format: double
+          minimum: 0
+          exclusiveMinimum: true
+          description: 'Optional minimum traffic rate required for the detector to evaluate. Supported only
+
+            for Services Metrics and Spans Metrics queries, in requests/second and spans/second
+
+            respectively. Traffic is derived from the query''s authored selections, filters,
+
+            grouping, and rate window and evaluated ad hoc at the detector timestamp. Dashboard
+
+            variable placeholders are omitted, as in the observed check query.
+
+            Other query types, including hand-written PromQL, cannot configure this floor.
+
+            Export compiles this floor into a PromQL enablement condition with the authored filters
+
+            and service namespace/name matching. Import retains the condition rather than a typed floor.
+
+            No traffic query or volume gate is applied when omitted.
+
+            '
       required:
-      - error
+      - direction
     PrometheusAlertRuleMetadataLabels:
       type: object
       description: 'Server-derived labels that apply to the alert-rule resource itself, not to the
 
-        emitted alert. Currently includes `dash0.com/source`
+        emitted alert. Currently includes `dash0.com/source` when the origin is known; see
 
-        (`ui` / `terraform` / `operator` / `api`) when the origin is known.
+        the `CrdSource` enum for the values it can take.
 
         '
       properties:
         dash0.com/source:
           $ref: '#/components/schemas/CrdSource'
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    PrometheusAlertRuleBulkCreateRequest:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          minItems: 1
-          maxItems: 1000
-          items:
-            $ref: '#/components/schemas/PrometheusAlertRule'
-    CheckThresholds:
-      description: 'Thresholds to use for the `$__threshold` variable in the expression field.
-
-        '
-      properties:
-        degraded:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a degraded state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
-        failed:
-          type: number
-          format: double
-          description: 'The threshold value that defines when the check is in a failed state. The value will be
-
-            interpolated into the expression field as `$__threshold`.
-
-            '
     PrometheusAlertRuleApiListItem:
       description: The ID, origin, dataset, and the name of a check rule.
       properties:
@@ -459,9 +495,230 @@ components:
       required:
       - id
       - dataset
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - error
     Duration:
       type: string
       pattern: (\d+(ms|s|m|h|d|w|M|Q|y))+
+    CheckThresholds:
+      description: "Thresholds to use for the `$__threshold` variable in the expression field.\n\nBy default `degraded` and `failed` are absolute values. The optional `baseline` and\n`changeGate` sub-objects are detector configuration: **the presence of one of them is the\ndiscriminator** that changes how `degraded` and `failed` are interpreted.\n\n- Neither present: `degraded` and `failed` are absolute values compared against the\n  expression's own value, as they always have been.\n- `baseline` present: `degraded` and `failed` are re-interpreted as z-score cutoffs —\n  multiples of the watched entity's own typical spread away from its prediction — rather\n  than as absolute values. Each configured cutoff must be greater than `0` and less than\n  `1000000`, the detector score cap.\n- `changeGate` present: `degraded` and `failed` stay absolute, but the check additionally\n  requires the value to have become materially worse than it recently was before it fails.\n\nAt most one of `baseline` and `changeGate` may be set. A request setting both is rejected\nwith a `400`; the mutual exclusion is enforced by the server rather than by this schema,\nmatching the existing treatment of `metric` versus `servicesMetricQuery`.\n"
+      properties:
+        degraded:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a degraded state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+
+            Interpreted as a z-score cutoff rather than an absolute value when `baseline` is set.
+
+            '
+        failed:
+          type: number
+          format: double
+          description: 'The threshold value that defines when the check is in a failed state. The value will be
+
+            interpolated into the expression field as `$__threshold`.
+
+
+            Interpreted as a z-score cutoff rather than an absolute value when `baseline` is set.
+
+            '
+        baseline:
+          $ref: '#/components/schemas/CheckThresholdBaseline'
+          description: 'Compare the check rule''s observed quantity against its own past instead of against an
+
+            absolute value. Setting this re-interprets `degraded` and `failed` as z-score cutoffs.
+
+
+            Mutually exclusive with `changeGate`.
+
+            '
+        changeGate:
+          $ref: '#/components/schemas/CheckThresholdChangeGate'
+          description: 'Require the observed quantity to have changed materially compared to a recent window
+
+            before the absolute `degraded` / `failed` thresholds are allowed to fail the check.
+
+            `degraded` and `failed` remain absolute values.
+
+
+            Mutually exclusive with `baseline`.
+
+            '
+    PrometheusAlertRuleBulkCreateRequest:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/PrometheusAlertRule'
+    PrometheusAlertRuleBulkCreateResponse:
+      type: object
+      required:
+      - created
+      properties:
+        created:
+          type: integer
+          description: Number of check rules that were newly created.
+    AnomalyDirection:
+      type: string
+      enum:
+      - both
+      - above
+      - below
+      description: 'Which deviations from the prediction are treated as anomalous.
+
+
+        - `both`: Deviations in either direction are anomalous.
+
+        - `above`: Only values above the prediction are anomalous.
+
+        - `below`: Only values below the prediction are anomalous.
+
+        '
+    CheckThresholdChangeGate:
+      description: 'Change gate configuration. Its presence on `CheckThresholds` leaves `degraded` and `failed`
+
+        absolute, but additionally requires the observed quantity to be materially worse than it was
+
+        over `baselineWindow` before the check fails. The check rule expression must provide the
+
+        absolute threshold comparator through its parsed expression or a hand-written top-level
+
+        comparison; otherwise the write is rejected.
+
+        '
+      properties:
+        comparison:
+          $ref: '#/components/schemas/ChangeGateComparison'
+        value:
+          type: number
+          format: double
+          description: 'The minimum change required, interpreted according to `comparison`.
+
+            '
+        baselineWindow:
+          $ref: '#/components/schemas/Duration'
+          description: 'The window the observed quantity''s recent level is derived from.
+
+            '
+        volumeFloor:
+          type: number
+          format: double
+          minimum: 0
+          exclusiveMinimum: true
+          description: 'Optional minimum average traffic rate over `baselineWindow` required for the detector
+
+            to evaluate. Supported only for Services Metrics and Spans Metrics queries, in
+
+            requests/second and spans/second respectively. Traffic is derived from the query''s
+
+            authored selections, filters, grouping, and rate window and evaluated ad hoc. Dashboard
+
+            variable placeholders are omitted, as in the observed check query.
+
+            Other query types, including hand-written PromQL, cannot configure this floor.
+
+            Export compiles this floor into a PromQL enablement condition with the authored filters
+
+            and service namespace/name matching. Import retains the condition rather than a typed floor.
+
+            No traffic query or volume gate is applied when omitted.
+
+            '
+      required:
+      - comparison
+      - value
+      - baselineWindow
+    ChangeGateComparison:
+      type: string
+      enum:
+      - absolute_delta
+      - relative_factor
+      description: "How the change gate's `value` is compared against the observed quantity's recent level.\n\n- `absolute_delta`: The observed quantity must differ from its recent level by at least\n  `value`, in the unit of the observed quantity itself and in the worsening direction defined\n  by the rule's absolute threshold comparator.\n- `relative_factor`: The observed quantity must differ from its recent level by at least\n  `value` times in the worsening direction defined by the rule's absolute threshold comparator.\n"
+    PrometheusAlertRuleMetadataAnnotations:
+      type: object
+      description: 'Server-populated annotations that apply to the alert-rule resource itself, not to the
+
+        emitted alert. Read-only on responses; ignored on write if a valid date-time.
+
+        '
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+          description: 'Soft-delete timestamp. Present when the check rule has been deleted but not yet purged.
+
+            Set by the server; read-only. Ignored on write if a valid date-time; a malformed value is rejected with a 400.
+
+            '
+    PrometheusAlertRuleMetadata:
+      type: object
+      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
+
+        '
+      properties:
+        labels:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
+        annotations:
+          $ref: '#/components/schemas/PrometheusAlertRuleMetadataAnnotations'
+    CrdSource:
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - dash0-cli
+      - platform
+      - identity-provider
+      - api
     PrometheusAlertRule:
       description: 'Check rules represent a periodically evaluated expression to determine the health of a resource.
 
@@ -556,7 +813,9 @@ components:
               type: string
               description: 'Human-readable and templatable summary for the check that allows you to customize the way the check
 
-                is textually described in short form in the Dash0 UI, in notifications, etc.
+                is textually described in short form in the Dash0 UI, in notifications, etc. Limited to 255
+
+                characters.
 
                 '
               maxLength: 255
@@ -566,7 +825,7 @@ components:
 
                 rationale of the check is textually described in the Dash0 UI, in notifications, etc. This will
 
-                be optimized in the design for long form viewing.
+                be optimized in the design for long form viewing. Limited to 2048 characters.
 
                 '
               maxLength: 2048
@@ -575,7 +834,7 @@ components:
               description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
             sharing:
               type: string
-              description: 'Comma-separated list of principals to grant read and delete access to for API-managed check rules. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
+              description: 'Comma-separated list of principals to grant read and delete access to. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''. Sharing is honored only on check rules that declare a dash0.com/origin (for example those managed by Terraform, the operator, the CLI, or the API). Setting it on a check rule that declares no dash0.com/origin is rejected with a 400 — manage that rule''s access via the UI share dialog instead.'
           additionalProperties:
             type: string
           description: 'Annotations are key-value pairs that can be used to add additional metadata to a check. They map
@@ -612,37 +871,3 @@ components:
       required:
       - name
       - expression
-    PrometheusAlertRuleBulkCreateResponse:
-      type: object
-      required:
-      - created
-      properties:
-        created:
-          type: integer
-          description: Number of check rules that were newly created.
-    PrometheusAlertRuleMetadata:
-      type: object
-      description: 'Server-populated metadata for the alert rule. Read-only on responses; ignored on write.
-
-        '
-      properties:
-        labels:
-          $ref: '#/components/schemas/PrometheusAlertRuleMetadataLabels'
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api

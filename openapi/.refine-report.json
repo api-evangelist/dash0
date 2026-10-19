@@ -7,16 +7,18 @@
     "dash0-edge-collectors-api-openapi.yml",
     "dash0-manage-agent0-automations-api-openapi.yml",
     "dash0-manage-alerting-api-openapi.yml",
+    "dash0-manage-auth-tokens-api-openapi.yml",
     "dash0-manage-dashboards-api-openapi.yml",
+    "dash0-manage-datasets-api-openapi.yml",
     "dash0-manage-notification-channels-api-openapi.yml",
     "dash0-manage-recording-rules-api-openapi.yml",
-    "dash0-manage-slos-private-beta-api-openapi.yml",
+    "dash0-manage-slos-api-openapi.yml",
     "dash0-manage-sampling-rules-api-openapi.yml",
-    "dash0-manage-signal-to-metrics-beta-api-openapi.yml",
+    "dash0-manage-signal-to-metrics-api-openapi.yml",
     "dash0-manage-spam-filters-api-openapi.yml",
     "dash0-manage-synthetic-checks-api-openapi.yml",
     "dash0-manage-teams-and-members-api-openapi.yml",
-    "dash0-manage-time-series-aggregations-private-beta-api-openapi.yml",
+    "dash0-manage-time-series-aggregations-api-openapi.yml",
     "dash0-manage-views-api-openapi.yml",
     "dash0-oauth-2-0-api-openapi.yml",
     "dash0-prometheus-api-api-openapi.yml",
@@ -29,26 +31,7 @@
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "dash0-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "apis.yml register: written (+5 apis, 20 total)"
   ],
-  "skipped": [
-    "dash0-edge-collectors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-agent0-automations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-alerting-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-dashboards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-notification-channels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-recording-rules-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-sampling-rules-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-signal-to-metrics-beta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-slos-private-beta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-spam-filters-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-synthetic-checks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-teams-and-members-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-time-series-aggregations-private-beta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-manage-views-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-oauth-2-0-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-prometheus-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-query-sql-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "dash0-query-telemetry-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

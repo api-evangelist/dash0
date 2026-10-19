@@ -2,7 +2,31 @@ openapi: 3.2.0
 info:
   title: Dash0 Manage Dashboards API
   version: 1.0.0
-  description: '## Request body size limit
+  description: '## Selecting a dataset
+
+
+    Endpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.
+
+
+    If neither is given, the request falls back to the organization''s `default` dataset — a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.
+
+
+    ## Resource origins
+
+
+    Most resources take an optional `metadata.labels["dash0.com/origin"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.
+
+
+    An origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.
+
+
+    You cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.
+
+
+    Endpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.
+
+
+    ## Request body size limit
 
 
     Most API endpoints enforce a maximum request body size of 256KB. Bulk
@@ -20,6 +44,8 @@ servers:
   description: API endpoint for AWS region EU (Ireland)
 - url: https://api.eu-central-1.aws.dash0.com
   description: API endpoint for AWS region EU (Germany)
+- url: https://api.us-east-1.aws.dash0.com
+  description: API endpoint for AWS region US (N. Virginia)
 - url: https://api.us-west-2.aws.dash0.com
   description: API endpoint for AWS region US (Oregon)
 - url: https://api.europe-west4.gcp.dash0.com
@@ -27,6 +53,65 @@ servers:
 tags:
 - name: Manage Dashboards
 paths:
+  /api/dashboards:
+    get:
+      summary: Receive a list of dashboards
+      description: Receive a list of your organization dashboards
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      responses:
+        '200':
+          description: Receive a list of dashboards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DashboardApiListItem'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: getApiDashboards
+      x-operation-id-source: derived
+    post:
+      summary: Create a dashboard
+      description: Create a dashboard.
+      parameters:
+      - in: query
+        name: dataset
+        schema:
+          $ref: '#/components/schemas/Dataset'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardDefinition'
+      responses:
+        '200':
+          description: The created dashboard.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardDefinition'
+        default:
+          description: In case any error happens.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+      - Manage Dashboards
+      operationId: postApiDashboards
+      x-operation-id-source: derived
   /api/dashboards/{originOrId}:
     delete:
       summary: Delete a specific dashboard by its origin or id
@@ -53,7 +138,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Dashboards
-      operationId: delete_api-dashboards-originorid
+      operationId: deleteApiDashboardsByOriginOrId
+      x-operation-id-source: derived
     get:
       summary: Receive a specific dashboard by its origin or id
       description: Receive a specific dashboard by its **origin** or **id**.
@@ -83,7 +169,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Dashboards
-      operationId: get_api-dashboards-originorid
+      operationId: getApiDashboardsByOriginOrId
+      x-operation-id-source: derived
     put:
       summary: Update or insert a specific dashboard by its origin or id
       description: Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**.
@@ -119,64 +206,8 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Dashboards
-      operationId: put_api-dashboards-originorid
-  /api/dashboards:
-    get:
-      summary: Receive a list of dashboards
-      description: Receive a list of your organization dashboards
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      responses:
-        '200':
-          description: Receive a list of dashboards.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DashboardApiListItem'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Dashboards
-      operationId: get_api-dashboards
-    post:
-      summary: Create a dashboard
-      description: Create a dashboard.
-      parameters:
-      - in: query
-        name: dataset
-        schema:
-          $ref: '#/components/schemas/Dataset'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DashboardDefinition'
-      responses:
-        '200':
-          description: The created dashboard.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DashboardDefinition'
-        default:
-          description: In case any error happens.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      tags:
-      - Manage Dashboards
-      operationId: post_api-dashboards
+      operationId: putApiDashboardsByOriginOrId
+      x-operation-id-source: derived
   /api/import/dashboard:
     post:
       summary: Import a dashboard
@@ -217,9 +248,56 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
       tags:
       - Manage Dashboards
-      operationId: post_api-import-dashboard
+      operationId: postApiImportDashboard
+      x-operation-id-source: derived
 components:
   schemas:
+    DashboardAnnotations:
+      properties:
+        dash0.com/deleted-at:
+          type: string
+          format: date-time
+        dash0.com/folder-path:
+          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
+          type: string
+        dash0.com/sharing:
+          description: 'Comma-separated list of principals to grant read access to. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''. Sharing is honored only on assets that declare a dash0.com/origin (for example those managed by Terraform, the operator, the CLI, or the API). Setting it on an asset that declares no dash0.com/origin is rejected with a 400 — manage that asset''s access via the UI share dialog instead.'
+          type: string
+    Error:
+      properties:
+        code:
+          type: integer
+          description: 'HTTP status code.
+
+            '
+        type:
+          type: string
+          description: 'Stable `snake_case` identifier for the kind of error, safe for clients to branch on. Not
+
+            an enum: treat an unrecognized value the same as an absent one and fall back to `message`,
+
+            so a new error kind never breaks the contract. Optional — absent means unclassified, not
+
+            success.
+
+            '
+        message:
+          type: string
+          description: 'Human-readable description of the error. Safe to display.
+
+            '
+        traceId:
+          type: string
+          description: 'Trace ID for the request that produced the error, for correlating with logs and traces.
+
+            '
+      required:
+      - code
+      - message
+    Dataset:
+      type: string
+      pattern: ^[a-zA-Z0-9_-]{3,26}$
+      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
     ErrorResponse:
       type: object
       properties:
@@ -231,111 +309,6 @@ components:
       properties:
         dash0.com/source:
           $ref: '#/components/schemas/CrdSource'
-    DashboardDefinition:
-      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
-
-        '
-      properties:
-        kind:
-          type: string
-          enum:
-          - Dashboard
-        metadata:
-          $ref: '#/components/schemas/DashboardMetadata'
-        spec:
-          type: object
-      required:
-      - kind
-      - metadata
-      - spec
-    Dataset:
-      type: string
-      pattern: ^[a-zA-Z0-9_-]{3,26}$
-      description: Optional dataset to query across. Defaults to whatever is configured to be the default dataset for the organization.
-    Error:
-      properties:
-        code:
-          type: integer
-        message:
-          type: string
-        traceId:
-          type: string
-      required:
-      - code
-      - message
-    DashboardApiListItem:
-      properties:
-        id:
-          type: string
-        origin:
-          type: string
-        dataset:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-      required:
-      - id
-      - dataset
-      - tags
-    DashboardAnnotations:
-      properties:
-        dash0.com/deleted-at:
-          type: string
-          format: date-time
-        dash0.com/folder-path:
-          description: Optional UI folder path for organising groups (e.g. '/infrastructure/hosts'). Nesting is expressed with '/' separators.
-          type: string
-        dash0.com/sharing:
-          description: 'Comma-separated list of principals to grant read access to for API-managed resources. Supported formats: ''team:<team_id>'' and ''user:<email>''. Example: ''team:team_01abc,user:alice@example.com''.'
-          type: string
-    DashboardMetadata:
-      properties:
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        version:
-          type: integer
-          format: int64
-          minimum: 0
-        project:
-          type: string
-        dash0Extensions:
-          $ref: '#/components/schemas/DashboardMetadataExtensions'
-        labels:
-          $ref: '#/components/schemas/DashboardLabels'
-        annotations:
-          $ref: '#/components/schemas/DashboardAnnotations'
-      required:
-      - name
-    CrdSource:
-      description: 'Origin of a Dash0 resource.
-
-        - `ui`: created interactively in the Dash0 UI.
-
-        - `terraform`: managed via the Dash0 Terraform provider.
-
-        - `operator`: managed via the Dash0 Kubernetes operator.
-
-        - `api`: created directly through the internal API.
-
-        '
-      type: string
-      enum:
-      - ui
-      - terraform
-      - operator
-      - api
     DashboardMetadataExtensions:
       properties:
         tags:
@@ -362,3 +335,75 @@ components:
         createdBy:
           type: string
           description: The member ID of the user who created this dashboard or dashboard version.
+    DashboardMetadata:
+      properties:
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
+          minimum: 0
+        project:
+          type: string
+        dash0Extensions:
+          $ref: '#/components/schemas/DashboardMetadataExtensions'
+        labels:
+          $ref: '#/components/schemas/DashboardLabels'
+        annotations:
+          $ref: '#/components/schemas/DashboardAnnotations'
+      required:
+      - name
+    DashboardDefinition:
+      description: 'A dashboard definition that is compatible with Perses'' dashboarding system.
+
+        '
+      properties:
+        kind:
+          type: string
+          enum:
+          - Dashboard
+        metadata:
+          $ref: '#/components/schemas/DashboardMetadata'
+        spec:
+          type: object
+      required:
+      - kind
+      - metadata
+      - spec
+    CrdSource:
+      description: "Origin of a Dash0 resource, derived from `dash0.com/origin` on read.\n- `ui`: created interactively in the Dash0 UI.\n- `terraform`: managed via the Dash0 Terraform provider.\n- `operator`: managed via the Dash0 Kubernetes operator.\n- `dash0-cli`: managed via the Dash0 CLI.\n- `platform`: owned by Dash0 rather than by anyone in your organization. Covers both\n  resources Dash0 generates from another resource you own (the recording rules an SLO\n  produces) and resources Dash0 ships with the product (the built-in views).\n- `identity-provider`: a team whose membership Dash0 keeps in sync with a directory\n  group from the organization's identity provider. Membership edits made by hand\n  revert on the next reconcile.\n- `api`: created directly through the API, and the fallback for any origin whose\n  prefix is not recognized.\n\nNew values may be added over time. Treat an unrecognized value as `api`\nrather than rejecting the response.\n"
+      type: string
+      enum:
+      - ui
+      - terraform
+      - operator
+      - dash0-cli
+      - platform
+      - identity-provider
+      - api
+    DashboardApiListItem:
+      properties:
+        id:
+          type: string
+        origin:
+          type: string
+        dataset:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+      - id
+      - dataset
+      - tags
