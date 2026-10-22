@@ -25,6 +25,7 @@ checked:
 - https://www.skills.sh/sitemap.xml
 - opentofu/integrations/opentofu-integration-edges.yml
 - terraform/integrations/terraform-integration-edges.yml
+- vercel/integrations/vercel-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: OpenTelemetry
@@ -355,6 +356,23 @@ edges:
   category: infrastructure-as-code provider registry listing
   badges:
   - Verified publisher (GitHub domain-verified organization)
+- partner_name: Vercel (own)
+  partner: vercel
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://vercel.com/marketplace/dash0
+  mirror_of: vercel/integrations/vercel-integration-edges.yml
+  apps:
+  - Dash0
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Vercel Marketplace
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
