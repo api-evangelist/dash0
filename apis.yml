@@ -281,6 +281,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/dash0/overview
 - type: CapabilityMap
   url: capabilities/dash0-capability-edges.yml
   name: Dash0 Business Capability Map
