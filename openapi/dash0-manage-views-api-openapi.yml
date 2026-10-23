@@ -827,3 +827,9 @@ components:
     AttributeFilterAnyValue:
       description: AttributeFilterAnyValue may contain any AnyValue value.
       $ref: '#/components/schemas/AnyValue'
+x-provenance:
+  method: harvested
+  publisher: Dash0
+  source: https://api.eu-central-1.aws.dash0.com/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
