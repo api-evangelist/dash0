@@ -1,0 +1,1507 @@
+{
+  "info": {
+    "_postman_id": "e7db4d30-d028-490a-a323-60489b185dd3",
+    "name": "Dash0 Manage Signal To Metrics API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:53.000Z",
+    "updatedAt": "2026-10-21T19:56:53.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-e7db4d30-d028-490a-a323-60489b185dd3"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "import",
+          "item": [
+            {
+              "name": "signal-to-metrics",
+              "item": [
+                {
+                  "name": "Bulk upsert signal-to-metrics configs",
+                  "id": "e3b8a590-0b06-48dc-a845-3e4e8881a13e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"platform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_set\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"ends_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"7973051927ms045m07364054067M917507931M306149959h8067325w19131207809d6783Q950812011d24ms\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"lte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"gte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"gt\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/import/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "import",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset.",
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ]
+                    },
+                    "description": "Atomically upserts up to 500 signal-to-metrics configurations at once. If any item\nfails validation or cannot be written, the entire batch is rejected and no\nconfigurations are changed.\n\nThis endpoint is designed for Infrastructure-as-Code (IaC) workflows (Terraform,\nthe operator, CLI scripts). Rules are matched by their `origin` values across\nrepeated invocations, making the operation idempotent.\n\nThis endpoint accepts request bodies up to 2 MB (vs. the 256 KB default for other\nendpoints) to accommodate batched payloads of up to 500 rules per request."
+                  },
+                  "response": [
+                    {
+                      "id": "f100e148-367c-4bbd-956e-39c45e2cb972",
+                      "name": "All items were successfully upserted.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"platform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_set\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"ends_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"7973051927ms045m07364054067M917507931M306149959h8067325w19131207809d6783Q950812011d24ms\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"lte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"gte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"gt\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "signal-to-metrics"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset.",
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"created\": \"<integer>\",\n  \"updated\": \"<integer>\"\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-f100e148-367c-4bbd-956e-39c45e2cb972"
+                    },
+                    {
+                      "id": "8207d48e-cb63-4767-8f74-7412d690dca3",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"items\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"platform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_set\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"ends_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"7973051927ms045m07364054067M917507931M306149959h8067325w19131207809d6783Q950812011d24ms\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"lte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"gte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"gt\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "signal-to-metrics"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The dataset to deploy rules into. Required to prevent accidental deployment to the wrong dataset.",
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-8207d48e-cb63-4767-8f74-7412d690dca3"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-e3b8a590-0b06-48dc-a845-3e4e8881a13e"
+                }
+              ],
+              "id": "199681f7-7745-4c29-9e3b-b74a2181a13a",
+              "createdAt": "2026-10-21T19:56:53.000Z",
+              "updatedAt": "2026-10-21T19:56:53.000Z",
+              "uid": "35240-199681f7-7745-4c29-9e3b-b74a2181a13a"
+            }
+          ],
+          "id": "2face108-dd2f-4771-862f-0ae42548ba53",
+          "createdAt": "2026-10-21T19:56:53.000Z",
+          "updatedAt": "2026-10-21T19:56:53.000Z",
+          "uid": "35240-2face108-dd2f-4771-862f-0ae42548ba53"
+        },
+        {
+          "name": "signal-to-metrics",
+          "item": [
+            {
+              "name": "test",
+              "item": [
+                {
+                  "name": "Test a signal-to-metrics config",
+                  "id": "17468162-4b44-4f3a-9d7e-da43864693e0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"terraform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": \"<boolean>\",\n      \"display\": {\n        \"name\": \"<string>\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"ends_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"<string>\",\n        \"interval\": \"710088s777636854ms79736290077w1289480398m777472484M10810w96889884815M5w40526655d7714666935d\",\n        \"description\": \"<string>\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": \"is_not_set\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"lte\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"is_one_of\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"<string>\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics/test?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics",
+                        "test"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ]
+                    },
+                    "description": "Validates a signal-to-metrics definition and simulates its match filter\nagainst real signals in the selected dataset over a recent time window.\nReturns the number of matching signals on success. A 4xx error is returned\nwhen the definition fails validation or the request is otherwise invalid.\nNothing is persisted."
+                  },
+                  "response": [
+                    {
+                      "id": "54807ca1-e459-462f-a9eb-e0d3573a00f3",
+                      "name": "The test result.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"terraform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": \"<boolean>\",\n      \"display\": {\n        \"name\": \"<string>\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"ends_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"<string>\",\n        \"interval\": \"710088s777636854ms79736290077w1289480398m777472484M10810w96889884815M5w40526655d7714666935d\",\n        \"description\": \"<string>\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": \"is_not_set\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"lte\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"is_one_of\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"<string>\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/test?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            "test"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"executionTime\": \"<dateTime>\",\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  },\n  \"matchedCount\": \"<long>\"\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-54807ca1-e459-462f-a9eb-e0d3573a00f3"
+                    },
+                    {
+                      "id": "036d9c3d-1580-4699-ba63-87395143bcf1",
+                      "name": "The request is invalid \u2014 either the body is missing/malformed, the\ntime range is unparseable or out of range, or the definition fails\nvalidation. The response payload lists the specific failures.\n",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"terraform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": \"<boolean>\",\n      \"display\": {\n        \"name\": \"<string>\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"ends_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"<string>\",\n        \"interval\": \"710088s777636854ms79736290077w1289480398m777472484M10810w96889884815M5w40526655d7714666935d\",\n        \"description\": \"<string>\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": \"is_not_set\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"lte\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"is_one_of\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"<string>\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/test?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            "test"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-036d9c3d-1580-4699-ba63-87395143bcf1"
+                    },
+                    {
+                      "id": "cb4b3aa9-fe4c-4234-8b2b-2867722eb0a7",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"definition\": {\n    \"kind\": \"Dash0SignalToMetrics\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"terraform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"enabled\": \"<boolean>\",\n      \"display\": {\n        \"name\": \"<string>\"\n      },\n      \"match\": {\n        \"signal\": \"spans\",\n        \"filters\": [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"ends_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"output\": {\n        \"name\": \"<string>\",\n        \"interval\": \"710088s777636854ms79736290077w1289480398m777472484M10810w96889884815M5w40526655d7714666935d\",\n        \"description\": \"<string>\",\n        \"keepResourceAttributes\": [\n          {\n            \"operator\": \"is_not_set\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"lte\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        \"keepSignalAttributes\": [\n          {\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"operator\": \"is_one_of\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      },\n      \"targetDatasetMode\": \"original\",\n      \"alternativeDatasetId\": \"<string>\"\n    }\n  },\n  \"timeRange\": {\n    \"from\": \"<dateTime>\",\n    \"to\": \"<dateTime>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/test?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            "test"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-cb4b3aa9-fe4c-4234-8b2b-2867722eb0a7"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-17468162-4b44-4f3a-9d7e-da43864693e0"
+                }
+              ],
+              "id": "7a8b3251-3319-4401-a67d-f957f62a192c",
+              "createdAt": "2026-10-21T19:56:53.000Z",
+              "updatedAt": "2026-10-21T19:56:53.000Z",
+              "uid": "35240-7a8b3251-3319-4401-a67d-f957f62a192c"
+            },
+            {
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a signal-to-metrics config by origin or ID",
+                  "id": "6d9e4b6e-14ec-4732-a057-cf5996b62f6b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "e2851908-35f8-4f20-9d41-ce461582239c",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Signal-to-metrics config origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Deletes a specific signal-to-metrics configuration identified by its origin label or UUID."
+                  },
+                  "response": [
+                    {
+                      "id": "f1be2641-5ba4-43af-9ab5-ab9b56c831ee",
+                      "name": "Successfully deleted",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-f1be2641-5ba4-43af-9ab5-ab9b56c831ee"
+                    },
+                    {
+                      "id": "64e1bf4c-730b-4db6-8b75-15f4aa39b66a",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-64e1bf4c-730b-4db6-8b75-15f4aa39b66a"
+                    },
+                    {
+                      "id": "65cc68d9-dd7a-4694-90d6-bd277e8fda4e",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-65cc68d9-dd7a-4694-90d6-bd277e8fda4e"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-6d9e4b6e-14ec-4732-a057-cf5996b62f6b"
+                },
+                {
+                  "name": "Get a specific signal-to-metrics config by origin or ID",
+                  "id": "63000ed9-80f2-4a61-b9d7-302ccd411219",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "4b29b09f-d3a9-4965-ae13-b3a0f9253157",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Signal-to-metrics config origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Returns a specific signal-to-metrics configuration identified by its origin label or UUID."
+                  },
+                  "response": [
+                    {
+                      "id": "59ff3f43-07ae-4ee0-9c93-6477b7971287",
+                      "name": "The requested signal-to-metrics config",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-59ff3f43-07ae-4ee0-9c93-6477b7971287"
+                    },
+                    {
+                      "id": "a7433548-d626-4401-a4ad-da2788c2dd8b",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-a7433548-d626-4401-a4ad-da2788c2dd8b"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-63000ed9-80f2-4a61-b9d7-302ccd411219"
+                },
+                {
+                  "name": "Update or create a signal-to-metrics config by origin or ID",
+                  "id": "c376c192-a983-488f-a62d-1c5f18a08a30",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "ab983f86-74a7-44a8-8f6c-d282e5b56fc3",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Signal-to-metrics config origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Updates an existing signal-to-metrics configuration or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows."
+                  },
+                  "response": [
+                    {
+                      "id": "4ad849fb-0e13-4c4c-8f8b-86e8ca9f7841",
+                      "name": "The updated or created signal-to-metrics config",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-4ad849fb-0e13-4c4c-8f8b-86e8ca9f7841"
+                    },
+                    {
+                      "id": "6b4f383b-789d-441f-8e5a-1e4acec5ca49",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-6b4f383b-789d-441f-8e5a-1e4acec5ca49"
+                    },
+                    {
+                      "id": "0edd5ce9-d795-436b-8b35-6fff3ed2485f",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/signal-to-metrics/:originOrId?dataset=hpTagfhdqjy2G7Xajwgy",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "signal-to-metrics",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "hpTagfhdqjy2G7Xajwgy"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:53.000Z",
+                      "updatedAt": "2026-10-21T19:56:53.000Z",
+                      "uid": "35240-0edd5ce9-d795-436b-8b35-6fff3ed2485f"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-c376c192-a983-488f-a62d-1c5f18a08a30"
+                }
+              ],
+              "id": "f1694077-86c4-4184-aa68-9ad2bc67d1dd",
+              "createdAt": "2026-10-21T19:56:53.000Z",
+              "updatedAt": "2026-10-21T19:56:53.000Z",
+              "uid": "35240-f1694077-86c4-4184-aa68-9ad2bc67d1dd"
+            },
+            {
+              "name": "List all signal-to-metrics configs for the organization",
+              "id": "e8ed64d1-543c-45a7-89ce-27c7d1e59309",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy&limit=50&offset=0&originPrefix=<string>&name=<string>&signal=spans&enabled=<boolean>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "hpTagfhdqjy2G7Xajwgy"
+                    },
+                    {
+                      "description": "Maximum number of items to return.",
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "description": "Number of items to skip.",
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "description": "Filter by origin prefix.",
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Case-insensitive substring search on the rule name, or an exact match on the rule id.",
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter by signal type.",
+                      "key": "signal",
+                      "value": "spans"
+                    },
+                    {
+                      "description": "Filter by enabled state.",
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    }
+                  ]
+                },
+                "description": "Returns all signal-to-metrics configurations for your organization."
+              },
+              "response": [
+                {
+                  "id": "b13ced93-9a34-4184-851f-ec9975e08d9b",
+                  "name": "List of signal-to-metrics configs",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy&limit=50&offset=0&originPrefix=<string>&name=<string>&signal=spans&enabled=<boolean>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        },
+                        {
+                          "description": "Maximum number of items to return.",
+                          "key": "limit",
+                          "value": "50"
+                        },
+                        {
+                          "description": "Number of items to skip.",
+                          "key": "offset",
+                          "value": "0"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive substring search on the rule name, or an exact match on the rule id.",
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by signal type.",
+                          "key": "signal",
+                          "value": "spans"
+                        },
+                        {
+                          "description": "Filter by enabled state.",
+                          "key": "enabled",
+                          "value": "<boolean>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"signalToMetrics\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"platform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"logs\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"gte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_match\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"8722Q265596d68M0388m\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"is_set\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"is_not_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"is_not\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"does_not_end_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"original\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    },\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"operator\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_match\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_end_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"32656861996h8016162ms3206534M698w\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"matches\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"is_not_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"is_any\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"both\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ],\n  \"hasMore\": \"<boolean>\",\n  \"total\": \"<integer>\",\n  \"counts\": {\n    \"logs\": {\n      \"total\": \"<integer>\",\n      \"enabled\": \"<integer>\"\n    },\n    \"spans\": {\n      \"total\": \"<integer>\",\n      \"enabled\": \"<integer>\"\n    }\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-b13ced93-9a34-4184-851f-ec9975e08d9b"
+                },
+                {
+                  "id": "83cde27d-21d9-45e6-986a-d0e5d8b4e712",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy&limit=50&offset=0&originPrefix=<string>&name=<string>&signal=spans&enabled=<boolean>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        },
+                        {
+                          "description": "Maximum number of items to return.",
+                          "key": "limit",
+                          "value": "50"
+                        },
+                        {
+                          "description": "Number of items to skip.",
+                          "key": "offset",
+                          "value": "0"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Case-insensitive substring search on the rule name, or an exact match on the rule id.",
+                          "key": "name",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by signal type.",
+                          "key": "signal",
+                          "value": "spans"
+                        },
+                        {
+                          "description": "Filter by enabled state.",
+                          "key": "enabled",
+                          "value": "<boolean>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-83cde27d-21d9-45e6-986a-d0e5d8b4e712"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:53.000Z",
+              "updatedAt": "2026-10-21T19:56:53.000Z",
+              "uid": "35240-e8ed64d1-543c-45a7-89ce-27c7d1e59309"
+            },
+            {
+              "name": "Create a new signal-to-metrics config",
+              "id": "02b84042-bb92-48c8-a098-0ff59a7f7b61",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "signal-to-metrics"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "hpTagfhdqjy2G7Xajwgy"
+                    }
+                  ]
+                },
+                "description": "Create a new signal-to-metrics configuration for your organization."
+              },
+              "response": [
+                {
+                  "id": "85c2dff5-98c6-47d6-aa1e-526859e96966",
+                  "name": "The created signal-to-metrics config",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-85c2dff5-98c6-47d6-aa1e-526859e96966"
+                },
+                {
+                  "id": "0a1e9f01-d013-4a6f-8179-f93289c27a8a",
+                  "name": "Forbidden - Admin access required",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-0a1e9f01-d013-4a6f-8179-f93289c27a8a"
+                },
+                {
+                  "id": "59c3e996-1ea4-4c04-bde4-8ecde9bef35b",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0SignalToMetrics\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"platform\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"match\": {\n      \"signal\": \"logs\",\n      \"filters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"ends_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"does_not_end_with\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"output\": {\n      \"name\": \"<string>\",\n      \"interval\": \"29111w328y8984w1244813463y93055748689ms\",\n      \"description\": \"<string>\",\n      \"keepResourceAttributes\": [\n        {\n          \"operator\": \"is\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"keepSignalAttributes\": [\n        {\n          \"operator\": \"lte\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"operator\": \"is_not_one_of\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"targetDatasetMode\": \"alternative\",\n    \"alternativeDatasetId\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/signal-to-metrics?dataset=hpTagfhdqjy2G7Xajwgy",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "signal-to-metrics"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "hpTagfhdqjy2G7Xajwgy"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:53.000Z",
+                  "updatedAt": "2026-10-21T19:56:53.000Z",
+                  "uid": "35240-59c3e996-1ea4-4c04-bde4-8ecde9bef35b"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:53.000Z",
+              "updatedAt": "2026-10-21T19:56:53.000Z",
+              "uid": "35240-02b84042-bb92-48c8-a098-0ff59a7f7b61"
+            }
+          ],
+          "id": "9927167e-0dce-4c45-af9f-6f38cd854d24",
+          "createdAt": "2026-10-21T19:56:53.000Z",
+          "updatedAt": "2026-10-21T19:56:53.000Z",
+          "uid": "35240-9927167e-0dce-4c45-af9f-6f38cd854d24"
+        }
+      ],
+      "id": "e42a5d32-9940-49e2-a208-e5d4a500e48c",
+      "createdAt": "2026-10-21T19:56:53.000Z",
+      "updatedAt": "2026-10-21T19:56:53.000Z",
+      "uid": "35240-e42a5d32-9940-49e2-a208-e5d4a500e48c"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
+    }
+  ]
+}

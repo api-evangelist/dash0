@@ -1,0 +1,723 @@
+{
+  "info": {
+    "_postman_id": "323aef91-ab99-4b71-8084-2fa1d3ffeb1a",
+    "name": "Dash0 Manage Datasets API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:46.000Z",
+    "updatedAt": "2026-10-21T19:56:47.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-323aef91-ab99-4b71-8084-2fa1d3ffeb1a"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "datasets",
+          "item": [
+            {
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a specific dataset",
+                  "id": "586608fc-2f6a-4177-aa6a-a3f4e366eaaf",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "519f830e-48c8-40ea-ba35-55a888bac801",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Dataset origin or slug."
+                        }
+                      ]
+                    },
+                    "description": "Deletes the dataset. It can be restored, 30 days by default, by creating a dataset with the same\nslug; after that it is gone for good. Deleting the default dataset returns 400. Deleting a\ndataset that does not exist, or is already deleted, returns 200.\n\nA deleted dataset keeps its origin reserved until it is purged. Creating a dataset with that\norigin under another slug returns `400`."
+                  },
+                  "response": [
+                    {
+                      "id": "05411aea-47c1-4354-b6af-91721407b41f",
+                      "name": "The dataset was deleted.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-05411aea-47c1-4354-b6af-91721407b41f"
+                    },
+                    {
+                      "id": "66008f58-01d5-4af1-9e52-a24732e40024",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-66008f58-01d5-4af1-9e52-a24732e40024"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-586608fc-2f6a-4177-aa6a-a3f4e366eaaf"
+                },
+                {
+                  "name": "Retrieve a specific dataset",
+                  "id": "6b589005-f08c-4962-8471-6a4822516b13",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "bd5c375b-34e2-4032-b160-6464cb4193db",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Dataset origin or slug."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "1c9671ab-b998-4531-a5b4-1ecbbf630ec5",
+                      "name": "The requested dataset.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-1c9671ab-b998-4531-a5b4-1ecbbf630ec5"
+                    },
+                    {
+                      "id": "3189ac01-12c5-45e3-82b7-4c11ad2efe71",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-3189ac01-12c5-45e3-82b7-4c11ad2efe71"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-6b589005-f08c-4962-8471-6a4822516b13"
+                },
+                {
+                  "name": "Update a specific dataset",
+                  "id": "85189987-749e-4e16-8488-b665f70a6353",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "26ac56fe-59a2-4dcb-bff1-1281a4f41bbf",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Dataset origin or slug."
+                        }
+                      ]
+                    },
+                    "description": "Updates a dataset. Unless the caller is the Dash0 UI, a dataset that does not exist is\ncreated instead.\n\n`metadata.labels[\"dash0.com/version\"]` is optional for API tokens, which take the stored\nversion. Omitting any spec field leaves its stored value unchanged. Changing the slug is\nrejected with `400`. `apiVersion` is required; a missing or unsupported value returns `400`."
+                  },
+                  "response": [
+                    {
+                      "id": "bf70d05e-7c96-40fa-86a2-910896b6dd0e",
+                      "name": "The dataset was updated.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-bf70d05e-7c96-40fa-86a2-910896b6dd0e"
+                    },
+                    {
+                      "id": "cd525bdc-8db2-4313-b76c-3627c0b0f73f",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/datasets/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "datasets",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:47.000Z",
+                      "updatedAt": "2026-10-21T19:56:47.000Z",
+                      "uid": "35240-cd525bdc-8db2-4313-b76c-3627c0b0f73f"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-85189987-749e-4e16-8488-b665f70a6353"
+                }
+              ],
+              "id": "00198f4f-dec9-4f67-9f9f-df6bf42e7b7e",
+              "createdAt": "2026-10-21T19:56:47.000Z",
+              "updatedAt": "2026-10-21T19:56:47.000Z",
+              "uid": "35240-00198f4f-dec9-4f67-9f9f-df6bf42e7b7e"
+            },
+            {
+              "name": "List all datasets for the organization",
+              "id": "dad99003-f928-45e3-a317-cb3d9dafae08",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/datasets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "datasets"
+                  ]
+                },
+                "description": "Returns all datasets in your organization."
+              },
+              "response": [
+                {
+                  "id": "e89351ac-2e63-495e-bcc4-8ec905f1647e",
+                  "name": "The organization's datasets.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"apiVersion\": \"<string>\",\n    \"kind\": \"Dash0Dataset\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/source\": \"platform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"slug\": \"x-aD1UjcAnJpcotFBu-BxVhbKR\",\n      \"preferred\": \"<boolean>\",\n      \"retention\": {\n        \"traces\": \"90d\",\n        \"logs\": \"120d\",\n        \"metrics\": \"90d\",\n        \"profiles\": \"120d\",\n        \"webEvents\": \"60d\"\n      },\n      \"privacy\": {\n        \"ipAddresses\": {\n          \"endUser\": {\n            \"storage\": \"anonymize\"\n          }\n        },\n        \"geoLocation\": {\n          \"endUser\": {\n            \"storage\": \"up_to_country\"\n          }\n        },\n        \"redaction\": {\n          \"cardholderData\": {\n            \"enabled\": \"<boolean>\"\n          },\n          \"genAi\": {\n            \"conversation\": \"redact\",\n            \"toolCalls\": \"redact\",\n            \"errors\": \"disabled\"\n          }\n        }\n      },\n      \"processing\": {\n        \"spanEventsToLogs\": \"<boolean>\",\n        \"semanticConventionUpgrades\": \"<string>\",\n        \"darkplane\": {\n          \"respectNativeCodingAgentTelemetry\": \"disabled\"\n        }\n      },\n      \"permissions\": [\n        {\n          \"actions\": [\n            \"dataset:delete\",\n            \"dataset:read\"\n          ],\n          \"teamId\": \"<string>\",\n          \"userId\": \"<string>\",\n          \"role\": \"<string>\"\n        },\n        {\n          \"actions\": [\n            \"dataset:read\",\n            \"dataset:delete\"\n          ],\n          \"teamId\": \"<string>\",\n          \"userId\": \"<string>\",\n          \"role\": \"<string>\"\n        }\n      ],\n      \"permittedActions\": [\n        \"dataset:createRecordingRuleGroup\",\n        \"dataset:createAgent0Automation\"\n      ]\n    }\n  },\n  {\n    \"apiVersion\": \"<string>\",\n    \"kind\": \"Dash0Dataset\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/source\": \"terraform\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"slug\": \"eXvjVZTO7p\",\n      \"preferred\": \"<boolean>\",\n      \"retention\": {\n        \"traces\": \"30d\",\n        \"logs\": \"210d\",\n        \"metrics\": \"390d\",\n        \"profiles\": \"120d\",\n        \"webEvents\": \"120d\"\n      },\n      \"privacy\": {\n        \"ipAddresses\": {\n          \"endUser\": {\n            \"storage\": \"do_not_store\"\n          }\n        },\n        \"geoLocation\": {\n          \"endUser\": {\n            \"storage\": \"up_to_city\"\n          }\n        },\n        \"redaction\": {\n          \"cardholderData\": {\n            \"enabled\": \"<boolean>\"\n          },\n          \"genAi\": {\n            \"conversation\": \"redact\",\n            \"toolCalls\": \"disabled\",\n            \"errors\": \"disabled\"\n          }\n        }\n      },\n      \"processing\": {\n        \"spanEventsToLogs\": \"<boolean>\",\n        \"semanticConventionUpgrades\": \"<string>\",\n        \"darkplane\": {\n          \"respectNativeCodingAgentTelemetry\": \"disabled\"\n        }\n      },\n      \"permissions\": [\n        {\n          \"actions\": [\n            \"dataset:createSLO\",\n            \"dataset:delete\"\n          ],\n          \"teamId\": \"<string>\",\n          \"userId\": \"<string>\",\n          \"role\": \"<string>\"\n        },\n        {\n          \"actions\": [\n            \"dataset:createSyntheticCheck\",\n            \"dataset:createCheckRule\"\n          ],\n          \"teamId\": \"<string>\",\n          \"userId\": \"<string>\",\n          \"role\": \"<string>\"\n        }\n      ],\n      \"permittedActions\": [\n        \"dataset:createSyntheticCheck\",\n        \"dataset:createSLO\"\n      ]\n    }\n  }\n]",
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-e89351ac-2e63-495e-bcc4-8ec905f1647e"
+                },
+                {
+                  "id": "b3a3067d-432e-487e-a196-8afc120f725e",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-b3a3067d-432e-487e-a196-8afc120f725e"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:47.000Z",
+              "updatedAt": "2026-10-21T19:56:47.000Z",
+              "uid": "35240-dad99003-f928-45e3-a317-cb3d9dafae08"
+            },
+            {
+              "name": "Create a dataset",
+              "id": "8b360004-26e0-4ee6-a46e-b47b7642ced2",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/datasets",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "datasets"
+                  ]
+                },
+                "description": "Creates a dataset. The slug supplied as `metadata.labels[\"dash0.com/id\"]` is the dataset's\npermanent identifier and cannot be changed afterwards. A slug or origin that is already in\nuse, as a slug or as an origin, in your organization is rejected with `400`.\n\nCreating a dataset whose slug belongs to a deleted dataset restores it. A restore sets the\norigin like a create: the origin in the request; else an `api-` origin for a machine\ntoken that has no user; else none, and the old origin is dropped.\n\n`spec.permissions` is ignored on create, which grants `dataset:read` to the organization's\nmembers. Set permissions with a subsequent update.\n\n`apiVersion` is required. A missing or unsupported value returns `400`."
+              },
+              "response": [
+                {
+                  "id": "4c9aa4a6-e421-41b8-b0b5-69a15cc22478",
+                  "name": "The dataset was created.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-4c9aa4a6-e421-41b8-b0b5-69a15cc22478"
+                },
+                {
+                  "id": "8c26e41b-9fd5-474a-a991-73b6f6e7ffee",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"Dash0Dataset\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"slug\": \"r9qLzV6F0gWGIGP2SIXPbJQTIW\",\n    \"preferred\": \"<boolean>\",\n    \"retention\": {\n      \"traces\": \"120d\",\n      \"logs\": \"60d\",\n      \"metrics\": \"90d\",\n      \"profiles\": \"390d\",\n      \"webEvents\": \"60d\"\n    },\n    \"privacy\": {\n      \"ipAddresses\": {\n        \"endUser\": {\n          \"storage\": \"anonymize\"\n        }\n      },\n      \"geoLocation\": {\n        \"endUser\": {\n          \"storage\": \"up_to_country\"\n        }\n      },\n      \"redaction\": {\n        \"cardholderData\": {\n          \"enabled\": \"<boolean>\"\n        },\n        \"genAi\": {\n          \"conversation\": \"disabled\",\n          \"toolCalls\": \"redact\",\n          \"errors\": \"redact\"\n        }\n      }\n    },\n    \"processing\": {\n      \"spanEventsToLogs\": \"<boolean>\",\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"enabled\"\n      }\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"dataset:createRecordingRuleGroup\",\n          \"dataset:createSyntheticCheck\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"dataset:createSLO\",\n          \"dataset:createCheckRule\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"permittedActions\": [\n      \"dataset:createSyntheticCheck\",\n      \"dataset:write\"\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/datasets",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "datasets"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:47.000Z",
+                  "updatedAt": "2026-10-21T19:56:47.000Z",
+                  "uid": "35240-8c26e41b-9fd5-474a-a991-73b6f6e7ffee"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:47.000Z",
+              "updatedAt": "2026-10-21T19:56:47.000Z",
+              "uid": "35240-8b360004-26e0-4ee6-a46e-b47b7642ced2"
+            }
+          ],
+          "id": "d3ba6c20-0108-4d8d-a044-a939b0cbf879",
+          "createdAt": "2026-10-21T19:56:47.000Z",
+          "updatedAt": "2026-10-21T19:56:47.000Z",
+          "uid": "35240-d3ba6c20-0108-4d8d-a044-a939b0cbf879"
+        }
+      ],
+      "id": "8b042836-6a45-4cb7-ae90-350d8a4a7178",
+      "createdAt": "2026-10-21T19:56:47.000Z",
+      "updatedAt": "2026-10-21T19:56:47.000Z",
+      "uid": "35240-8b042836-6a45-4cb7-ae90-350d8a4a7178"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
+    }
+  ]
+}

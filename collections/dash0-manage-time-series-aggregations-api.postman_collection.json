@@ -1,0 +1,986 @@
+{
+  "info": {
+    "_postman_id": "c568dea8-9fb7-4189-b0a8-2bf9f17e21f4",
+    "name": "Dash0 Manage Time Series Aggregations API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:57:07.000Z",
+    "updatedAt": "2026-10-21T19:57:07.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-c568dea8-9fb7-4189-b0a8-2bf9f17e21f4"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "time-series-aggregations",
+          "item": [
+            {
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a time series aggregation by origin or ID",
+                  "id": "f4cfe52c-4d64-4fdf-a9ad-89253a68cc7f",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "4e7b0f6e-513e-4f41-820a-ac59fa6fed9d",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Time series aggregation origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Deletes a specific time series aggregation identified by its origin label or UUID."
+                  },
+                  "response": [
+                    {
+                      "id": "f0949229-44e2-4315-a5f1-b685017e281d",
+                      "name": "Successfully deleted",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-f0949229-44e2-4315-a5f1-b685017e281d"
+                    },
+                    {
+                      "id": "222c63a7-d7b1-493b-9bdb-645748c92695",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-222c63a7-d7b1-493b-9bdb-645748c92695"
+                    },
+                    {
+                      "id": "6f0bfae1-3f30-4eb4-bc7a-a977d60e5219",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-6f0bfae1-3f30-4eb4-bc7a-a977d60e5219"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-f4cfe52c-4d64-4fdf-a9ad-89253a68cc7f"
+                },
+                {
+                  "name": "Get a specific time series aggregation by origin or ID",
+                  "id": "96ae7963-70d2-4ce7-a20c-201faaaa9778",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "1af23067-201b-4d92-92f3-5fa43dd2ce3b",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Time series aggregation origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Returns a specific time series aggregation identified by its origin label or UUID."
+                  },
+                  "response": [
+                    {
+                      "id": "ad7976f5-64b3-4cd1-ba51-69b2d4ef4719",
+                      "name": "The requested time series aggregation",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-ad7976f5-64b3-4cd1-ba51-69b2d4ef4719"
+                    },
+                    {
+                      "id": "5bdb04b5-5710-4a3d-9bfe-d36218a4330c",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-5bdb04b5-5710-4a3d-9bfe-d36218a4330c"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-96ae7963-70d2-4ce7-a20c-201faaaa9778"
+                },
+                {
+                  "name": "Update or create a time series aggregation by origin or ID",
+                  "id": "34d5dbd6-9ca6-4ff5-bebd-834e3f8ee1d9",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "5d4fb836-ebc4-42ef-b602-2c26e89ad6b3",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Time series aggregation origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Updates an existing time series aggregation or creates a new one if it doesn't exist.\nUseful for Infrastructure-as-Code workflows."
+                  },
+                  "response": [
+                    {
+                      "id": "addda93c-3f22-41b4-91fc-cbf663949eab",
+                      "name": "The updated or created time series aggregation",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-addda93c-3f22-41b4-91fc-cbf663949eab"
+                    },
+                    {
+                      "id": "18b1f557-9082-4e22-87c7-5444f3045cfc",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-18b1f557-9082-4e22-87c7-5444f3045cfc"
+                    },
+                    {
+                      "id": "e6c74f02-899b-44c8-87fd-14ce2d5f3952",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/time-series-aggregations/:originOrId?dataset=Otz-GQF2KR3b",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "time-series-aggregations",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Otz-GQF2KR3b"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:07.000Z",
+                      "updatedAt": "2026-10-21T19:57:07.000Z",
+                      "uid": "35240-e6c74f02-899b-44c8-87fd-14ce2d5f3952"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-34d5dbd6-9ca6-4ff5-bebd-834e3f8ee1d9"
+                }
+              ],
+              "id": "d0801fab-a646-44e1-820c-5270115df9c9",
+              "createdAt": "2026-10-21T19:57:07.000Z",
+              "updatedAt": "2026-10-21T19:57:07.000Z",
+              "uid": "35240-d0801fab-a646-44e1-820c-5270115df9c9"
+            },
+            {
+              "name": "List all time series aggregations for the organization",
+              "id": "46ebaed2-d02c-425e-aebf-0a092596bf20",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "Otz-GQF2KR3b"
+                    }
+                  ]
+                },
+                "description": "Returns all time series aggregation rules configured for your organization."
+              },
+              "response": [
+                {
+                  "id": "3e2ba6fc-ac36-4d84-b411-8c8c08ce5b16",
+                  "name": "List of time series aggregations",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"timeSeriesAggregations\": [\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"api\",\n          \"custom\": {\n            \"ut_b\": \"<string>\",\n            \"tempor_c2d\": \"<string>\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"contains\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"098846006w954462y353574384M46192212w9638397m9753ms40Q54148222859y\",\n          \"delay\": \"6d\",\n          \"staleAfter\": \"028d19s35211ms808335Q091w75271420m24513260774ms482313264d284365438w\"\n        },\n        \"priority\": 2,\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"keyMatcher\": {\n                \"operator\": \"starts_with\",\n                \"value\": \"<string>\",\n                \"values\": [\n                  \"<string>\",\n                  \"<string>\"\n                ]\n              },\n              \"context\": \"resource\"\n            }\n          },\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"keyMatcher\": {\n                \"operator\": \"does_not_contain\",\n                \"value\": \"<string>\",\n                \"values\": [\n                  \"<string>\",\n                  \"<string>\"\n                ]\n              },\n              \"context\": \"datapoint\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"dash0-cli\",\n          \"custom\": {\n            \"Lorem_2\": \"<string>\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": \"is_not_one_of\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"gt\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"3169759509Q8262306796M91550w42799656994s0Q53263m93828565855d654818169Q95576523473Q\",\n          \"delay\": \"2974850s5548506939M27M2990611s\",\n          \"staleAfter\": \"85253021Q1614697775h900269415s9760999w8536d\"\n        },\n        \"priority\": 2,\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"keyMatcher\": {\n                \"operator\": \"is_one_of\",\n                \"value\": \"<string>\",\n                \"values\": [\n                  \"<string>\",\n                  \"<string>\"\n                ]\n              },\n              \"context\": \"datapoint\"\n            }\n          },\n          {\n            \"kind\": \"keep_attributes\",\n            \"spec\": {\n              \"keyMatcher\": {\n                \"operator\": \"is\",\n                \"value\": \"<string>\",\n                \"values\": [\n                  \"<string>\",\n                  \"<string>\"\n                ]\n              },\n              \"context\": \"resource\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n}",
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-3e2ba6fc-ac36-4d84-b411-8c8c08ce5b16"
+                },
+                {
+                  "id": "c22ba719-0a98-4622-9f3f-9e0d5e07059d",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-c22ba719-0a98-4622-9f3f-9e0d5e07059d"
+                }
+              ],
+              "createdAt": "2026-10-21T19:57:07.000Z",
+              "updatedAt": "2026-10-21T19:57:07.000Z",
+              "uid": "35240-46ebaed2-d02c-425e-aebf-0a092596bf20"
+            },
+            {
+              "name": "Create a new time series aggregation",
+              "id": "dd482c67-f0a0-45e1-b6f1-341462045956",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "time-series-aggregations"
+                  ],
+                  "query": [
+                    {
+                      "key": "dataset",
+                      "value": "Otz-GQF2KR3b"
+                    }
+                  ]
+                },
+                "description": "Create a new time series aggregation rule for your organization. If\n`metadata.labels[\"dash0.com/origin\"]` is provided, it must be unique within the\norganization and dataset; a request with a duplicate origin returns 400. If no\norigin is provided, the server auto-generates one."
+              },
+              "response": [
+                {
+                  "id": "dedb09c4-1a84-4561-a8f1-ff5900ae5a19",
+                  "name": "The created time series aggregation",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-dedb09c4-1a84-4561-a8f1-ff5900ae5a19"
+                },
+                {
+                  "id": "b799e370-6297-4fe8-bead-75af312f8255",
+                  "name": "Forbidden - Admin access required",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-b799e370-6297-4fe8-bead-75af312f8255"
+                },
+                {
+                  "id": "80ad6ca2-97ba-412e-a1b8-e63b5fae3ec2",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0TimeSeriesAggregation\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"custom\": {\n        \"laboris4\": \"<string>\",\n        \"quisab\": \"<string>\"\n      }\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"match\": {\n      \"metricNameMatcher\": {\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      \"otherFilters\": [\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not_set\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"key\": \"<string>\",\n          \"operator\": \"is_not\",\n          \"value\": \"<string>\",\n          \"values\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    },\n    \"sample\": {\n      \"interval\": \"22267Q48830983007s\",\n      \"delay\": \"22M204014s05978441y36357809ms00064544s45485849h\",\n      \"staleAfter\": \"43708065w60296y\"\n    },\n    \"priority\": 2,\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"attributeModifications\": [\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"is\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      },\n      {\n        \"kind\": \"drop_attributes\",\n        \"spec\": {\n          \"keyMatcher\": {\n            \"operator\": \"does_not_match\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          \"context\": \"resource\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/time-series-aggregations?dataset=Otz-GQF2KR3b",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "time-series-aggregations"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Otz-GQF2KR3b"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:07.000Z",
+                  "updatedAt": "2026-10-21T19:57:07.000Z",
+                  "uid": "35240-80ad6ca2-97ba-412e-a1b8-e63b5fae3ec2"
+                }
+              ],
+              "createdAt": "2026-10-21T19:57:07.000Z",
+              "updatedAt": "2026-10-21T19:57:07.000Z",
+              "uid": "35240-dd482c67-f0a0-45e1-b6f1-341462045956"
+            }
+          ],
+          "id": "4523bf60-076e-4139-bc77-344521d99f04",
+          "createdAt": "2026-10-21T19:57:07.000Z",
+          "updatedAt": "2026-10-21T19:57:07.000Z",
+          "uid": "35240-4523bf60-076e-4139-bc77-344521d99f04"
+        }
+      ],
+      "id": "98ab5772-c5c5-4331-ae01-e59bfe155f39",
+      "createdAt": "2026-10-21T19:57:07.000Z",
+      "updatedAt": "2026-10-21T19:57:07.000Z",
+      "uid": "35240-98ab5772-c5c5-4331-ae01-e59bfe155f39"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
+    }
+  ]
+}

@@ -1,1387 +1,2029 @@
 {
+  "info": {
+    "_postman_id": "22f37a8a-7a16-49bb-a774-ac60fc4ca4e6",
+    "name": "Dash0 Manage Teams and Members API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:55.000Z",
+    "updatedAt": "2026-10-21T19:55:56.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-22f37a8a-7a16-49bb-a774-ac60fc4ca4e6"
+  },
   "item": [
     {
-      "id": "99c3b7eb-8f84-43a3-a04a-404b652d3020",
-      "name": "Manage Teams and Members",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "61411ed7-69c8-4346-8d2a-c348acdf4742",
-          "name": "Remove a member from the organization.",
-          "request": {
-            "name": "Remove a member from the organization.",
-            "description": {
-              "content": "Removes the given member from the organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "members",
-                ":memberID"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "memberID",
-                  "description": "(Required) The Clerk user ID of the member to remove."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "members",
+          "item": [
             {
-              "id": "ceeed8c3-ffa1-4832-96e9-7d4b961bfe8c",
-              "name": "Successfully removed the member.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "members",
-                    ":memberID"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "invitations",
+              "item": [
+                {
+                  "name": "{invitationID}",
+                  "item": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "memberID",
-                      "description": "(Required) The Clerk user ID of the member to remove."
+                      "name": "Revoke a pending member invitation",
+                      "id": "806c13a7-ee38-448d-a644-7c9668ace7ae",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/invitations/:invitationID",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            "invitations",
+                            ":invitationID"
+                          ],
+                          "variable": [
+                            {
+                              "id": "22946238-11b9-4506-ab3b-779833eebd5e",
+                              "key": "invitationID",
+                              "value": "<string>",
+                              "description": "(Required) ID of the invitation to revoke, as returned in `metadata.labels['dash0.com/id']` by\n`GET /api/members/invitations`. An invitation that does not exist, or that was already\naccepted, revoked or expired, is rejected with `404`.\n"
+                            }
+                          ]
+                        },
+                        "description": "Revokes an invitation to your organization that has not been accepted yet, so it can no\nlonger be accepted. Requires the admin role."
+                      },
+                      "response": [
+                        {
+                          "id": "96da68e5-3b4b-4e5a-b422-8fd164932af5",
+                          "name": "Successfully revoked the invitation.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/members/invitations/:invitationID",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "members",
+                                "invitations",
+                                ":invitationID"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "invitationID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-96da68e5-3b4b-4e5a-b422-8fd164932af5"
+                        },
+                        {
+                          "id": "ce82726f-36c9-43e7-87c6-5b54000c2527",
+                          "name": "In case any error happens.",
+                          "originalRequest": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/members/invitations/:invitationID",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "members",
+                                "invitations",
+                                ":invitationID"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "invitationID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-ce82726f-36c9-43e7-87c6-5b54000c2527"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-806c13a7-ee38-448d-a644-7c9668ace7ae"
                     }
-                  ]
+                  ],
+                  "id": "cf4ddbcc-4fb5-4f37-a4b5-881bb55add35",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-cf4ddbcc-4fb5-4f37-a4b5-881bb55add35"
                 },
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "30e8d667-2274-40ff-95d4-79795abb1800",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "members",
-                    ":memberID"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+                  "name": "Receive a list of pending member invitations",
+                  "id": "6a2ee94d-9ae2-412a-9699-f106e18ab10b",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members/invitations",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members",
+                        "invitations"
+                      ]
+                    },
+                    "description": "Receive all invitations to your organization that have not been accepted yet. Invitees are\nnot listed by `GET /api/members` until they accept, so compare against both lists before\ninviting an address again. Requires the admin role."
+                  },
+                  "response": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "memberID",
-                      "description": "(Required) The Clerk user ID of the member to remove."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "ab1bfc5a-d76e-47f8-a4e3-afb66f909fcf",
-          "name": "Remove a member from a team.",
-          "request": {
-            "name": "Remove a member from a team.",
-            "description": {
-              "content": "Removes the given member from the team.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams",
-                ":originOrId",
-                "members",
-                ":memberID"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the team."
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "memberID",
-                  "description": "(Required) The **id** of the member."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "e3e94327-f890-4d3a-ba59-9b869cefef04",
-              "name": "The member is removed.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "members",
-                    ":memberID"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
+                      "id": "e16c9ddb-ce98-45e8-a260-b77a32592bce",
+                      "name": "Receive a list of pending invitations.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/invitations",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            "invitations"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "[\n  {\n    \"kind\": \"Dash0MemberInvitation\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/role\": \"<string>\",\n        \"dash0.com/invited-at\": \"<dateTime>\",\n        \"dash0.com/expires-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"emailAddress\": \"<string>\"\n    }\n  },\n  {\n    \"kind\": \"Dash0MemberInvitation\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/role\": \"<string>\",\n        \"dash0.com/invited-at\": \"<dateTime>\",\n        \"dash0.com/expires-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"emailAddress\": \"<string>\"\n    }\n  }\n]",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-e16c9ddb-ce98-45e8-a260-b77a32592bce"
                     },
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "memberID",
-                      "description": "(Required) The **id** of the member."
+                      "id": "ebdd9c51-8d27-45dd-b138-bd645363f97e",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/invitations",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            "invitations"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-ebdd9c51-8d27-45dd-b138-bd645363f97e"
                     }
-                  ]
-                },
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  ],
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-6a2ee94d-9ae2-412a-9699-f106e18ab10b"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
+              "id": "46fa9854-11df-4b0a-a562-89436f27ca4a",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-46fa9854-11df-4b0a-a562-89436f27ca4a"
             },
             {
-              "id": "509f03c5-65e4-488b-b5a3-c4d4b6a44adb",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "members",
-                    ":memberID"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "{memberID}",
+              "item": [
+                {
+                  "name": "role",
+                  "item": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
+                      "name": "Change the organization role of a member",
+                      "id": "0218334a-fafc-4045-9055-93f1e4330a71",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"role\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/:memberID/role",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            ":memberID",
+                            "role"
+                          ],
+                          "variable": [
+                            {
+                              "id": "f97d75b8-9b1f-4271-9e1c-abb1fb5a05ec",
+                              "key": "memberID",
+                              "value": "<string>",
+                              "description": "(Required) The internal ID of the member whose role to change."
+                            }
+                          ]
+                        },
+                        "description": "Changes the role of a member of your organization."
+                      },
+                      "response": [
+                        {
+                          "id": "7e79b8b3-3e05-4c76-89da-6d5c6230c01c",
+                          "name": "Successfully changed the member role.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/members/:memberID/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "members",
+                                ":memberID",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "memberID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-7e79b8b3-3e05-4c76-89da-6d5c6230c01c"
+                        },
+                        {
+                          "id": "e9c8143a-028b-424c-993a-249445e1473d",
+                          "name": "In case any error happens.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"role\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/members/:memberID/role",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "members",
+                                ":memberID",
+                                "role"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "memberID"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-e9c8143a-028b-424c-993a-249445e1473d"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-0218334a-fafc-4045-9055-93f1e4330a71"
+                    }
+                  ],
+                  "id": "8ea8cd59-781f-44a3-b725-c0393973dcd1",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-8ea8cd59-781f-44a3-b725-c0393973dcd1"
+                },
+                {
+                  "name": "Remove a member from the organization",
+                  "id": "c8b85547-8e26-45f7-aa5e-1ab2008287f4",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members/:memberID",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members",
+                        ":memberID"
+                      ],
+                      "variable": [
+                        {
+                          "id": "828cb210-fddf-437a-b627-b1820db35619",
+                          "key": "memberID",
+                          "value": "<string>",
+                          "description": "(Required) The internal ID of the member to remove."
+                        }
+                      ]
+                    },
+                    "description": "Removes the given member from the organization."
+                  },
+                  "response": [
+                    {
+                      "id": "05a2d97e-e4e1-4fa9-a0d3-38a457bf5543",
+                      "name": "Successfully removed the member.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/:memberID",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            ":memberID"
+                          ],
+                          "variable": [
+                            {
+                              "key": "memberID"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-05a2d97e-e4e1-4fa9-a0d3-38a457bf5543"
                     },
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "memberID",
-                      "description": "(Required) The **id** of the member."
+                      "id": "e578b114-a5d0-4a8d-ae99-440b5b423aff",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/members/:memberID",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "members",
+                            ":memberID"
+                          ],
+                          "variable": [
+                            {
+                              "key": "memberID"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-e578b114-a5d0-4a8d-ae99-440b5b423aff"
                     }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "dec3a5cd-a8e8-45c1-9f48-fd0f8662abe6",
-          "name": "Delete a specific team by its origin or id.",
-          "request": {
-            "name": "Delete a specific team by its origin or id.",
-            "description": {
-              "content": "Delete a specific team by its **origin** or **id**.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the team."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "792a4dd8-059e-46ec-a2cf-4866267cc9d6",
-              "name": "Team deleted successfully.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-c8b85547-8e26-45f7-aa5e-1ab2008287f4"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
+              "id": "03ca264c-54ac-41e7-895f-2f0d0f1f5d34",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-03ca264c-54ac-41e7-895f-2f0d0f1f5d34"
             },
             {
-              "id": "527e643d-d9aa-41c5-92f0-d31486d15f62",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
+              "name": "Receive a list of organization members",
+              "id": "b5f83ab3-310a-4716-b0ee-27a4a00a8843",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "6e6b504e-9a67-4fc5-9c3c-3d9a9be77899",
-          "name": "Receive a specific team by its origin or id.",
-          "request": {
-            "name": "Receive a specific team by its origin or id.",
-            "description": {
-              "content": "Receive a specific team by its **origin** or **id**.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the team."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "f036885e-fc67-4223-9726-b54938fbc501",
-              "name": "Receive a specific team.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"team\": {\n    \"kind\": \"Dash0Team\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/source\": \"api\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"name\": \"string\",\n        \"color\": {\n          \"from\": \"string\",\n          \"to\": \"string\"\n        }\n      },\n      \"members\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  },\n  \"members\": [\n    {\n      \"kind\": \"Dash0Member\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/joinedAt\": \"1948-07-07T20:43:37.223Z\"\n        }\n      },\n      \"spec\": {\n        \"display\": {\n          \"email\": \"string\",\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"imageUrl\": \"string\"\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0Member\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/joinedAt\": \"1957-01-30T04:31:37.351Z\"\n        }\n      },\n      \"spec\": {\n        \"display\": {\n          \"email\": \"string\",\n          \"firstName\": \"string\",\n          \"lastName\": \"string\",\n          \"imageUrl\": \"string\"\n        }\n      }\n    }\n  ],\n  \"dashboards\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"1955-10-08T08:10:50.515Z\",\n      \"dataset\": \"AQ92\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2009-01-03T02:23:28.601Z\",\n      \"dataset\": \"H3IpIUwNc9zM\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    }\n  ],\n  \"checkRules\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2006-06-06T11:17:41.851Z\",\n      \"dataset\": \"XVsnLB06iwEh\",\n      \"hasAccess\": true,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2025-02-25T16:27:17.721Z\",\n      \"dataset\": \"xZUH16RpX6ZNWYM1\",\n      \"hasAccess\": true,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    }\n  ],\n  \"syntheticChecks\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2003-09-08T11:44:16.654Z\",\n      \"dataset\": \"MuJk664LraLU0QUySNLaa1cwLm\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"1992-10-25T19:40:39.210Z\",\n      \"dataset\": \"MxMgFYYCGoj1C\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    }\n  ],\n  \"views\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2009-12-17T04:32:48.874Z\",\n      \"dataset\": \"MX8ze\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"1947-05-03T03:32:57.601Z\",\n      \"dataset\": \"22UWltrqdOXwJ\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    }\n  ],\n  \"datasets\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"2016-10-18T14:55:52.940Z\",\n      \"dataset\": \"19nVrlWsErY54B3TY3r_TruJE\",\n      \"hasAccess\": true,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"permittedActions\": [\n        \"string\",\n        \"string\"\n      ],\n      \"createdAt\": \"1981-08-07T18:28:52.007Z\",\n      \"dataset\": \"Jb0yt3TDevdmBmvFYqhLH7NDF\",\n      \"hasAccess\": false,\n      \"type\": \"string\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f8a03fa4-912e-48f7-9bb1-0a69955c6ede",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "25fc5424-6545-4917-bd78-23c4af4b8c9c",
-          "name": "Receive a list of organization members.",
-          "request": {
-            "name": "Receive a list of organization members.",
-            "description": {
-              "content": "Receive a list of all members in your organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "members"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "fa3818f1-4fc9-440c-b0f1-64ecb583bd23",
-              "name": "Receive a list of members.",
-              "originalRequest": {
                 "url": {
+                  "raw": "{{baseUrl}}/api/members",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Receive a list of all members in your organization."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "2a03aaeb-5f33-439a-90e9-8ccae58a53e6",
+                  "name": "Receive a list of members.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"kind\": \"Dash0Member\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/userId\": \"<string>\",\n        \"dash0.com/joinedAt\": \"<dateTime>\",\n        \"dash0.com/role\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"email\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"imageUrl\": \"<string>\"\n      }\n    }\n  },\n  {\n    \"kind\": \"Dash0Member\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/userId\": \"<string>\",\n        \"dash0.com/joinedAt\": \"<dateTime>\",\n        \"dash0.com/role\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"email\": \"<string>\",\n        \"firstName\": \"<string>\",\n        \"lastName\": \"<string>\",\n        \"imageUrl\": \"<string>\"\n      }\n    }\n  }\n]",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-2a03aaeb-5f33-439a-90e9-8ccae58a53e6"
+                },
+                {
+                  "id": "1f32d74e-ac5f-4778-a961-b822456cda01",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-1f32d74e-ac5f-4778-a961-b822456cda01"
                 }
               ],
-              "body": "[\n  {\n    \"kind\": \"Dash0Member\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/joinedAt\": \"1985-07-16T21:58:02.043Z\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"imageUrl\": \"string\"\n      }\n    }\n  },\n  {\n    \"kind\": \"Dash0Member\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/joinedAt\": \"1990-04-01T17:04:21.942Z\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"email\": \"string\",\n        \"firstName\": \"string\",\n        \"lastName\": \"string\",\n        \"imageUrl\": \"string\"\n      }\n    }\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-b5f83ab3-310a-4716-b0ee-27a4a00a8843"
             },
             {
-              "id": "5cda04ea-d334-45c7-a96b-ea998ea91e4d",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+              "name": "Invite a member to the organization",
+              "id": "1bcfbdcd-7acf-4fd0-ab08-212868125d35",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "fdda0cb1-278b-4529-8616-de468a183d31",
-          "name": "Invite a member to the organization.",
-          "request": {
-            "name": "Invite a member to the organization.",
-            "description": {
-              "content": "Sends an invitation to join the organization to the given email address.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "members"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"role\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "4afddaf7-be37-47b1-8a8f-d81f8960ef42",
-              "name": "Successfully invited the member.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+              "request": {
                 "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
                 "body": {
                   "mode": "raw",
                   "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"role\": \"<string>\"\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "935e0c0f-485a-44af-a7b4-dfcfc7d03964",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/members",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"role\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Sends an invitation to join the organization to the given email address."
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "0c14298a-2225-4ca9-b6de-5a0dd52f239a",
+                  "name": "Successfully invited the member.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"role\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-0c14298a-2225-4ca9-b6de-5a0dd52f239a"
+                },
+                {
+                  "id": "df708c5d-173b-45b3-99f1-b47144daa0b7",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"role\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/members",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "members"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-df708c5d-173b-45b3-99f1-b47144daa0b7"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-1bcfbdcd-7acf-4fd0-ab08-212868125d35"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "59504869-15e4-448c-8e54-cc3e7db5a7e8",
+          "createdAt": "2026-10-21T19:55:56.000Z",
+          "updatedAt": "2026-10-21T19:55:56.000Z",
+          "uid": "35240-59504869-15e4-448c-8e54-cc3e7db5a7e8"
         },
         {
-          "id": "139a142c-750f-4005-9452-a14b8cccb8d5",
-          "name": "Receive a list of teams",
-          "request": {
-            "name": "Receive a list of teams",
-            "description": {
-              "content": "Receive a list of your organization teams",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "teams",
+          "item": [
             {
-              "id": "55ae2156-a8f6-4240-9678-42035c9769ce",
-              "name": "Receive a list of teams.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams"
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "display",
+                  "item": [
+                    {
+                      "name": "Update a specific team display option",
+                      "id": "70a8676a-7c63-47a3-aa35-08fe2f18b479",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"<string>\",\n    \"to\": \"<string>\"\n  },\n  \"description\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId/display",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId",
+                            "display"
+                          ],
+                          "variable": [
+                            {
+                              "id": "2ce41739-cf7e-4976-8393-e5fa71b866fc",
+                              "key": "originOrId",
+                              "value": "<string>",
+                              "description": "(Required) The **origin** or **id** of the team."
+                            }
+                          ]
+                        },
+                        "description": "Update the display name, description, and color of a team."
+                      },
+                      "response": [
+                        {
+                          "id": "4092c906-8fa7-4da8-8229-a3d49c6c2e61",
+                          "name": "Successfully updated team display.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"<string>\",\n    \"to\": \"<string>\"\n  },\n  \"description\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/teams/:originOrId/display",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "teams",
+                                ":originOrId",
+                                "display"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-4092c906-8fa7-4da8-8229-a3d49c6c2e61"
+                        },
+                        {
+                          "id": "a46420e2-b819-4b39-9554-7b58940f73a7",
+                          "name": "In case any error happens.",
+                          "originalRequest": {
+                            "method": "PUT",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"<string>\",\n    \"to\": \"<string>\"\n  },\n  \"description\": \"<string>\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/teams/:originOrId/display",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "teams",
+                                ":originOrId",
+                                "display"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-a46420e2-b819-4b39-9554-7b58940f73a7"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-70a8676a-7c63-47a3-aa35-08fe2f18b479"
+                    }
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  "id": "8dc2c60b-0a1d-43bf-a3f4-3af438cf1026",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-8dc2c60b-0a1d-43bf-a3f4-3af438cf1026"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+                {
+                  "name": "members",
+                  "item": [
+                    {
+                      "name": "{memberID}",
+                      "item": [
+                        {
+                          "name": "Remove a member from a team",
+                          "id": "4b958f06-5738-4925-932a-0107caf78348",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "DELETE",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/teams/:originOrId/members/:memberID",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "teams",
+                                ":originOrId",
+                                "members",
+                                ":memberID"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "1b661621-bd91-45be-aacb-9f4fa31b886e",
+                                  "key": "originOrId",
+                                  "value": "<string>",
+                                  "description": "(Required) The **origin** or **id** of the team."
+                                },
+                                {
+                                  "id": "9181920b-0f3c-4c4d-b41b-9280cf5a85b4",
+                                  "key": "memberID",
+                                  "value": "<string>",
+                                  "description": "(Required) The **id** of the member."
+                                }
+                              ]
+                            },
+                            "description": "Removes the given member from the team."
+                          },
+                          "response": [
+                            {
+                              "id": "3a94dbd4-7bd0-4934-a5e5-b7da33ff8ae9",
+                              "name": "The member is removed.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/teams/:originOrId/members/:memberID",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "teams",
+                                    ":originOrId",
+                                    "members",
+                                    ":memberID"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "originOrId"
+                                    },
+                                    {
+                                      "key": "memberID"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:55:56.000Z",
+                              "updatedAt": "2026-10-21T19:55:56.000Z",
+                              "uid": "35240-3a94dbd4-7bd0-4934-a5e5-b7da33ff8ae9"
+                            },
+                            {
+                              "id": "241144f5-ddc2-47a0-8a58-36059891e8d5",
+                              "name": "In case any error happens.",
+                              "originalRequest": {
+                                "method": "DELETE",
+                                "header": [
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  }
+                                ],
+                                "url": {
+                                  "raw": "{{baseUrl}}/api/teams/:originOrId/members/:memberID",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "api",
+                                    "teams",
+                                    ":originOrId",
+                                    "members",
+                                    ":memberID"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "originOrId"
+                                    },
+                                    {
+                                      "key": "memberID"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                              "createdAt": "2026-10-21T19:55:56.000Z",
+                              "updatedAt": "2026-10-21T19:55:56.000Z",
+                              "uid": "35240-241144f5-ddc2-47a0-8a58-36059891e8d5"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-4b958f06-5738-4925-932a-0107caf78348"
+                        }
+                      ],
+                      "id": "2380e4fc-c2f4-424e-b260-8d7223bdaa2b",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-2380e4fc-c2f4-424e-b260-8d7223bdaa2b"
+                    },
+                    {
+                      "name": "Add members to a team",
+                      "id": "f2fdbf1a-4cca-4215-801e-19376465e07a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId/members",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId",
+                            "members"
+                          ],
+                          "variable": [
+                            {
+                              "id": "b08547f0-d2d1-4e7c-845f-78bfe6e55b95",
+                              "key": "originOrId",
+                              "value": "<string>",
+                              "description": "(Required) The **origin** or **id** of the team."
+                            }
+                          ]
+                        },
+                        "description": "Adds the given members to the team."
+                      },
+                      "response": [
+                        {
+                          "id": "5446d58b-3d47-4192-b2ee-525bcb3c2c9f",
+                          "name": "The members are added.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/teams/:originOrId/members",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "teams",
+                                ":originOrId",
+                                "members"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Created",
+                          "code": 201,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-5446d58b-3d47-4192-b2ee-525bcb3c2c9f"
+                        },
+                        {
+                          "id": "c36fba9b-9e72-4e62-88c6-958ebe7de1f8",
+                          "name": "In case any error happens.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/api/teams/:originOrId/members",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "teams",
+                                ":originOrId",
+                                "members"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:55:56.000Z",
+                          "updatedAt": "2026-10-21T19:55:56.000Z",
+                          "uid": "35240-c36fba9b-9e72-4e62-88c6-958ebe7de1f8"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-f2fdbf1a-4cca-4215-801e-19376465e07a"
+                    }
+                  ],
+                  "id": "38359634-8765-4de6-aaa5-0497a1702c24",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-38359634-8765-4de6-aaa5-0497a1702c24"
+                },
+                {
+                  "name": "Delete a specific team by its origin or id",
+                  "id": "2b626bd0-68ce-41c6-9ada-bd92cbfb4e18",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "0b5e34e2-4025-4a56-a913-ffbdfe732e67",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the team."
+                        }
+                      ]
+                    },
+                    "description": "Delete a specific team by its **origin** or **id**."
+                  },
+                  "response": [
+                    {
+                      "id": "55800d22-9886-417d-a954-d3ef84fa1619",
+                      "name": "Team deleted successfully.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-55800d22-9886-417d-a954-d3ef84fa1619"
+                    },
+                    {
+                      "id": "9370f057-6ff5-4fd2-a19b-9e0c31215e5b",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-9370f057-6ff5-4fd2-a19b-9e0c31215e5b"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-2b626bd0-68ce-41c6-9ada-bd92cbfb4e18"
+                },
+                {
+                  "name": "Receive a specific team by its origin or id",
+                  "id": "6ca230b3-6a43-4fad-9dfa-f66491f1855d",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "563080c5-08de-4567-be26-48e3472e8fd2",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the team."
+                        }
+                      ]
+                    },
+                    "description": "Receive a specific team by its **origin** or **id**."
+                  },
+                  "response": [
+                    {
+                      "id": "80a5212f-dc6f-4def-b748-05e42be784f1",
+                      "name": "Receive a specific team.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"team\": {\n    \"kind\": \"Dash0Team\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/source\": \"identity-provider\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"deserunt99b\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"display\": {\n        \"name\": \"<string>\",\n        \"color\": {\n          \"from\": \"<string>\",\n          \"to\": \"<string>\"\n        },\n        \"description\": \"<string>\"\n      },\n      \"members\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"apiVersion\": \"dash0.com/v1alpha1\"\n  },\n  \"members\": [\n    {\n      \"kind\": \"Dash0Member\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/userId\": \"<string>\",\n          \"dash0.com/joinedAt\": \"<dateTime>\",\n          \"dash0.com/role\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"display\": {\n          \"email\": \"<string>\",\n          \"firstName\": \"<string>\",\n          \"lastName\": \"<string>\",\n          \"imageUrl\": \"<string>\"\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0Member\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/userId\": \"<string>\",\n          \"dash0.com/joinedAt\": \"<dateTime>\",\n          \"dash0.com/role\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"display\": {\n          \"email\": \"<string>\",\n          \"firstName\": \"<string>\",\n          \"lastName\": \"<string>\",\n          \"imageUrl\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"dashboards\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"paDHBaZO2DCl58NPjOm4M5h7a_\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"-pmnB6B_Ny0YnY-2QFGAmMjEr3\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"checkRules\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"nkvXzW\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"OxImJ_74ta7qS\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"syntheticChecks\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"zZIhBHuTsDt81KWN\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"9Py\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"views\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"Pqrs6h\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"6j1Q\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"datasets\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"221\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"QmuqB\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ],\n  \"agenticWorkflows\": [\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"y7SysBgz55x0MB\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"permittedActions\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"createdAt\": \"<dateTime>\",\n      \"dataset\": \"jDg6IGA\",\n      \"hasAccess\": \"<boolean>\",\n      \"type\": \"<string>\",\n      \"creator\": {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-80a5212f-dc6f-4def-b748-05e42be784f1"
+                    },
+                    {
+                      "id": "eb1a42a4-533e-48b1-965d-5739100ec654",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-eb1a42a4-533e-48b1-965d-5739100ec654"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-6ca230b3-6a43-4fad-9dfa-f66491f1855d"
+                },
+                {
+                  "name": "Update or insert a specific team by its origin or id",
+                  "id": "9313b28f-ebe3-478f-bde4-facc23ef0611",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "35fa6835-ef0c-40ed-b7bb-7a3860013fd7",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the team."
+                        }
+                      ]
+                    },
+                    "description": "Update or insert a specific team by its **origin** or **id**. In case a team with the given **origin** or **id** is found it will be updated. If there is no team found a new team will be created and the given `originOrId` is used as **origin**.\n\n`spec.display` fully replaces the existing display values. `spec.members` is reconciled declaratively \u2014 the resulting membership is exactly the set given in the request body (adds and removes are computed against the current membership)."
+                  },
+                  "response": [
+                    {
+                      "id": "3edb4f5f-6c87-4bec-9956-7528d073ff19",
+                      "name": "The updated or created team.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-3edb4f5f-6c87-4bec-9956-7528d073ff19"
+                    },
+                    {
+                      "id": "0be8de13-028f-49c3-b0a9-2cf5904adef0",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/teams/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "teams",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:56.000Z",
+                      "updatedAt": "2026-10-21T19:55:56.000Z",
+                      "uid": "35240-0be8de13-028f-49c3-b0a9-2cf5904adef0"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-9313b28f-ebe3-478f-bde4-facc23ef0611"
+                }
+              ],
+              "id": "c05946e0-c1f0-4dbd-ba28-94353a564134",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-c05946e0-c1f0-4dbd-ba28-94353a564134"
+            },
+            {
+              "name": "Receive a list of teams",
+              "id": "6c151376-a346-49c9-b694-5088559b7bc1",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "[\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"color\": {\n      \"from\": \"string\",\n      \"to\": \"string\"\n    },\n    \"members\": [\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    ],\n    \"totalMemberCount\": 6005,\n    \"origin\": \"string\",\n    \"source\": \"ui\"\n  },\n  {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"color\": {\n      \"from\": \"string\",\n      \"to\": \"string\"\n    },\n    \"members\": [\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"string\",\n          \"labels\": {\n            \"dash0.com/id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dash0.com/joinedAt\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"firstName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lastName\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"imageUrl\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      }\n    ],\n    \"totalMemberCount\": 1207,\n    \"origin\": \"string\",\n    \"source\": \"api\"\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a6683b3a-79e9-48c6-a5cf-212e3afed387",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
                 "url": {
+                  "raw": "{{baseUrl}}/api/teams",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "teams"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
+                "description": "Receive a list of your organization teams"
+              },
+              "response": [
+                {
+                  "id": "7563419d-189d-4cc0-9c94-a25021b98161",
+                  "name": "Receive a list of teams.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"color\": {\n      \"from\": \"<string>\",\n      \"to\": \"<string>\"\n    },\n    \"members\": [\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      },\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    ],\n    \"totalMemberCount\": \"<integer>\",\n    \"origin\": \"<string>\",\n    \"source\": \"api\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"color\": {\n      \"from\": \"<string>\",\n      \"to\": \"<string>\"\n    },\n    \"members\": [\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      },\n      {\n        \"kind\": \"Dash0Member\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"labels\": {\n            \"dash0.com/id\": \"<string>\",\n            \"dash0.com/userId\": \"<string>\",\n            \"dash0.com/joinedAt\": \"<dateTime>\",\n            \"dash0.com/role\": \"<string>\"\n          }\n        },\n        \"spec\": {\n          \"display\": {\n            \"email\": \"<string>\",\n            \"firstName\": \"<string>\",\n            \"lastName\": \"<string>\",\n            \"imageUrl\": \"<string>\"\n          }\n        }\n      }\n    ],\n    \"totalMemberCount\": \"<integer>\",\n    \"origin\": \"<string>\",\n    \"source\": \"operator\"\n  }\n]",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-7563419d-189d-4cc0-9c94-a25021b98161"
+                },
+                {
+                  "id": "9255c7d7-7f16-4660-b767-81921cb547ee",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-9255c7d7-7f16-4660-b767-81921cb547ee"
+                }
+              ],
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-6c151376-a346-49c9-b694-5088559b7bc1"
+            },
+            {
+              "name": "Create a new team",
+              "id": "8ac29ff4-8be3-49ea-b6c3-55514a773d72",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "4ed8103f-9ebc-4fcb-979e-df03ac1b70bb",
-          "name": "Create a new team",
-          "request": {
-            "name": "Create a new team",
-            "description": {
-              "content": "Create a new team in the organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      }\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "2128e93b-b641-48fa-a825-20c4f54228e8",
-              "name": "Successfully created the team.",
-              "originalRequest": {
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/teams",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "teams"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"string\",\n      \"color\": {\n        \"from\": \"string\",\n        \"to\": \"string\"\n      }\n    },\n    \"members\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Create a new team in the organization."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "d1f1e16a-ab07-44d7-a08f-abff08aa421c",
+                  "name": "Successfully created the team.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-d1f1e16a-ab07-44d7-a08f-abff08aa421c"
+                },
+                {
+                  "id": "16e57106-7841-4463-9059-629622eff25f",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"identity-provider\",\n      \"in_586\": \"<string>\",\n      \"nulla_e\": \"<string>\",\n      \"ullamco83\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"exe4\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"<string>\",\n      \"color\": {\n        \"from\": \"<string>\",\n        \"to\": \"<string>\"\n      },\n      \"description\": \"<string>\"\n    },\n    \"members\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  },\n  \"apiVersion\": \"dash0.com/v1alpha1\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/teams",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "teams"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:56.000Z",
+                  "updatedAt": "2026-10-21T19:55:56.000Z",
+                  "uid": "35240-16e57106-7841-4463-9059-629622eff25f"
                 }
               ],
-              "body": "{\n  \"kind\": \"Dash0Team\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"string\",\n      \"color\": {\n        \"from\": \"string\",\n        \"to\": \"string\"\n      }\n    },\n    \"members\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0965ec0a-d503-495d-bb45-6a94d7f468d5",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"terraform\"\n    }\n  },\n  \"spec\": {\n    \"display\": {\n      \"name\": \"string\",\n      \"color\": {\n        \"from\": \"string\",\n        \"to\": \"string\"\n      }\n    },\n    \"members\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-8ac29ff4-8be3-49ea-b6c3-55514a773d72"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "6759194b-3709-41fe-9255-f6e0ccc8e005",
-          "name": "Add members to a team.",
-          "request": {
-            "name": "Add members to a team.",
-            "description": {
-              "content": "Adds the given members to the team.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams",
-                ":originOrId",
-                "members"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the team."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "995884dc-a9a6-4b4c-ade7-f294cef28a21",
-              "name": "The members are added.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "653a461d-903b-4ea3-8e3c-628760fde3a7",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "members"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"memberIds\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "822a074b-fb27-458a-86c5-41f70cedb863",
-          "name": "Update a specific team display option.",
-          "request": {
-            "name": "Update a specific team display option.",
-            "description": {
-              "content": "Update the display name, description, and color of a team.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "teams",
-                ":originOrId",
-                "display"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the team."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"<string>\",\n    \"to\": \"<string>\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "1a3123ee-a5e7-4198-ae98-8bb79514f7dd",
-              "name": "Successfully updated team display.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "display"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"string\",\n    \"to\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "adcf7d9b-f8b1-46b5-a03f-338afb6a076f",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "teams",
-                    ":originOrId",
-                    "display"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the team."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"<string>\",\n  \"color\": {\n    \"from\": \"string\",\n    \"to\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5989,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "04d63815-421b-4d8b-9207-edef7a9750cf",
+          "createdAt": "2026-10-21T19:55:56.000Z",
+          "updatedAt": "2026-10-21T19:55:56.000Z",
+          "uid": "35240-04d63815-421b-4d8b-9207-edef7a9750cf"
         }
       ],
-      "event": []
+      "id": "98bde5f4-5318-4f48-8207-6d5f92951d0c",
+      "createdAt": "2026-10-21T19:55:56.000Z",
+      "updatedAt": "2026-10-21T19:55:56.000Z",
+      "uid": "35240-98bde5f4-5318-4f48-8207-6d5f92951d0c"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "6d58741c-0dc4-4eb8-8023-99212449da34",
-    "name": "Dash0 Edge Collectors Manage Teams and Members API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

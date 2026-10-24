@@ -1,942 +1,986 @@
 {
+  "info": {
+    "_postman_id": "34cbe895-dbb9-4e20-849a-ae1722b2c94c",
+    "name": "Dash0 Manage Sampling Rules API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:36.000Z",
+    "updatedAt": "2026-10-21T19:55:36.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-34cbe895-dbb9-4e20-849a-ae1722b2c94c"
+  },
   "item": [
     {
-      "id": "9678ca4b-ed5b-4945-8487-e15dc9252d59",
-      "name": "Manage Sampling Rules",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "dd43910f-c4e5-4dac-bbd8-f047a3efefea",
-          "name": "Delete a sampling rule by origin or ID",
-          "request": {
-            "name": "Delete a sampling rule by origin or ID",
-            "description": {
-              "content": "Deletes a specific sampling rule identified by its origin label or UUID.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "sampling-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Sampling rule origin or UUID"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "sampling-rules",
+          "item": [
             {
-              "id": "3c6411c7-2c34-474b-9444-e81479a22bab",
-              "name": "Successfully deleted",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a sampling rule by origin or ID",
+                  "id": "8c25978f-cb73-4dd4-9e7a-4493e0f003e2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "178452af-78b7-47b4-8bfc-1b7adb548b77",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Sampling rule origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Deletes a specific sampling rule identified by its origin label or UUID."
+                  },
+                  "response": [
                     {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
+                      "id": "a48ca50c-24c7-453d-a5a0-bb3c2f5912fb",
+                      "name": "Successfully deleted",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-a48ca50c-24c7-453d-a5a0-bb3c2f5912fb"
+                    },
+                    {
+                      "id": "4dd5acfb-1620-45a6-8e0c-f64facb5a08c",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-4dd5acfb-1620-45a6-8e0c-f64facb5a08c"
+                    },
+                    {
+                      "id": "0769237a-4b0f-484f-876a-de040ae3c265",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-0769237a-4b0f-484f-876a-de040ae3c265"
                     }
                   ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-8c25978f-cb73-4dd4-9e7a-4493e0f003e2"
                 },
-                "method": "DELETE",
-                "body": {}
+                {
+                  "name": "Get a specific sampling rule by origin or ID",
+                  "id": "6d8778d4-036d-4bf8-a891-3f19e5beebfe",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "e91c7809-502d-4360-a352-c56577a05109",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Sampling rule origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Returns a specific sampling rule identified by its origin label or UUID."
+                  },
+                  "response": [
+                    {
+                      "id": "6cf1cf43-9c19-4d21-9d49-034cb37866a9",
+                      "name": "The requested sampling rule",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-6cf1cf43-9c19-4d21-9d49-034cb37866a9"
+                    },
+                    {
+                      "id": "c0f0de4f-1400-4c28-b85b-e2b284d5b6dd",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-c0f0de4f-1400-4c28-b85b-e2b284d5b6dd"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-6d8778d4-036d-4bf8-a891-3f19e5beebfe"
+                },
+                {
+                  "name": "Update or create a sampling rule by origin or ID",
+                  "id": "65cc7509-f331-4c73-a836-7fe0334a9147",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "a44dc5fb-87cd-47e7-acaf-2447f93bc60d",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Sampling rule origin or UUID"
+                        }
+                      ]
+                    },
+                    "description": "Updates an existing sampling rule or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows."
+                  },
+                  "response": [
+                    {
+                      "id": "8d7bf642-2e15-4db9-a1b7-8dd716eb0461",
+                      "name": "The updated or created sampling rule",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-8d7bf642-2e15-4db9-a1b7-8dd716eb0461"
+                    },
+                    {
+                      "id": "ffabf12e-6178-490a-8b13-18d2cbfcc055",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-ffabf12e-6178-490a-8b13-18d2cbfcc055"
+                    },
+                    {
+                      "id": "1b5513d3-1848-4ac4-b28f-5b8b96422e3c",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/sampling-rules/:originOrId?dataset=M0_qjt5xja",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "sampling-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "M0_qjt5xja"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:36.000Z",
+                      "updatedAt": "2026-10-21T19:55:36.000Z",
+                      "uid": "35240-1b5513d3-1848-4ac4-b28f-5b8b96422e3c"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-65cc7509-f331-4c73-a836-7fe0334a9147"
+                }
+              ],
+              "id": "42c880f0-18ff-466d-9f94-bf0a051c594c",
+              "createdAt": "2026-10-21T19:55:36.000Z",
+              "updatedAt": "2026-10-21T19:55:36.000Z",
+              "uid": "35240-42c880f0-18ff-466d-9f94-bf0a051c594c"
+            },
+            {
+              "name": "List all sampling rules for the organization",
+              "id": "e7d8f081-9182-4c0d-94c2-a474b828c946",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "a4579a61-c706-448d-aef4-692be94b0386",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f33e7e48-dd12-44eb-b7c1-56933cc7973d",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "adce34e9-3df7-417d-adda-19885d9b6cc0",
-          "name": "Get a specific sampling rule by origin or ID",
-          "request": {
-            "name": "Get a specific sampling rule by origin or ID",
-            "description": {
-              "content": "Returns a specific sampling rule identified by its origin label or UUID.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "sampling-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Sampling rule origin or UUID"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "b9badebb-6beb-4212-a537-7446f521169e",
-              "name": "The requested sampling rule",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 8697\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8822cf32-d036-48fb-8f0b-036db85b59bb",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "6a4d76c3-45be-4da5-9c79-bed211fa670a",
-          "name": "Update or create a sampling rule by origin or ID",
-          "request": {
-            "name": "Update or create a sampling rule by origin or ID",
-            "description": {
-              "content": "Updates an existing sampling rule or creates a new one if it doesn't exist. Useful for Infrastructure-as-Code workflows.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "sampling-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Sampling rule origin or UUID"
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"custom\": {\n        \"key_0\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"<string>\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "5ba05efd-21c3-4417-9382-a39de61373ec",
-              "name": "The updated or created sampling rule",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
+                  "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 8697\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7822fdb1-a67c-481a-866d-16e92b407364",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2f6052e4-7f2d-4820-a76a-882ff6979406",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Sampling rule origin or UUID"
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "ae04539d-8dbe-457d-a77a-bc985a75a658",
-          "name": "List all sampling rules for the organization",
-          "request": {
-            "name": "List all sampling rules for the organization",
-            "description": {
-              "content": "Returns all sampling rules configured for your organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "sampling-rules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "db1eb8f0-818a-4be3-8eaf-b5d8c270df62",
-              "name": "List of sampling rules",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "api",
                     "sampling-rules"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "BZCPYGlQI"
+                      "value": "M0_qjt5xja"
+                    }
+                  ]
+                },
+                "description": "Returns all sampling rules configured for your organization."
+              },
+              "response": [
+                {
+                  "id": "5671317a-a1e4-4af8-812b-3f8b091b0794",
+                  "name": "List of sampling rules",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"samplingRules\": [\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"dash0-cli\",\n          \"custom\": {\n            \"officia__3_\": \"<string>\",\n            \"suntbb\": \"<string>\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"conditions\": {\n          \"kind\": \"and\",\n          \"spec\": {\n            \"conditions\": [\n              {\n                \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n              }\n            ]\n          }\n        },\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"rateLimit\": {\n          \"rate\": \"<integer>\"\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"api\",\n          \"custom\": {\n            \"laborum_0b\": \"<string>\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"conditions\": {\n          \"kind\": \"and\",\n          \"spec\": {\n            \"conditions\": [\n              {\n                \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n              }\n            ]\n          }\n        },\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"rateLimit\": {\n          \"rate\": \"<integer>\"\n        }\n      }\n    }\n  ]\n}",
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-5671317a-a1e4-4af8-812b-3f8b091b0794"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "c9307d7e-abb4-4a98-872e-e85245c6f80c",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-c9307d7e-abb4-4a98-872e-e85245c6f80c"
                 }
               ],
-              "body": "{\n  \"samplingRules\": [\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"conditions\": {\n          \"kind\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"spec\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"rateLimit\": {\n          \"rate\": 8951\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"ui\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"conditions\": {\n          \"kind\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"spec\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"rateLimit\": {\n          \"rate\": 6794\n        }\n      }\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:36.000Z",
+              "updatedAt": "2026-10-21T19:55:36.000Z",
+              "uid": "35240-e7d8f081-9182-4c0d-94c2-a474b828c946"
             },
             {
-              "id": "1c416644-543c-4b00-9b18-792d6f5cff56",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+              "name": "Create a new sampling rule",
+              "id": "6c13c959-b3f7-429a-96fa-13531d7b7a8b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "0638162d-ab59-4b46-9d1a-8710fb2ee09b",
-          "name": "Create a new sampling rule",
-          "request": {
-            "name": "Create a new sampling rule",
-            "description": {
-              "content": "Create a new sampling rule for your organization.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "sampling-rules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\",\n      \"custom\": {\n        \"key_0\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"<string>\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "838fedfe-9db1-4512-bdee-3b727440b95e",
-              "name": "The created sampling rule",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"operator\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 8697\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2b7095bb-7b81-4576-b46b-788d2d95d85d",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "sampling-rules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "BZCPYGlQI"
-                    }
-                  ],
-                  "variable": []
-                },
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
+                  "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "a5f16c53-d751-4c74-9a10-d0e37ccf858d",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "sampling-rules"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "BZCPYGlQI"
+                      "value": "M0_qjt5xja"
+                    }
+                  ]
+                },
+                "description": "Create a new sampling rule for your organization. If you set\n`metadata.labels[\"dash0.com/origin\"]`, it must be unique within the organization,\nacross all datasets. See \"Resource origins\" in the introduction. A request with a\nduplicate origin returns 400. To run the same rule in several datasets, put the\ndataset in the origin."
+              },
+              "response": [
+                {
+                  "id": "940e80a7-1775-4a65-b62f-dae5d9d34d24",
+                  "name": "The created sampling rule",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-940e80a7-1775-4a65-b62f-dae5d9d34d24"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"api\",\n      \"custom\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": false,\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"string\"\n    },\n    \"rateLimit\": {\n      \"rate\": 1081\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "297da73d-d19a-4f4a-ab88-a1854ed328b8",
+                  "name": "Forbidden - Admin access required",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-297da73d-d19a-4f4a-ab88-a1854ed328b8"
+                },
+                {
+                  "id": "95d6b59a-08c9-4351-b474-3b5e64cd47b8",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0Sampling\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"custom\": {\n        \"voluptate_5be\": \"<string>\"\n      }\n    }\n  },\n  \"spec\": {\n    \"enabled\": \"<boolean>\",\n    \"conditions\": {\n      \"kind\": \"and\",\n      \"spec\": {\n        \"conditions\": [\n          {\n            \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n          }\n        ]\n      }\n    },\n    \"display\": {\n      \"name\": \"<string>\"\n    },\n    \"rateLimit\": {\n      \"rate\": \"<integer>\"\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/sampling-rules?dataset=M0_qjt5xja",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "sampling-rules"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "M0_qjt5xja"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:36.000Z",
+                  "updatedAt": "2026-10-21T19:55:36.000Z",
+                  "uid": "35240-95d6b59a-08c9-4351-b474-3b5e64cd47b8"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 4910,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:36.000Z",
+              "updatedAt": "2026-10-21T19:55:36.000Z",
+              "uid": "35240-6c13c959-b3f7-429a-96fa-13531d7b7a8b"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "369b5110-9aec-4152-8ae5-f3ea07cbc058",
+          "createdAt": "2026-10-21T19:55:36.000Z",
+          "updatedAt": "2026-10-21T19:55:36.000Z",
+          "uid": "35240-369b5110-9aec-4152-8ae5-f3ea07cbc058"
         }
       ],
-      "event": []
+      "id": "5c09dc55-5a89-4f93-8ebf-44ff309caa95",
+      "createdAt": "2026-10-21T19:55:36.000Z",
+      "updatedAt": "2026-10-21T19:55:36.000Z",
+      "uid": "35240-5c09dc55-5a89-4f93-8ebf-44ff309caa95"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "39632806-b11b-4d1c-b5fd-7198c010e9b3",
-    "name": "Dash0 Edge Collectors Manage Sampling Rules API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

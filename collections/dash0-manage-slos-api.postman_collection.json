@@ -1,0 +1,992 @@
+{
+  "info": {
+    "_postman_id": "d768205f-a019-4f00-8ce0-b87cc8cb2435",
+    "name": "Dash0 Manage SLOs API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:57:00.000Z",
+    "updatedAt": "2026-10-21T19:57:00.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-d768205f-a019-4f00-8ce0-b87cc8cb2435"
+  },
+  "item": [
+    {
+      "name": "api",
+      "item": [
+        {
+          "name": "slos",
+          "item": [
+            {
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "reset",
+                  "item": [
+                    {
+                      "name": "Restart the error budget window of a specific SLO",
+                      "id": "fe82f13b-2508-4065-8efa-ba3c6e2cab9f",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId/reset?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId",
+                            "reset"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "a6ae7818-2dd7-4cf8-9478-8aaedba7f4b5",
+                              "key": "originOrId",
+                              "value": "<string>",
+                              "description": "(Required) SLO origin or id."
+                            }
+                          ]
+                        },
+                        "description": "Starts a new error budget window for the SLO, beginning now. The definition is left\nunchanged, and the measurement starts from scratch: everything recorded before the reset,\nincluding any incident, stops counting against the objective.\n\nThe SLO records a new series from this point on, so the budget reported right after a reset\ncovers only the elapsed part of the time window and widens as the window fills up again.\nData recorded by the previous series is kept."
+                      },
+                      "response": [
+                        {
+                          "id": "996a5468-3016-40ea-92d3-c248aca7b660",
+                          "name": "The SLO, measuring from the start of its new error budget window.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/slos/:originOrId/reset?dataset=CZuIf6FbsmZxAhjI",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "slos",
+                                ":originOrId",
+                                "reset"
+                              ],
+                              "query": [
+                                {
+                                  "key": "dataset",
+                                  "value": "CZuIf6FbsmZxAhjI"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "OK",
+                          "code": 200,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                          "createdAt": "2026-10-21T19:57:00.000Z",
+                          "updatedAt": "2026-10-21T19:57:00.000Z",
+                          "uid": "35240-996a5468-3016-40ea-92d3-c248aca7b660"
+                        },
+                        {
+                          "id": "331dc14d-b136-4460-ad13-787e5cb6d81f",
+                          "name": "In case any error happens.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/api/slos/:originOrId/reset?dataset=CZuIf6FbsmZxAhjI",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "api",
+                                "slos",
+                                ":originOrId",
+                                "reset"
+                              ],
+                              "query": [
+                                {
+                                  "key": "dataset",
+                                  "value": "CZuIf6FbsmZxAhjI"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "originOrId"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-10-21T19:57:00.000Z",
+                          "updatedAt": "2026-10-21T19:57:00.000Z",
+                          "uid": "35240-331dc14d-b136-4460-ad13-787e5cb6d81f"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-fe82f13b-2508-4065-8efa-ba3c6e2cab9f"
+                    }
+                  ],
+                  "id": "2229af38-5930-407e-8351-6450e0dd80bf",
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-2229af38-5930-407e-8351-6450e0dd80bf"
+                },
+                {
+                  "name": "Delete a specific SLO",
+                  "id": "5183e14a-ca6a-4bcc-af94-f38b4e4daead",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "a980edca-e7fc-4471-910b-fbf0e32b086a",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) SLO origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "46b48a52-5b87-4bfa-92e5-7e4222aa3454",
+                      "name": "The SLO was deleted.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-46b48a52-5b87-4bfa-92e5-7e4222aa3454"
+                    },
+                    {
+                      "id": "65f5abc7-2573-4ae5-99b6-156b5b4f2e54",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-65f5abc7-2573-4ae5-99b6-156b5b4f2e54"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-5183e14a-ca6a-4bcc-af94-f38b4e4daead"
+                },
+                {
+                  "name": "Retrieve the latest version of a specific SLO",
+                  "id": "1993392d-fde9-4e47-83cc-6b5df5433894",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "2cfc6e46-7d20-4d54-a688-4e7f0d535c92",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) SLO origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "0820a5f6-7e50-4452-bbda-cbb23ad2d863",
+                      "name": "The requested SLO.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-0820a5f6-7e50-4452-bbda-cbb23ad2d863"
+                    },
+                    {
+                      "id": "3c2fcb9c-81a1-4302-a9be-5a3f34e579f6",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-3c2fcb9c-81a1-4302-a9be-5a3f34e579f6"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-1993392d-fde9-4e47-83cc-6b5df5433894"
+                },
+                {
+                  "name": "Update a specific SLO",
+                  "id": "90bd5955-3d4f-44ca-ac51-833f272967c0",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "2d78f56e-9127-4934-802e-252a7e88eb23",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) SLO origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "db957214-b040-4b51-8f76-0da4007a9a56",
+                      "name": "The SLO was updated.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-db957214-b040-4b51-8f76-0da4007a9a56"
+                    },
+                    {
+                      "id": "bc810e23-f29a-4918-a804-006e701aadd9",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/slos/:originOrId?dataset=CZuIf6FbsmZxAhjI",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "slos",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                              "key": "dataset",
+                              "value": "CZuIf6FbsmZxAhjI"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:57:00.000Z",
+                      "updatedAt": "2026-10-21T19:57:00.000Z",
+                      "uid": "35240-bc810e23-f29a-4918-a804-006e701aadd9"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-90bd5955-3d4f-44ca-ac51-833f272967c0"
+                }
+              ],
+              "id": "64dc0788-b44f-44c6-b2a0-84bd423cb879",
+              "createdAt": "2026-10-21T19:57:00.000Z",
+              "updatedAt": "2026-10-21T19:57:00.000Z",
+              "uid": "35240-64dc0788-b44f-44c6-b2a0-84bd423cb879"
+            },
+            {
+              "name": "Retrieve a list of SLOs",
+              "id": "1f915ac1-6961-409e-9726-540097e10a23",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI&originPrefix=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "query": [
+                    {
+                      "description": "Filter by dataset.",
+                      "key": "dataset",
+                      "value": "CZuIf6FbsmZxAhjI"
+                    },
+                    {
+                      "description": "Filter by origin prefix.",
+                      "key": "originPrefix",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "e23e5553-5220-43e1-b1a1-14846ab58509",
+                  "name": "List of SLOs.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI&originPrefix=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by dataset.",
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"apiVersion\": \"openslo.com/v1\",\n    \"kind\": \"SLO\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"api\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\",\n        \"dash0.com/enabled\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"budgetingMethod\": \"Occurrences\",\n      \"objectives\": [\n        {\n          \"displayName\": \"<string>\",\n          \"op\": \"lte\",\n          \"value\": \"<number>\",\n          \"target\": \"<number>\",\n          \"targetPercent\": \"<number>\",\n          \"timeSliceTarget\": \"<number>\",\n          \"timeSliceWindow\": \"218h0523Q061228674y75602859w\",\n          \"indicator\": {\n            \"spec\": {\n              \"description\": \"<string>\",\n              \"ratioMetric\": {\n                \"counter\": \"<boolean>\",\n                \"good\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"ina8\": \"Ut laboris elit esse qui\"\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"bad\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"ipsum_a\": 53354272.88541642,\n                      \"fugiat_b\": 91313462\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"total\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"minimdf\": false\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"raw\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"tempora87\": \"mollit deserunt nisi\",\n                      \"officia_31\": \"amet nisi voluptate\"\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"rawType\": \"failure\"\n              },\n              \"thresholdMetric\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"cillum1\": -87396701.74538147\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              }\n            },\n            \"metadata\": {\n              \"name\": \"<string>\",\n              \"displayName\": \"<string>\"\n            }\n          },\n          \"indicatorRef\": \"<string>\",\n          \"compositeWeight\": \"<number>\"\n        }\n      ],\n      \"description\": \"<string>\",\n      \"service\": \"<string>\",\n      \"indicator\": {\n        \"spec\": {\n          \"description\": \"<string>\",\n          \"ratioMetric\": {\n            \"counter\": \"<boolean>\",\n            \"good\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"dolor_6d\": true,\n                  \"occaecat8\": 3926259.046899542\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"bad\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"occaecat_35\": -78411341\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"total\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sedc\": 61982445.20989862,\n                  \"ullamco_\": false,\n                  \"Ut1a7\": true\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"raw\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"tempord\": false\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"rawType\": \"success\"\n          },\n          \"thresholdMetric\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"eiusmod6\": -34109225.12080594,\n                \"aliqua81b\": 20544615,\n                \"deserunt_e\": 71673695.03962862\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          }\n        },\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        }\n      },\n      \"indicatorRef\": \"<string>\",\n      \"timeWindow\": [\n        {\n          \"duration\": \"54530028M262382y32474107787y4812Q4125213Q3581985d2606311Q805868w\",\n          \"isRolling\": \"<boolean>\",\n          \"calendar\": {\n            \"startTime\": \"<string>\",\n            \"timeZone\": \"<string>\"\n          }\n        }\n      ],\n      \"alertPolicies\": [\n        {\n          \"alertPolicyRef\": \"<string>\",\n          \"kind\": \"<string>\",\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": \"<boolean>\",\n            \"alertWhenResolved\": \"<boolean>\",\n            \"alertWhenNoData\": \"<boolean>\",\n            \"conditions\": [\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"lte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"64894654m8291s63411200812ms83519s4747Q314s10s231227s41054M06105573y\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"4m43913y\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              },\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"gt\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"7973368591h63530y988645159y129037M24089543s09200353714ms057073y\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"47122900344d8743054235s60253637496ms441344273h2237949s40w870544042s25Q31701s\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              }\n            ],\n            \"notificationTargets\": [\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"laborum_2\": 17491456.75717947,\n                  \"in_f5\": -82587168.67753541,\n                  \"nisi_87\": -26823470.28296514,\n                  \"elit_1\": \"do ad\"\n                },\n                \"spec\": {\n                  \"officia0\": 74042469.78263286\n                }\n              },\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"deserunt56_\": \"aliqua\",\n                  \"ea6\": 95930937\n                },\n                \"spec\": {\n                  \"laborisd\": false,\n                  \"anim_020\": \"ut dolore commodo consectetur\",\n                  \"consectetur_6\": -75134767,\n                  \"quis__\": -69078681\n                }\n              }\n            ],\n            \"description\": \"<string>\"\n          }\n        },\n        {\n          \"alertPolicyRef\": \"<string>\",\n          \"kind\": \"<string>\",\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": \"<boolean>\",\n            \"alertWhenResolved\": \"<boolean>\",\n            \"alertWhenNoData\": \"<boolean>\",\n            \"conditions\": [\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"gte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"3942ms8966189s7052680745w626821468w713s2452819Q\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"722m49304095389ms13169h39876963804s\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              },\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"gte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"0340M1142m75d68522883502M195787304h30238966m\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"99107594M72725h7725988d9977469888w064935393m8428726361m\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              }\n            ],\n            \"notificationTargets\": [\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"dolor5d\": false,\n                  \"doloreb_\": -2119062\n                },\n                \"spec\": {\n                  \"euab\": false,\n                  \"laboris_c16\": false\n                }\n              },\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"pariatur450\": \"amet eu\"\n                },\n                \"spec\": {\n                  \"deseruntf8\": \"reprehenderit\"\n                }\n              }\n            ],\n            \"description\": \"<string>\"\n          }\n        }\n      ]\n    }\n  },\n  {\n    \"apiVersion\": \"openslo.com/v1\",\n    \"kind\": \"SLO\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/version\": \"<string>\",\n        \"dash0.com/dataset\": \"<string>\",\n        \"dash0.com/source\": \"identity-provider\",\n        \"pariatur_7b7\": \"<string>\",\n        \"exercitationd\": \"<string>\",\n        \"deserunt_b0\": \"<string>\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\",\n        \"dash0.com/deleted-at\": \"<dateTime>\",\n        \"dash0.com/folder-path\": \"<string>\",\n        \"dash0.com/sharing\": \"<string>\",\n        \"dash0.com/enabled\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"budgetingMethod\": \"RatioTimeslices\",\n      \"objectives\": [\n        {\n          \"displayName\": \"<string>\",\n          \"op\": \"lte\",\n          \"value\": \"<number>\",\n          \"target\": \"<number>\",\n          \"targetPercent\": \"<number>\",\n          \"timeSliceTarget\": \"<number>\",\n          \"timeSliceWindow\": \"557397672M289496003Q98925w58199m095026882y62327128165m\",\n          \"indicator\": {\n            \"spec\": {\n              \"description\": \"<string>\",\n              \"ratioMetric\": {\n                \"counter\": \"<boolean>\",\n                \"good\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"deserunta5\": -2913397.221603647\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"bad\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"ipsum_f\": \"eiusmod sunt nisi\",\n                      \"qui_be6\": \"exercitation esse reprehenderit\",\n                      \"Duis1\": \"consectetur Lorem eu in cillum\"\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"total\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"reprehenderitde2\": -86921526.6201377,\n                      \"eiusmod_6e\": 97340028.77918187,\n                      \"dolore__b2\": 99482941\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"raw\": {\n                  \"metricSource\": {\n                    \"spec\": {\n                      \"deseruntc\": -59851668.454070106,\n                      \"et_55a\": \"officia occaecat aliquip sunt\",\n                      \"officia_284\": \"qui aliqua\",\n                      \"aliquaafc\": -26593156.057242334,\n                      \"officia13\": 53490707.37150794\n                    },\n                    \"metricSourceRef\": \"<string>\",\n                    \"type\": \"<string>\"\n                  }\n                },\n                \"rawType\": \"success\"\n              },\n              \"thresholdMetric\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"doc0\": 85655729.3600924,\n                    \"nulla_ae9\": 16635543\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              }\n            },\n            \"metadata\": {\n              \"name\": \"<string>\",\n              \"displayName\": \"<string>\"\n            }\n          },\n          \"indicatorRef\": \"<string>\",\n          \"compositeWeight\": \"<number>\"\n        }\n      ],\n      \"description\": \"<string>\",\n      \"service\": \"<string>\",\n      \"indicator\": {\n        \"spec\": {\n          \"description\": \"<string>\",\n          \"ratioMetric\": {\n            \"counter\": \"<boolean>\",\n            \"good\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"Duis_ec\": -73333710,\n                  \"incididunt_4c9\": \"eu mollit tempor et\",\n                  \"ut6\": \"sed occaecat\",\n                  \"nulla_808\": 89327598\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"bad\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"Duis_04\": -23095500\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"total\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"fugiat9\": 70764299,\n                  \"ullamco5\": \"reprehenderit officia\",\n                  \"ex5b\": false\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"raw\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"consectetur_4b\": -25781308\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            },\n            \"rawType\": \"failure\"\n          },\n          \"thresholdMetric\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ad0_\": -12744435.614160746\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          }\n        },\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        }\n      },\n      \"indicatorRef\": \"<string>\",\n      \"timeWindow\": [\n        {\n          \"duration\": \"2s5281127h68505h07590Q87971573745s7317y25983536m08931m09946664Q789007565m\",\n          \"isRolling\": \"<boolean>\",\n          \"calendar\": {\n            \"startTime\": \"<string>\",\n            \"timeZone\": \"<string>\"\n          }\n        }\n      ],\n      \"alertPolicies\": [\n        {\n          \"alertPolicyRef\": \"<string>\",\n          \"kind\": \"<string>\",\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": \"<boolean>\",\n            \"alertWhenResolved\": \"<boolean>\",\n            \"alertWhenNoData\": \"<boolean>\",\n            \"conditions\": [\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"gte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"1546634m4188463d\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"1d\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              },\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"gt\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"2015d65070M0631192d790w33966998w\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"36181547611s7653797h014264304s\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              }\n            ],\n            \"notificationTargets\": [\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"reprehenderit_c\": \"enim elit Ut est\",\n                  \"dolorea_3\": 26527531.157574162\n                },\n                \"spec\": {\n                  \"nonee3\": \"ipsum\"\n                }\n              },\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"qui7\": 73831597.5514527\n                },\n                \"spec\": {\n                  \"aliquip_fc4\": -54544632.11692411,\n                  \"cupidatat1\": \"ipsum magna aliqua\",\n                  \"iruref6\": \"anim ex\",\n                  \"mollit_0d\": 43607938\n                }\n              }\n            ],\n            \"description\": \"<string>\"\n          }\n        },\n        {\n          \"alertPolicyRef\": \"<string>\",\n          \"kind\": \"<string>\",\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          },\n          \"spec\": {\n            \"alertWhenBreaching\": \"<boolean>\",\n            \"alertWhenResolved\": \"<boolean>\",\n            \"alertWhenNoData\": \"<boolean>\",\n            \"conditions\": [\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"lte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"2955456ms770h46007435M264h97038772894M\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"6ms1666122M95006095123ms5795187y83583187864M77m9525s3M6954845196Q\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              },\n              {\n                \"conditionRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"name\": \"<string>\",\n                  \"displayName\": \"<string>\"\n                },\n                \"spec\": {\n                  \"severity\": \"<string>\",\n                  \"condition\": {\n                    \"op\": \"lte\",\n                    \"threshold\": \"<number>\",\n                    \"lookbackWindow\": \"301w36309439s6604102h1M5ms59852462851w5M\",\n                    \"kind\": \"<string>\",\n                    \"alertAfter\": \"33Q24144728217w8256w1483428Q368Q85h\"\n                  },\n                  \"description\": \"<string>\"\n                }\n              }\n            ],\n            \"notificationTargets\": [\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"eiusmod_91\": \"dol\"\n                },\n                \"spec\": {\n                  \"ut7\": -953894,\n                  \"suntd\": true,\n                  \"incididunt_f\": \"est esse ex\"\n                }\n              },\n              {\n                \"targetRef\": \"<string>\",\n                \"kind\": \"<string>\",\n                \"metadata\": {\n                  \"ut6\": false,\n                  \"incididunt_a\": 49462097.76213744\n                },\n                \"spec\": {\n                  \"culpa_e\": -79241117.5002118,\n                  \"commodo_1f\": \"fugiat Lorem Excepteur\"\n                }\n              }\n            ],\n            \"description\": \"<string>\"\n          }\n        }\n      ]\n    }\n  }\n]",
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-e23e5553-5220-43e1-b1a1-14846ab58509"
+                },
+                {
+                  "id": "3556e352-acfc-4692-bf56-0824951c728d",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI&originPrefix=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by dataset.",
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-3556e352-acfc-4692-bf56-0824951c728d"
+                }
+              ],
+              "createdAt": "2026-10-21T19:57:00.000Z",
+              "updatedAt": "2026-10-21T19:57:00.000Z",
+              "uid": "35240-1f915ac1-6961-409e-9726-540097e10a23"
+            },
+            {
+              "name": "Create an SLO",
+              "id": "dc2b43b1-97e2-4f30-919b-ee10e0439bf0",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "slos"
+                  ],
+                  "query": [
+                    {
+                      "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                      "key": "dataset",
+                      "value": "CZuIf6FbsmZxAhjI"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "48ad8090-2b5b-4f8b-ac25-408882cb2095",
+                  "name": "The SLO was created.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-48ad8090-2b5b-4f8b-ac25-408882cb2095"
+                },
+                {
+                  "id": "8518ad3c-0fd8-473a-b062-17a3dd6878ad",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"openslo/v1\",\n  \"kind\": \"SLO\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\",\n      \"commodo_b\": \"<string>\",\n      \"dolorf\": \"<string>\",\n      \"minim0\": \"<string>\",\n      \"in0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\",\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\",\n      \"dash0.com/enabled\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"budgetingMethod\": \"RatioTimeslices\",\n    \"objectives\": [\n      {\n        \"displayName\": \"<string>\",\n        \"op\": \"gte\",\n        \"value\": \"<number>\",\n        \"target\": \"<number>\",\n        \"targetPercent\": \"<number>\",\n        \"timeSliceTarget\": \"<number>\",\n        \"timeSliceWindow\": \"9524797293M8d65M771215541y0691w7290725s36202304ms\",\n        \"indicator\": {\n          \"spec\": {\n            \"description\": \"<string>\",\n            \"ratioMetric\": {\n              \"counter\": \"<boolean>\",\n              \"good\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"labore_8f1\": \"eiusmod\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"bad\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"eiusmod_b17\": \"adipisicing cupidatat laborum\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"total\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"aute_87\": false,\n                    \"ipsum85b\": -18485097,\n                    \"esse_b30\": 58843201\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"raw\": {\n                \"metricSource\": {\n                  \"spec\": {\n                    \"et_5\": \"Excepteur commodo in\"\n                  },\n                  \"metricSourceRef\": \"<string>\",\n                  \"type\": \"<string>\"\n                }\n              },\n              \"rawType\": \"success\"\n            },\n            \"thresholdMetric\": {\n              \"metricSource\": {\n                \"spec\": {\n                  \"sed_aec\": 69544101.3629806\n                },\n                \"metricSourceRef\": \"<string>\",\n                \"type\": \"<string>\"\n              }\n            }\n          },\n          \"metadata\": {\n            \"name\": \"<string>\",\n            \"displayName\": \"<string>\"\n          }\n        },\n        \"indicatorRef\": \"<string>\",\n        \"compositeWeight\": \"<number>\"\n      }\n    ],\n    \"description\": \"<string>\",\n    \"service\": \"<string>\",\n    \"indicator\": {\n      \"spec\": {\n        \"description\": \"<string>\",\n        \"ratioMetric\": {\n          \"counter\": \"<boolean>\",\n          \"good\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"deserunt498\": \"enim\",\n                \"labore1\": true\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"bad\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"anim04\": -62754390.70891995,\n                \"aliqua_7\": -68987294.92894375,\n                \"laborisf4\": -19507698.048673466\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"total\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"ida4d\": 44941936.86909175\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"raw\": {\n            \"metricSource\": {\n              \"spec\": {\n                \"mollitd\": \"ex voluptate eiusmod\"\n              },\n              \"metricSourceRef\": \"<string>\",\n              \"type\": \"<string>\"\n            }\n          },\n          \"rawType\": \"failure\"\n        },\n        \"thresholdMetric\": {\n          \"metricSource\": {\n            \"spec\": {\n              \"velit6b2\": -64732250\n            },\n            \"metricSourceRef\": \"<string>\",\n            \"type\": \"<string>\"\n          }\n        }\n      },\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"displayName\": \"<string>\"\n      }\n    },\n    \"indicatorRef\": \"<string>\",\n    \"timeWindow\": [\n      {\n        \"duration\": \"177y1060053656m5y8796299210m072470m19Q58496353ms2976w253h\",\n        \"isRolling\": \"<boolean>\",\n        \"calendar\": {\n          \"startTime\": \"<string>\",\n          \"timeZone\": \"<string>\"\n        }\n      }\n    ],\n    \"alertPolicies\": [\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gte\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8823178323d5s63001Q6564223s47Q91221423205s343w374s513915024y931493026h00w\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"4330761009s9786601M91718440350d\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"8138592495m2619w765819w57931M26y3484880d5299438ms395332286ms39d306m\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"18832588422M1442y8397607646y83618407095M\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6\": 37782719\n              },\n              \"spec\": {\n                \"deserunt_89\": 25157450.548267588,\n                \"voluptate929\": \"est elit\"\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"culpa_6b9\": -79304497.29401863,\n                \"mollit_f\": -76377826.47619686\n              },\n              \"spec\": {\n                \"voluptatebce\": 12697163,\n                \"laborum5f\": true\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      },\n      {\n        \"alertPolicyRef\": \"<string>\",\n        \"kind\": \"<string>\",\n        \"metadata\": {\n          \"name\": \"<string>\",\n          \"displayName\": \"<string>\"\n        },\n        \"spec\": {\n          \"alertWhenBreaching\": \"<boolean>\",\n          \"alertWhenResolved\": \"<boolean>\",\n          \"alertWhenNoData\": \"<boolean>\",\n          \"conditions\": [\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"gt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"377625042d\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"2y13h1589944750ms\"\n                },\n                \"description\": \"<string>\"\n              }\n            },\n            {\n              \"conditionRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"name\": \"<string>\",\n                \"displayName\": \"<string>\"\n              },\n              \"spec\": {\n                \"severity\": \"<string>\",\n                \"condition\": {\n                  \"op\": \"lt\",\n                  \"threshold\": \"<number>\",\n                  \"lookbackWindow\": \"987937m30758w0w5252727ms0827200943ms2Q42201790M0801w885Q13383696h\",\n                  \"kind\": \"<string>\",\n                  \"alertAfter\": \"7484815963d084693h190714678m697982373w046824569h833h37d23030575Q\"\n                },\n                \"description\": \"<string>\"\n              }\n            }\n          ],\n          \"notificationTargets\": [\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"in_c\": true,\n                \"amet8\": \"sint ut\"\n              },\n              \"spec\": {\n                \"aliquip3d5\": -8733869.9841903,\n                \"ut_57\": 51891141,\n                \"anim900\": true\n              }\n            },\n            {\n              \"targetRef\": \"<string>\",\n              \"kind\": \"<string>\",\n              \"metadata\": {\n                \"dolore_a\": 12638565\n              },\n              \"spec\": {\n                \"deserunt9e\": \"velit Duis do\",\n                \"sit3\": false\n              }\n            }\n          ],\n          \"description\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/slos?dataset=CZuIf6FbsmZxAhjI",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "slos"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "CZuIf6FbsmZxAhjI"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:57:00.000Z",
+                  "updatedAt": "2026-10-21T19:57:00.000Z",
+                  "uid": "35240-8518ad3c-0fd8-473a-b062-17a3dd6878ad"
+                }
+              ],
+              "createdAt": "2026-10-21T19:57:00.000Z",
+              "updatedAt": "2026-10-21T19:57:00.000Z",
+              "uid": "35240-dc2b43b1-97e2-4f30-919b-ee10e0439bf0"
+            }
+          ],
+          "id": "7216f480-377b-4ecc-a76a-db7c0a51f151",
+          "createdAt": "2026-10-21T19:57:00.000Z",
+          "updatedAt": "2026-10-21T19:57:00.000Z",
+          "uid": "35240-7216f480-377b-4ecc-a76a-db7c0a51f151"
+        }
+      ],
+      "id": "5b232dfc-fc9b-4c53-b9eb-c2c5cb0c3864",
+      "createdAt": "2026-10-21T19:57:00.000Z",
+      "updatedAt": "2026-10-21T19:57:00.000Z",
+      "uid": "35240-5b232dfc-fc9b-4c53-b9eb-c2c5cb0c3864"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
+    }
+  ]
+}

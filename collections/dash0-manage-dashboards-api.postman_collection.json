@@ -1,941 +1,1003 @@
 {
+  "info": {
+    "_postman_id": "9d758e51-e7e4-49de-9328-5007113cd62e",
+    "name": "Dash0 Manage Dashboards API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:17.000Z",
+    "updatedAt": "2026-10-21T19:55:18.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-9d758e51-e7e4-49de-9328-5007113cd62e"
+  },
   "item": [
     {
-      "id": "69dab2f3-b71a-42b4-b42d-ee12bcda23bd",
-      "name": "Manage Dashboards",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "7279cf3a-5b1e-49d3-8451-e6a704678fbb",
-          "name": "Delete a specific dashboard by its origin or id.",
-          "request": {
-            "name": "Delete a specific dashboard by its origin or id.",
-            "description": {
-              "content": "Delete a specific dashboard by its **origin** or **id**.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "dashboards",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the dashboard."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "dashboards",
+          "item": [
             {
-              "id": "318b2a3b-60ee-4abf-b3ea-91ee76d21c43",
-              "name": "The specific dashboard was deleted.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a specific dashboard by its origin or id",
+                  "id": "ee9ebedd-de38-47e6-ac16-d9dae2c73961",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "de1aafc6-cc53-46a4-b6ad-3bab79cba354",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the dashboard."
+                        }
+                      ]
+                    },
+                    "description": "Delete a specific dashboard by its **origin** or **id**."
+                  },
+                  "response": [
                     {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
+                      "id": "6d42b3d3-ae48-4cef-8572-86f2f6974d06",
+                      "name": "The specific dashboard was deleted.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-6d42b3d3-ae48-4cef-8572-86f2f6974d06"
+                    },
+                    {
+                      "id": "39c3fb96-f030-4b1c-b3e3-201d488d2d9a",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-39c3fb96-f030-4b1c-b3e3-201d488d2d9a"
                     }
                   ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-ee9ebedd-de38-47e6-ac16-d9dae2c73961"
                 },
-                "method": "DELETE",
-                "body": {}
+                {
+                  "name": "Receive a specific dashboard by its origin or id",
+                  "id": "21ea75d3-94de-4853-9698-46f5d40c7bf7",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "d09fdaa0-e85d-4af7-8fe2-e872f9224755",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the dashboard."
+                        }
+                      ]
+                    },
+                    "description": "Receive a specific dashboard by its **origin** or **id**."
+                  },
+                  "response": [
+                    {
+                      "id": "e1c6e4f5-aedb-455c-8094-d280cc5f59c3",
+                      "name": "Receive a specific dashboard.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-e1c6e4f5-aedb-455c-8094-d280cc5f59c3"
+                    },
+                    {
+                      "id": "113bd86c-2cdd-48f0-8163-ad7c2c98f5f5",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-113bd86c-2cdd-48f0-8163-ad7c2c98f5f5"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-21ea75d3-94de-4853-9698-46f5d40c7bf7"
+                },
+                {
+                  "name": "Update or insert a specific dashboard by its origin or id",
+                  "id": "7f7db080-74f8-47cd-891b-e343c8236f66",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "53e22ba0-ce60-4036-8996-9b9323e83124",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) The **origin** or **id** of the dashboard."
+                        }
+                      ]
+                    },
+                    "description": "Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**."
+                  },
+                  "response": [
+                    {
+                      "id": "e4c47af6-ec61-418c-b03f-6904db130cba",
+                      "name": "The updated or created dashboard.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-e4c47af6-ec61-418c-b03f-6904db130cba"
+                    },
+                    {
+                      "id": "39fdc690-a848-41ac-b218-09554790df56",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/dashboards/:originOrId?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "dashboards",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-39fdc690-a848-41ac-b218-09554790df56"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-7f7db080-74f8-47cd-891b-e343c8236f66"
+                }
+              ],
+              "id": "e6a0a2f1-7b0b-42ed-addb-f516dfd74031",
+              "createdAt": "2026-10-21T19:55:18.000Z",
+              "updatedAt": "2026-10-21T19:55:18.000Z",
+              "uid": "35240-e6a0a2f1-7b0b-42ed-addb-f516dfd74031"
+            },
+            {
+              "name": "Receive a list of dashboards",
+              "id": "7fcce0ba-2a47-425a-baea-03ea5523e977",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "bbbabeda-2ed4-4c2a-a2be-7b42ba2efdb7",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "424e3172-6d45-42b8-8fa7-61c8af6b23bf",
-          "name": "Receive a specific dashboard by its origin or id.",
-          "request": {
-            "name": "Receive a specific dashboard by its origin or id.",
-            "description": {
-              "content": "Receive a specific dashboard by its **origin** or **id**.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "dashboards",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the dashboard."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "a8871e5d-4eaa-49b1-8f49-ed374bce8e21",
-              "name": "Receive a specific dashboard.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1963-06-02T21:46:27.139Z\",\n    \"updatedAt\": \"2019-07-18T20:19:51.944Z\",\n    \"version\": 4894,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"MWJ\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2014-02-05T23:37:42.876Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {}\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "56b4a0d5-4576-4bcb-b7a8-baf3059cd73b",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "a1d3532f-43aa-44c5-b7f8-e3c494497c73",
-          "name": "Update or insert a specific dashboard by its origin or id.",
-          "request": {
-            "name": "Update or insert a specific dashboard by its origin or id.",
-            "description": {
-              "content": "Update or insert a specific dashboard by its **origin** or **id**. In case a dashboard with the given **origin** or **id** is found it will be updated. If there is no dashboard found a new dashboard will be created and the given `originOrId` is used as **origin**.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "dashboards",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) The **origin** or **id** of the dashboard."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"<string>\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "22cade6a-fb4f-4551-a46a-a3088a8edeaa",
-              "name": "The updated or created dashboard.",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
+                  "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1963-06-02T21:46:27.139Z\",\n    \"updatedAt\": \"2019-07-18T20:19:51.944Z\",\n    \"version\": 4894,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"MWJ\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2014-02-05T23:37:42.876Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {}\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bdc6188f-028d-4ebb-8c70-08d552119a20",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) The **origin** or **id** of the dashboard."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "15cad7ae-39c7-4ba9-854f-dbb95b84a2cb",
-          "name": "Receive a list of dashboards",
-          "request": {
-            "name": "Receive a list of dashboards",
-            "description": {
-              "content": "Receive a list of your organization dashboards",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "dashboards"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "04b5c406-229a-43dd-9e19-13b050a2cfb3",
-              "name": "Receive a list of dashboards.",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "api",
                     "dashboards"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
+                      "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                    }
+                  ]
+                },
+                "description": "Receive a list of your organization dashboards"
+              },
+              "response": [
+                {
+                  "id": "72b53259-f10c-4623-bdd3-4b9299137e22",
+                  "name": "Receive a list of dashboards.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"id\": \"<string>\",\n    \"dataset\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"origin\": \"<string>\",\n    \"name\": \"<string>\",\n    \"description\": \"<string>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"dataset\": \"<string>\",\n    \"tags\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"origin\": \"<string>\",\n    \"name\": \"<string>\",\n    \"description\": \"<string>\"\n  }\n]",
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-72b53259-f10c-4623-bdd3-4b9299137e22"
                 },
+                {
+                  "id": "2cf2187d-32f7-455a-9597-3f0db17f203c",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-2cf2187d-32f7-455a-9597-3f0db17f203c"
+                }
+              ],
+              "createdAt": "2026-10-21T19:55:18.000Z",
+              "updatedAt": "2026-10-21T19:55:18.000Z",
+              "uid": "35240-7fcce0ba-2a47-425a-baea-03ea5523e977"
+            },
+            {
+              "name": "Create a dashboard",
+              "id": "70f710c7-d123-47f9-913a-bd5c59d347c6",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "[\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"origin\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"origin\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\"\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c59ab069-837d-4cb4-9281-8a2ad1339d8b",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "dashboards"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
+                      "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                    }
+                  ]
+                },
+                "description": "Create a dashboard."
+              },
+              "response": [
+                {
+                  "id": "93c8dd58-42c5-4935-afc7-42c30ea8a6f3",
+                  "name": "The created dashboard.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-93c8dd58-42c5-4935-afc7-42c30ea8a6f3"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "e9dde4d6-374d-482c-bf6c-d966e8ef25ac",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/dashboards?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "dashboards"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-e9dde4d6-374d-482c-bf6c-d966e8ef25ac"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:18.000Z",
+              "updatedAt": "2026-10-21T19:55:18.000Z",
+              "uid": "35240-70f710c7-d123-47f9-913a-bd5c59d347c6"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "f455e0e6-e59a-4810-9799-fdcb1ed7aed0",
+          "createdAt": "2026-10-21T19:55:18.000Z",
+          "updatedAt": "2026-10-21T19:55:18.000Z",
+          "uid": "35240-f455e0e6-e59a-4810-9799-fdcb1ed7aed0"
         },
         {
-          "id": "25eb4338-711d-49a7-b4e9-f471e461edfa",
-          "name": "Create a dashboard",
-          "request": {
-            "name": "Create a dashboard",
-            "description": {
-              "content": "Create a dashboard.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "dashboards"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"<string>\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
+          "name": "import",
+          "item": [
             {
-              "id": "32ca9526-0172-4bca-bf08-244ac14d3135",
-              "name": "The created dashboard.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "dashboard",
+              "item": [
+                {
+                  "name": "Import a dashboard",
+                  "id": "7659f723-fad6-4a62-8948-c8d0d07261ab",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/import/dashboard?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "import",
+                        "dashboard"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                        }
+                      ]
+                    },
+                    "description": "This endpoint allows you **to import an existing dashboard** into your organization. It's intended for one-time migrations rather than ongoing dashboard management.\nUnlike the standard API, this endpoint supports importing dashboards **with full editability**, allowing you to modify dashboards that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported dashboard state.\nImporting a dashboard without an id will create a new dashboard and return the created asset with a generated id.\nImporting a dashboard with an existing id (metadata>dash0Extensions>id) will override the corresponding dashboard definition. In case there is no dashboard with the given id a new dashboard will be created."
+                  },
+                  "response": [
                     {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1963-06-02T21:46:27.139Z\",\n    \"updatedAt\": \"2019-07-18T20:19:51.944Z\",\n    \"version\": 4894,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"MWJ\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2014-02-05T23:37:42.876Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {}\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f8488f9c-b733-47e2-a267-e866ca836086",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "dashboards"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                      "id": "50f0b944-2982-4360-90da-1f2e436f0353",
+                      "name": "The imported dashboard.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/dashboard?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "dashboard"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-50f0b944-2982-4360-90da-1f2e436f0353"
+                    },
                     {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
+                      "id": "8e3bfada-5200-4297-b717-92d163f8cd79",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"SgopSYNUmC\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"ui\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {}\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/dashboard?dataset=Qiv4-XWgGQm0hWo2Jy3g4zR4",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "dashboard"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "Qiv4-XWgGQm0hWo2Jy3g4zR4"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:18.000Z",
+                      "updatedAt": "2026-10-21T19:55:18.000Z",
+                      "uid": "35240-8e3bfada-5200-4297-b717-92d163f8cd79"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "createdAt": "2026-10-21T19:55:18.000Z",
+                  "updatedAt": "2026-10-21T19:55:18.000Z",
+                  "uid": "35240-7659f723-fad6-4a62-8948-c8d0d07261ab"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "174377cd-0943-4284-8a68-ac70e1b1a139",
-          "name": "Import a dashboard",
-          "request": {
-            "name": "Import a dashboard",
-            "description": {
-              "content": "This endpoint allows you **to import an existing dashboard** into your organization. It's intended for one-time migrations rather than ongoing dashboard management.\nUnlike the standard API, this endpoint supports importing dashboards **with full editability**, allowing you to modify dashboards that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported dashboard state.\nImporting a dashboard without an id will create a new dashboard and return the created asset with a generated id.\nImporting a dashboard with an existing id (metadata>dash0Extensions>id) will override the corresponding dashboard definition. In case there is no dashboard with the given id a new dashboard will be created.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "import",
-                "dashboard"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"updatedAt\": \"<dateTime>\",\n    \"version\": \"<long>\",\n    \"project\": \"<string>\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"dataset\": \"<string>\",\n      \"id\": \"<string>\",\n      \"origin\": \"<string>\",\n      \"createdBy\": \"<string>\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "c00fccdf-543f-4760-8de2-6d48ce7d0dd3",
-              "name": "The imported dashboard.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "import",
-                    "dashboard"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dashboard\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1963-06-02T21:46:27.139Z\",\n    \"updatedAt\": \"2019-07-18T20:19:51.944Z\",\n    \"version\": 4894,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"MWJ\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"2014-02-05T23:37:42.876Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {}\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "7ef9829b-5e36-4505-917c-7ea199de5d9e",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "import",
-                    "dashboard"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "kABj7XPqqlfWG-H4XUTIEx"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"createdAt\": \"1989-04-28T04:34:10.860Z\",\n    \"updatedAt\": \"1951-04-09T02:54:17.625Z\",\n    \"version\": 5352,\n    \"project\": \"string\",\n    \"dash0Extensions\": {\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"dataset\": \"SaQRRgg\",\n      \"id\": \"string\",\n      \"origin\": \"string\",\n      \"createdBy\": \"string\"\n    },\n    \"labels\": {\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1964-01-14T15:45:52.888Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": \"<object>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 9628,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "385fc88d-2f81-4c85-8de1-9726d3c37d3a",
+              "createdAt": "2026-10-21T19:55:18.000Z",
+              "updatedAt": "2026-10-21T19:55:18.000Z",
+              "uid": "35240-385fc88d-2f81-4c85-8de1-9726d3c37d3a"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "bba940cb-87e7-439d-9a4e-990800b5c719",
+          "createdAt": "2026-10-21T19:55:18.000Z",
+          "updatedAt": "2026-10-21T19:55:18.000Z",
+          "uid": "35240-bba940cb-87e7-439d-9a4e-990800b5c719"
         }
       ],
-      "event": []
+      "id": "bc636da0-dd72-4c47-ba1c-aca9272d80bf",
+      "createdAt": "2026-10-21T19:55:18.000Z",
+      "updatedAt": "2026-10-21T19:55:18.000Z",
+      "uid": "35240-bc636da0-dd72-4c47-ba1c-aca9272d80bf"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "ec4e8a7a-6843-458d-9c7d-5e7d83bc5f10",
-    "name": "Dash0 Edge Collectors Manage Dashboards API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

@@ -1,787 +1,833 @@
 {
+  "info": {
+    "_postman_id": "874e17c0-cec7-4146-b226-b769aa189275",
+    "name": "Dash0 Manage Recording Rules API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:30.000Z",
+    "updatedAt": "2026-10-21T19:55:30.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-874e17c0-cec7-4146-b226-b769aa189275"
+  },
   "item": [
     {
-      "id": "5be27f68-620b-41e3-8452-9e34502cfa71",
-      "name": "Manage Recording Rules",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "c616a446-9a25-4199-9230-54d9d81e5240",
-          "name": "Delete a specific recording rule.",
-          "request": {
-            "name": "Delete a specific recording rule.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "recording-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Recording rule origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "recording-rules",
+          "item": [
             {
-              "id": "9d994dc9-bf34-4e3e-b768-90cdab365e42",
-              "name": "The recording rule was deleted.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a specific recording rule",
+                  "id": "af94da0c-b991-4ed0-a08f-8d87c30eee14",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "ef237333-cf1a-4162-b8be-4f653180165b",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Recording rule origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
                     {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
+                      "id": "6e47c3d8-5462-4c38-8d53-7195d83a39d2",
+                      "name": "The recording rule was deleted.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-6e47c3d8-5462-4c38-8d53-7195d83a39d2"
+                    },
+                    {
+                      "id": "7762caec-ca77-46c6-98e4-b71b77090252",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-7762caec-ca77-46c6-98e4-b71b77090252"
                     }
                   ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-af94da0c-b991-4ed0-a08f-8d87c30eee14"
                 },
-                "method": "DELETE",
-                "body": {}
+                {
+                  "name": "Retrieve the latest version of a specific recording rule",
+                  "id": "8e9b5d14-fea1-4a8f-bbec-f264d1250a45",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "b0edf294-3e9b-42d3-adc1-c0e4e74ce69f",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Recording rule origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "da38523c-be01-4fd7-9a67-6c0194500846",
+                      "name": "The requested recording rule.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-da38523c-be01-4fd7-9a67-6c0194500846"
+                    },
+                    {
+                      "id": "9a9b6248-2a40-4c30-a015-7c1f4f2a566c",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-9a9b6248-2a40-4c30-a015-7c1f4f2a566c"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-8e9b5d14-fea1-4a8f-bbec-f264d1250a45"
+                },
+                {
+                  "name": "Update a specific recording rule",
+                  "id": "05b03420-24ce-43b4-a780-6a09f29c33b3",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "6894a6c1-fae7-4fa2-92e9-26d67e202e44",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Recording rule origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "32de65dd-d410-4c37-9501-e516b673fe8b",
+                      "name": "The recording rule was updated.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-32de65dd-d410-4c37-9501-e516b673fe8b"
+                    },
+                    {
+                      "id": "199a94a6-d8c1-451e-b07a-19412cd41b2e",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/recording-rules/:originOrId?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "recording-rules",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                              "key": "dataset",
+                              "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:31.000Z",
+                      "updatedAt": "2026-10-21T19:55:31.000Z",
+                      "uid": "35240-199a94a6-d8c1-451e-b07a-19412cd41b2e"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-05b03420-24ce-43b4-a780-6a09f29c33b3"
+                }
+              ],
+              "id": "2b4c17ee-ccae-4743-9275-3373e8ffcada",
+              "createdAt": "2026-10-21T19:55:31.000Z",
+              "updatedAt": "2026-10-21T19:55:31.000Z",
+              "uid": "35240-2b4c17ee-ccae-4743-9275-3373e8ffcada"
+            },
+            {
+              "name": "Retrieve a list of recording rules",
+              "id": "154342bd-1b64-454e-b85f-2d4472c4881b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "fee88f75-48b8-4080-b386-68ca45a38cf5",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 1754,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "43a8eb68-3cb7-433c-bf8f-6a9d67a32244",
-          "name": "Retrieve the latest version of a specific recording rule.",
-          "request": {
-            "name": "Retrieve the latest version of a specific recording rule.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "recording-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Recording rule origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "8d2a0e2e-01f5-410a-b2b3-096efd71d474",
-              "name": "The requested recording rule.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0510036a-892f-4868-bb28-12791300819e",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 1754,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "db2d4e78-5ef9-4826-83f8-144e4f84ada1",
-          "name": "Update a specific recording rule.",
-          "request": {
-            "name": "Update a specific recording rule.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "recording-rules",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>",
-                  "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Recording rule origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"key_0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"<string>\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_3\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_4\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "ef9057e9-b1cd-4ae8-b5df-bf626f72ea0c",
-              "name": "The recording rule was updated.",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
+                  "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO&originPrefix=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2d9f878e-b9c7-4e2d-84f6-e841e0b81037",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Recording rule origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 1754,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "25319759-c54f-4f7d-b051-6ba1242e7b0d",
-          "name": "Retrieve a list of recording rules.",
-          "request": {
-            "name": "Retrieve a list of recording rules.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "recording-rules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>",
-                  "description": "Filter by dataset."
-                },
-                {
-                  "disabled": false,
-                  "key": "originPrefix",
-                  "value": "<string>",
-                  "description": "Filter by origin prefix."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "f3d9e3c4-7773-46e2-8b8b-d59889e6251d",
-              "name": "List of recording rules.",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "api",
                     "recording-rules"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Filter by dataset.",
                       "key": "dataset",
-                      "value": "W_y4rlWad4"
+                      "value": "qT0q7WC1_Scgzq552xIjBRbO"
                     },
                     {
+                      "description": "Filter by origin prefix.",
                       "key": "originPrefix",
                       "value": "<string>"
                     }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "51b1a07b-8b2a-4111-9e2c-db3fc3a7f6b3",
+                  "name": "List of recording rules.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO&originPrefix=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by dataset.",
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"apiVersion\": \"monitoring.coreos.com/v1\",\n    \"kind\": \"PrometheusRule\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"enim_7\": \"<string>\",\n        \"voluptate_2\": \"<string>\"\n      },\n      \"annotations\": {\n        \"occaecat_718\": \"<string>\",\n        \"ex570\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"groups\": [\n        {\n          \"name\": \"<string>\",\n          \"rules\": [\n            {\n              \"expr\": \"<string>\",\n              \"record\": \"tMwLqqExa\",\n              \"alert\": \"<string>\",\n              \"for\": \"<string>\",\n              \"keep_firing_for\": \"<string>\",\n              \"labels\": {\n                \"anim4_7\": \"<string>\",\n                \"ut65a\": \"<string>\",\n                \"commodo_8_1\": \"<string>\"\n              },\n              \"annotations\": {\n                \"nisif\": \"<string>\",\n                \"sint_d\": \"<string>\",\n                \"pariaturba\": \"<string>\"\n              }\n            }\n          ],\n          \"interval\": \"<string>\",\n          \"query_offset\": \"<string>\",\n          \"labels\": {\n            \"consequat__\": \"<string>\",\n            \"velit_3\": \"<string>\",\n            \"ut673\": \"<string>\"\n          }\n        }\n      ]\n    }\n  },\n  {\n    \"apiVersion\": \"monitoring.coreos.com/v1\",\n    \"kind\": \"PrometheusRule\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"deserunt_2d\": \"<string>\"\n      },\n      \"annotations\": {\n        \"doa\": \"<string>\"\n      }\n    },\n    \"spec\": {\n      \"groups\": [\n        {\n          \"name\": \"<string>\",\n          \"rules\": [\n            {\n              \"expr\": \"<string>\",\n              \"record\": \"Sml5G4Q\",\n              \"alert\": \"<string>\",\n              \"for\": \"<string>\",\n              \"keep_firing_for\": \"<string>\",\n              \"labels\": {\n                \"Duis59\": \"<string>\"\n              },\n              \"annotations\": {\n                \"officia_c\": \"<string>\"\n              }\n            }\n          ],\n          \"interval\": \"<string>\",\n          \"query_offset\": \"<string>\",\n          \"labels\": {\n            \"Duis_5\": \"<string>\"\n          }\n        }\n      ]\n    }\n  }\n]",
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-51b1a07b-8b2a-4111-9e2c-db3fc3a7f6b3"
                 },
+                {
+                  "id": "ed54cee0-10f4-48b7-afaa-91e3b38a24dc",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO&originPrefix=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by dataset.",
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        },
+                        {
+                          "description": "Filter by origin prefix.",
+                          "key": "originPrefix",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-ed54cee0-10f4-48b7-afaa-91e3b38a24dc"
+                }
+              ],
+              "createdAt": "2026-10-21T19:55:31.000Z",
+              "updatedAt": "2026-10-21T19:55:31.000Z",
+              "uid": "35240-154342bd-1b64-454e-b85f-2d4472c4881b"
+            },
+            {
+              "name": "Create a recording rule",
+              "id": "252892c5-2a5d-4157-a499-bde8d07575e6",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "[\n  {\n    \"apiVersion\": \"monitoring.coreos.com/v1\",\n    \"kind\": \"PrometheusRule\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"annotations\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\",\n        \"key_4\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"groups\": [\n        {\n          \"name\": \"string\",\n          \"rules\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"interval\": \"string\",\n          \"query_offset\": \"string\",\n          \"labels\": {\n            \"key_0\": \"string\"\n          }\n        }\n      ]\n    }\n  },\n  {\n    \"apiVersion\": \"monitoring.coreos.com/v1\",\n    \"kind\": \"PrometheusRule\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"key_0\": \"string\"\n      },\n      \"annotations\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      }\n    },\n    \"spec\": {\n      \"groups\": [\n        {\n          \"name\": \"string\",\n          \"rules\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"interval\": \"string\",\n          \"query_offset\": \"string\",\n          \"labels\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          }\n        }\n      ]\n    }\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f75b3071-2400-4312-8ad3-aad33457cf89",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "recording-rules"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
                       "key": "dataset",
-                      "value": "W_y4rlWad4"
+                      "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "71afc52a-a00a-46a7-8580-9fb615a9fe32",
+                  "name": "The recording rule was created.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
                     },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "originPrefix",
-                      "value": "<string>"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-71afc52a-a00a-46a7-8580-9fb615a9fe32"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "9c9646e4-af41-402d-84b4-625ef1a18369",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"laborumba\": \"<string>\"\n    },\n    \"annotations\": {\n      \"amet_d\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"D5Hp:\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"enim_a7d\": \"<string>\"\n            },\n            \"annotations\": {\n              \"fugiat495\": \"<string>\",\n              \"incididunt24\": \"<string>\"\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"labore354\": \"<string>\",\n          \"addc\": \"<string>\",\n          \"deserunt_e\": \"<string>\",\n          \"ullamco7f0\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/recording-rules?dataset=qT0q7WC1_Scgzq552xIjBRbO",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "recording-rules"
+                      ],
+                      "query": [
+                        {
+                          "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided.",
+                          "key": "dataset",
+                          "value": "qT0q7WC1_Scgzq552xIjBRbO"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:31.000Z",
+                  "updatedAt": "2026-10-21T19:55:31.000Z",
+                  "uid": "35240-9c9646e4-af41-402d-84b4-625ef1a18369"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 1754,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:31.000Z",
+              "updatedAt": "2026-10-21T19:55:31.000Z",
+              "uid": "35240-252892c5-2a5d-4157-a499-bde8d07575e6"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "2c89f061-1526-4793-886d-c6b8b13deae2",
-          "name": "Create a recording rule.",
-          "request": {
-            "name": "Create a recording rule.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "recording-rules"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>",
-                  "description": "Target dataset. Overrides dash0.com/dataset in metadata.labels if both are provided."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"apiVersion\": \"<string>\",\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"key_0\": \"<string>\"\n    },\n    \"annotations\": {\n      \"key_0\": \"<string>\",\n      \"key_1\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"<string>\",\n        \"rules\": [\n          {\n            \"expr\": \"<string>\",\n            \"record\": \"<string>\",\n            \"alert\": \"<string>\",\n            \"for\": \"<string>\",\n            \"keep_firing_for\": \"<string>\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_2\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_3\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_4\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"<string>\",\n        \"query_offset\": \"<string>\",\n        \"labels\": {\n          \"key_0\": \"<string>\",\n          \"key_1\": \"<string>\",\n          \"key_2\": \"<string>\",\n          \"key_3\": \"<string>\"\n        }\n      }\n    ]\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "28c8e4c2-069f-431b-92c1-bd7e1e18141b",
-              "name": "The recording rule was created.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "5d2e87d1-f378-49ba-8e5b-65cbbb33e730",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "recording-rules"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "W_y4rlWad4"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"apiVersion\": \"monitoring.coreos.com/v1\",\n  \"kind\": \"PrometheusRule\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"key_0\": \"string\"\n    },\n    \"annotations\": {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"groups\": [\n      {\n        \"name\": \"string\",\n        \"rules\": [\n          {\n            \"expr\": \"string\",\n            \"record\": \"szL7uHe3Jv6\",\n            \"alert\": \"string\",\n            \"for\": \"string\",\n            \"keep_firing_for\": \"string\",\n            \"labels\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            \"annotations\": {\n              \"key_0\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"key_1\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          }\n        ],\n        \"interval\": \"string\",\n        \"query_offset\": \"string\",\n        \"labels\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    ]\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 1754,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "4e1807a9-3c12-4fd0-a229-16c38d606015",
+          "createdAt": "2026-10-21T19:55:31.000Z",
+          "updatedAt": "2026-10-21T19:55:31.000Z",
+          "uid": "35240-4e1807a9-3c12-4fd0-a229-16c38d606015"
         }
       ],
-      "event": []
+      "id": "6111515a-1964-46a2-892c-901d328cffe7",
+      "createdAt": "2026-10-21T19:55:31.000Z",
+      "updatedAt": "2026-10-21T19:55:31.000Z",
+      "uid": "35240-6111515a-1964-46a2-892c-901d328cffe7"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "b9142ce6-61d2-46c6-be13-2054a67c4210",
-    "name": "Dash0 Edge Collectors Manage Recording Rules API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

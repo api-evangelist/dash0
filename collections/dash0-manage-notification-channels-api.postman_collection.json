@@ -1,847 +1,922 @@
 {
+  "info": {
+    "_postman_id": "886591cd-6133-48e8-8d54-aaaada0a5573",
+    "name": "Dash0 Manage Notification Channels API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:24.000Z",
+    "updatedAt": "2026-10-21T19:55:24.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-886591cd-6133-48e8-8d54-aaaada0a5573"
+  },
   "item": [
     {
-      "id": "fbe7ac2a-8f35-45ff-b59d-41746d379e54",
-      "name": "Manage Notification Channels",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "c551fa33-42b2-4823-a8de-d867667d7dad",
-          "name": "Delete a notification channel",
-          "request": {
-            "name": "Delete a notification channel",
-            "description": {
-              "content": "Deletes a specific notification channel identified by its UUID or origin.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "notification-channels",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Notification channel origin or UUID."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "notification-channels",
+          "item": [
             {
-              "id": "4447bd0f-8e0e-47eb-aa2a-cdaf65c67152",
-              "name": "Successfully deleted",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a notification channel",
+                  "id": "5cc3729f-f6db-474d-bd48-e11d3e07ffd6",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "3f1d349d-99ad-4f4e-86c0-91bb66af3756",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Notification channel origin or UUID."
+                        }
+                      ]
+                    },
+                    "description": "Deletes a specific notification channel identified by its UUID or origin."
+                  },
+                  "response": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
+                      "id": "87706a63-3279-43b9-ae28-bba22e6d86d0",
+                      "name": "Successfully deleted",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-87706a63-3279-43b9-ae28-bba22e6d86d0"
+                    },
+                    {
+                      "id": "0d7c2b66-a9da-4c93-b66a-97047549fa47",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-0d7c2b66-a9da-4c93-b66a-97047549fa47"
+                    },
+                    {
+                      "id": "ea301863-b6a5-476f-a243-0d1208def241",
+                      "name": "The notification channel is still routed to by a synthetic check. Remove the channel from `spec.notifications` on those checks before deleting it; a synthetic check left routing to a deleted channel notifies nobody. A synthetic check names channels only t",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Conflict",
+                      "code": 409,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-ea301863-b6a5-476f-a243-0d1208def241"
+                    },
+                    {
+                      "id": "44bd4c17-0dea-4575-8975-390ed1746c3e",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-44bd4c17-0dea-4575-8975-390ed1746c3e"
                     }
-                  ]
+                  ],
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-5cc3729f-f6db-474d-bd48-e11d3e07ffd6"
                 },
-                "method": "DELETE",
-                "body": {}
+                {
+                  "name": "Get a specific notification channel",
+                  "id": "3ddb291d-b702-4369-b487-69ed824f6323",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "c415d276-70c7-46ee-88b8-9c098bcdc961",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Notification channel origin or UUID."
+                        }
+                      ]
+                    },
+                    "description": "Returns a specific notification channel identified by its UUID or origin."
+                  },
+                  "response": [
+                    {
+                      "id": "88ca4a07-4fe5-410a-934e-e39c61fc5286",
+                      "name": "The requested notification channel",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-88ca4a07-4fe5-410a-934e-e39c61fc5286"
+                    },
+                    {
+                      "id": "dc375f0f-3b67-47b6-b61d-0abada8e0a79",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-dc375f0f-3b67-47b6-b61d-0abada8e0a79"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-3ddb291d-b702-4369-b487-69ed824f6323"
+                },
+                {
+                  "name": "Update a notification channel",
+                  "id": "666cd34f-3792-4e26-ace6-666c2a804b54",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels",
+                        ":originOrId"
+                      ],
+                      "variable": [
+                        {
+                          "id": "458c1b9c-cb2d-4985-ad16-9c1add9d117c",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) Notification channel origin or UUID."
+                        }
+                      ]
+                    },
+                    "description": "Updates an existing notification channel."
+                  },
+                  "response": [
+                    {
+                      "id": "c6010732-5daa-473d-a020-0bd43478087d",
+                      "name": "The updated notification channel",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-c6010732-5daa-473d-a020-0bd43478087d"
+                    },
+                    {
+                      "id": "ef393f38-dba4-46d5-aed3-5bde1ddde1f5",
+                      "name": "Forbidden - Admin access required",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-ef393f38-dba4-46d5-aed3-5bde1ddde1f5"
+                    },
+                    {
+                      "id": "d033f029-9840-4c9e-95df-6a9d51382abb",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/notification-channels/:originOrId",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "notification-channels",
+                            ":originOrId"
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:24.000Z",
+                      "updatedAt": "2026-10-21T19:55:24.000Z",
+                      "uid": "35240-d033f029-9840-4c9e-95df-6a9d51382abb"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-666cd34f-3792-4e26-ace6-666c2a804b54"
+                }
+              ],
+              "id": "2847cbab-027c-46b1-b1a3-76dd13a92fd3",
+              "createdAt": "2026-10-21T19:55:24.000Z",
+              "updatedAt": "2026-10-21T19:55:24.000Z",
+              "uid": "35240-2847cbab-027c-46b1-b1a3-76dd13a92fd3"
+            },
+            {
+              "name": "List all notification channels for the organization",
+              "id": "e40ad736-e9f8-44c4-9050-70d5c9728405",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "09c6b445-e962-4a03-8f38-c96d18411d4f",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b5a6bd01-9e71-46cd-8033-26949de8593a",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "6db56652-9799-49d8-bf35-5caca824f8f7",
-          "name": "Get a specific notification channel",
-          "request": {
-            "name": "Get a specific notification channel",
-            "description": {
-              "content": "Returns a specific notification channel identified by its UUID or origin.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "notification-channels",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Notification channel origin or UUID."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "2f5c762e-dbb2-4549-a4d0-23410ef15d85",
-              "name": "The requested notification channel",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-06-10T20:55:34.294Z\",\n      \"dash0.com/updated-at\": \"1947-07-27T16:20:48.348Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"opsgenie\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"5BcbCLQoJha8sSztMU\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"Uaj7hxCmFAzWluJ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "92480dbe-e56b-4f1e-9e70-664ddbd57327",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "22e4d296-6ac9-4407-87d4-70bb1428bf60",
-          "name": "Update a notification channel",
-          "request": {
-            "name": "Update a notification channel",
-            "description": {
-              "content": "Updates an existing notification channel.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "notification-channels",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) Notification channel origin or UUID."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"config\": {\n      \"webhookURL\": \"<url>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"<string>\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"<string>\"\n        },\n        {\n          \"kind\": \"<string>\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"<string>\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      ]\n    }\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "1a0fba09-fb76-4951-bf4f-1c46f069e3f0",
-              "name": "The updated notification channel",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
+                  "raw": "{{baseUrl}}/api/notification-channels",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-06-10T20:55:34.294Z\",\n      \"dash0.com/updated-at\": \"1947-07-27T16:20:48.348Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"opsgenie\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"5BcbCLQoJha8sSztMU\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"Uaj7hxCmFAzWluJ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2b74f669-6063-42ac-9ac8-de92b499ce76",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6859e4cf-c1bd-4071-b047-d34bf337f920",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) Notification channel origin or UUID."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "bcbd1645-a1fd-4ab0-babe-f3e5cf2666f2",
-          "name": "List all notification channels for the organization",
-          "request": {
-            "name": "List all notification channels for the organization",
-            "description": {
-              "content": "Returns all notification channels configured for your organization as CRD-enveloped resources.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "notification-channels"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "e24b699e-a3d2-40b4-a0ea-07998374f68f",
-              "name": "List of notification channels",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "api",
                     "notification-channels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns all notification channels configured for your organization as CRD-enveloped resources."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "af5da241-b104-4415-9f65-9e3e0e45013b",
+                  "name": "List of notification channels",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"kind\": \"Dash0NotificationChannel\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/source\": \"dash0-cli\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"type\": \"email\",\n      \"config\": {\n        \"webhookURL\": \"<string>\",\n        \"channel\": \"<string>\"\n      },\n      \"frequency\": \"5954h70823m\",\n      \"routing\": {\n        \"assets\": [\n          {\n            \"kind\": \"check_rule\",\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"dataset\": \"0rmieC8g7Juf\"\n          },\n          {\n            \"kind\": \"synthetic_check\",\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"dataset\": \"eqhx77cGqT2\"\n          }\n        ],\n        \"filters\": [\n          [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_set\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"gte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_match\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        ]\n      }\n    }\n  },\n  {\n    \"kind\": \"Dash0NotificationChannel\",\n    \"metadata\": {\n      \"name\": \"<string>\",\n      \"labels\": {\n        \"dash0.com/id\": \"<string>\",\n        \"dash0.com/origin\": \"<string>\",\n        \"dash0.com/source\": \"identity-provider\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"<dateTime>\",\n        \"dash0.com/updated-at\": \"<dateTime>\"\n      }\n    },\n    \"spec\": {\n      \"type\": \"prometheus_alertmanager\",\n      \"config\": {\n        \"webhookURL\": \"<string>\",\n        \"channel\": \"<string>\"\n      },\n      \"frequency\": \"2524226h8396014013ms27983584200s\",\n      \"routing\": {\n        \"assets\": [\n          {\n            \"kind\": \"check_rule\",\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"dataset\": \"qQ-fKOyDM-UKeB6SEkV3BxX\"\n          },\n          {\n            \"kind\": \"check_rule\",\n            \"id\": \"<string>\",\n            \"name\": \"<string>\",\n            \"dataset\": \"H8EsQ8\"\n          }\n        ],\n        \"filters\": [\n          [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"matches\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"starts_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ],\n          [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"lte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            },\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_start_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\",\n                \"<string>\"\n              ]\n            }\n          ]\n        ]\n      }\n    }\n  }\n]",
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-af5da241-b104-4415-9f65-9e3e0e45013b"
+                },
+                {
+                  "id": "b777ca95-9341-4f3c-b594-ad607bd18a84",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-b777ca95-9341-4f3c-b594-ad607bd18a84"
                 }
               ],
-              "body": "[\n  {\n    \"kind\": \"Dash0NotificationChannel\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/source\": \"operator\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"1997-08-05T22:39:43.904Z\",\n        \"dash0.com/updated-at\": \"1988-04-04T17:29:33.569Z\"\n      }\n    },\n    \"spec\": {\n      \"type\": \"prometheus_alertmanager\",\n      \"config\": {\n        \"webhookURL\": \"string\",\n        \"channel\": \"string\"\n      },\n      \"frequency\": \"10m\",\n      \"routing\": {\n        \"assets\": [\n          {\n            \"kind\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"filters\": [\n          [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ],\n          [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        ]\n      }\n    }\n  },\n  {\n    \"kind\": \"Dash0NotificationChannel\",\n    \"metadata\": {\n      \"name\": \"string\",\n      \"labels\": {\n        \"dash0.com/id\": \"string\",\n        \"dash0.com/origin\": \"string\",\n        \"dash0.com/source\": \"operator\"\n      },\n      \"annotations\": {\n        \"dash0.com/created-at\": \"2024-07-05T03:08:20.306Z\",\n        \"dash0.com/updated-at\": \"1994-01-29T21:25:36.041Z\"\n      }\n    },\n    \"spec\": {\n      \"type\": \"email_v2\",\n      \"config\": {\n        \"webhookURL\": \"string\",\n        \"channel\": \"string\"\n      },\n      \"frequency\": \"10m\",\n      \"routing\": {\n        \"assets\": [\n          {\n            \"kind\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"dataset\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"filters\": [\n          [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ],\n          [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        ]\n      }\n    }\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:24.000Z",
+              "updatedAt": "2026-10-21T19:55:24.000Z",
+              "uid": "35240-e40ad736-e9f8-44c4-9050-70d5c9728405"
             },
             {
-              "id": "25d33631-5094-4ee1-a006-9a4bef0e7bd5",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+              "name": "Create a new notification channel",
+              "id": "8b5cedd7-251f-4f0f-8e5b-fdc696fc919d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "b900a129-0fa6-4285-b254-41551036b697",
-          "name": "Create a new notification channel",
-          "request": {
-            "name": "Create a new notification channel",
-            "description": {
-              "content": "Create a new notification channel for your organization.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "notification-channels"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"config\": {\n      \"webhookURL\": \"<url>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"<string>\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"<string>\"\n        },\n        {\n          \"kind\": \"<string>\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"<string>\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      ]\n    }\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "4205ab93-d332-44b7-954c-95e7a87ba4cc",
-              "name": "The created notification channel",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+              "request": {
                 "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"2014-06-10T20:55:34.294Z\",\n      \"dash0.com/updated-at\": \"1947-07-27T16:20:48.348Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"opsgenie\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"5BcbCLQoJha8sSztMU\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"Uaj7hxCmFAzWluJ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "863babb5-f3b0-471b-9a30-b46daf14efe6",
-              "name": "Forbidden - Admin access required",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "notification-channels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
+                  "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "9d25299d-4231-4cb4-a4b8-7df2b0fcc0d4",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                },
                 "url": {
-                  "path": [
-                    "api",
-                    "notification-channels"
-                  ],
+                  "raw": "{{baseUrl}}/api/notification-channels",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": []
+                  "path": [
+                    "api",
+                    "notification-channels"
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/source\": \"operator\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"1966-06-21T10:51:47.275Z\",\n      \"dash0.com/updated-at\": \"2020-02-19T09:59:19.094Z\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"teams_webhook\",\n    \"config\": {\n      \"webhookURL\": \"string\",\n      \"channel\": \"string\"\n    },\n    \"frequency\": \"10m\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"vjIbk0qFHD1ve-Qd9JHrtqpWvY\"\n        },\n        {\n          \"kind\": \"synthetic_check\",\n          \"id\": \"string\",\n          \"name\": \"string\",\n          \"dataset\": \"-iXeNvPDXYq_qaVgr2ttQ\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ],\n        [\n          {\n            \"key\": \"service.name\",\n            \"operator\": \"is\",\n            \"value\": \"foo\"\n          }\n        ]\n      ]\n    }\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
+                "description": "Create a new notification channel for your organization."
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "68cfa22e-bd42-4c66-a9cd-259331a82a46",
+                  "name": "The created notification channel",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-68cfa22e-bd42-4c66-a9cd-259331a82a46"
+                },
+                {
+                  "id": "b5ddc206-c6f4-4745-8ce0-bcc82f53f970",
+                  "name": "Forbidden - Admin access required",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels"
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-b5ddc206-c6f4-4745-8ce0-bcc82f53f970"
+                },
+                {
+                  "id": "9d5e47b4-0de8-45d6-b30b-e97d6f586cdc",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0NotificationChannel\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/source\": \"api\"\n    },\n    \"annotations\": {\n      \"dash0.com/created-at\": \"<dateTime>\",\n      \"dash0.com/updated-at\": \"<dateTime>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"slack\",\n    \"config\": {\n      \"webhookURL\": \"<string>\",\n      \"channel\": \"<string>\"\n    },\n    \"frequency\": \"5838167143y8490835637m96357w90325512ms5007358Q\",\n    \"routing\": {\n      \"assets\": [\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"XsNQ98TRSxCzocXx-v4Rpzw\"\n        },\n        {\n          \"kind\": \"check_rule\",\n          \"id\": \"<string>\",\n          \"name\": \"<string>\",\n          \"dataset\": \"Y0AJBZ3_jM2K8riI89ilAtULDc\"\n        }\n      ],\n      \"filters\": [\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"contains\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ],\n        [\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"starts_with\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          },\n          {\n            \"key\": \"<string>\",\n            \"operator\": \"is_any\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\",\n              \"<string>\"\n            ]\n          }\n        ]\n      ]\n    }\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/notification-channels",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "notification-channels"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:55:24.000Z",
+                  "updatedAt": "2026-10-21T19:55:24.000Z",
+                  "uid": "35240-9d5e47b4-0de8-45d6-b30b-e97d6f586cdc"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 2561,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:24.000Z",
+              "updatedAt": "2026-10-21T19:55:24.000Z",
+              "uid": "35240-8b5cedd7-251f-4f0f-8e5b-fdc696fc919d"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "82d1be0e-0ef2-4f3f-973c-cb1f555e569a",
+          "createdAt": "2026-10-21T19:55:24.000Z",
+          "updatedAt": "2026-10-21T19:55:24.000Z",
+          "uid": "35240-82d1be0e-0ef2-4f3f-973c-cb1f555e569a"
         }
       ],
-      "event": []
+      "id": "ad87e36d-5153-4d24-ae6e-ee5201a236a1",
+      "createdAt": "2026-10-21T19:55:24.000Z",
+      "updatedAt": "2026-10-21T19:55:24.000Z",
+      "uid": "35240-ad87e36d-5153-4d24-ae6e-ee5201a236a1"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "a2446d61-e1e6-4b20-be7e-8b17a1534d31",
-    "name": "Dash0 Edge Collectors Manage Notification Channels API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

@@ -1,143 +1,206 @@
 {
+  "info": {
+    "_postman_id": "e9bd9e80-744c-4bd5-8f6f-8f339c75598a",
+    "name": "Dash0 Edge Collectors API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:54:57.000Z",
+    "updatedAt": "2026-10-21T19:54:58.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-e9bd9e80-744c-4bd5-8f6f-8f339c75598a"
+  },
   "item": [
     {
-      "id": "dd469332-d283-4f1a-befb-bb86e5df3b2b",
-      "name": "Edge Collectors",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "bc0f4d53-d439-447a-abfc-caa04882bdd0",
-          "name": "Retrieve settings for the organization identified by the provided Dash0 auth token",
-          "request": {
-            "name": "Retrieve settings for the organization identified by the provided Dash0 auth token",
-            "description": {
-              "content": "Returns the aggregate settings payload (dataset settings, signal-to-metrics rules,\ntelemetry transformation rules, observed patterns, etc.) for the organization that\nowns the provided bearer token. Designed for edge collectors running in customer\nenvironments that need their full configuration in one request.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "edge",
-                "settings"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "edge",
+          "item": [
             {
-              "id": "1e38de6d-6b2e-44ae-98b6-66e1788a1ae9",
-              "name": "Settings for the organization identified by the auth token.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "edge",
-                    "settings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "settings",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "name": "Retrieve settings for the organization identified by the provided Dash0 auth\u2026",
+                  "id": "9a11b257-8996-4ac3-93c2-59fd8b720cf2",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/edge/settings",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "edge",
+                        "settings"
+                      ]
+                    },
+                    "description": "Returns the aggregate settings payload (dataset settings, signal-to-metrics rules,\ntelemetry transformation rules, observed patterns, etc.) for the organization that\nowns the provided bearer token. Designed for edge collectors running in customer\nenvironments that need their full configuration in one request."
+                  },
+                  "response": [
+                    {
+                      "id": "fb3e9183-8494-47d0-88af-b6482924eb43",
+                      "name": "Settings for the organization identified by the auth token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/edge/settings",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "edge",
+                            "settings"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "Validator for the returned representation. Send it back in\n`If-None-Match` on the next poll to get a `304` when nothing has\nchanged. Settings change far more slowly than they are polled, so\nmost polls are unchanged.\n\nOnly present when conditional requests are enabled for the\ndeployment.\n",
+                            "type": "text/plain"
+                          },
+                          "key": "ETag",
+                          "value": "<string>"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"technicalID\": \"<string>\",\n  \"signalControlEdge\": {\n    \"enabled\": \"<boolean>\"\n  },\n  \"signalControlOperationCardinalityReduction\": {\n    \"enabled\": \"<boolean>\"\n  },\n  \"datasetSettings\": [\n    {\n      \"slug\": \"_wrxq0Ixr\",\n      \"name\": \"<string>\",\n      \"tracing\": {\n        \"retention\": \"210d\",\n        \"convertSpanEventsToLogRecords\": false\n      },\n      \"logging\": {\n        \"retention\": \"390d\"\n      },\n      \"metrics\": {\n        \"retention\": \"60d\"\n      },\n      \"profiling\": {\n        \"retention\": \"30d\"\n      },\n      \"webEvents\": {\n        \"retention\": \"390d\"\n      },\n      \"semanticConventionUpgrades\": \"<string>\",\n      \"telemetryFilters\": [\n        {\n          \"context\": \"web_event\",\n          \"condition\": \"<string>\",\n          \"apiVersion\": \"v1alpha2\",\n          \"id\": \"<uuid>\",\n          \"origin\": \"<string>\",\n          \"source\": \"terraform\",\n          \"enabled\": \"<boolean>\",\n          \"name\": \"<string>\",\n          \"filter\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"ends_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"ipAddresses\": {\n        \"endUserIpAddressStorageStrategy\": \"do_not_store\"\n      },\n      \"geoLocation\": {\n        \"endUserGeoLocationStorageStrategy\": \"do_not_store\"\n      },\n      \"version\": \"<integer>\",\n      \"preferred\": \"<boolean>\",\n      \"createdAt\": \"<dateTime>\",\n      \"updatedAt\": \"<dateTime>\",\n      \"genAiAttributeRedaction\": {\n        \"conversation\": \"redact\",\n        \"toolCalls\": \"disabled\",\n        \"errors\": \"disabled\"\n      },\n      \"cardholderDataRedaction\": {\n        \"enabled\": \"<boolean>\"\n      },\n      \"darkplane\": {\n        \"respectNativeCodingAgentTelemetry\": \"disabled\"\n      },\n      \"permissions\": [\n        {\n          \"actions\": [\n            \"dataset:createRecordingRuleGroup\"\n          ],\n          \"teamId\": \"<string>\",\n          \"userId\": \"<string>\",\n          \"role\": \"<string>\"\n        }\n      ],\n      \"permittedActions\": [\n        \"dataset:createAgent0Automation\"\n      ]\n    }\n  ],\n  \"timeSeriesAggregationSettings\": [\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"api\",\n          \"custom\": {\n            \"Duis4\": \"<string>\",\n            \"Duis_04\": \"<string>\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": \"lt\",\n            \"value\": \"<string>\",\n            \"values\": [\n              \"<string>\"\n            ]\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"lte\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"693s9339h2649504s37708766m0100639y8117435w964415745h60963430y30s65648480429w\",\n          \"delay\": \"829311695h935M528967560y804621m1s8M13m343332390s\",\n          \"staleAfter\": \"30982819654w003s99y\"\n        },\n        \"priority\": 2,\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"drop_attributes\",\n            \"spec\": {\n              \"keyMatcher\": {\n                \"operator\": \"is_not_one_of\",\n                \"value\": \"<string>\",\n                \"values\": [\n                  \"<string>\"\n                ]\n              },\n              \"context\": \"datapoint\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"samplingSettings\": [\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"api\",\n          \"custom\": {\n            \"fugiat2f\": \"<string>\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"conditions\": {\n          \"kind\": \"and\",\n          \"spec\": {\n            \"conditions\": [\n              {\n                \"value\": \"<Circular reference to #/components/schemas/SamplingCondition detected>\"\n              }\n            ]\n          }\n        },\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"rateLimit\": {\n          \"rate\": \"<integer>\"\n        }\n      }\n    }\n  ],\n  \"sourceMapSettings\": [\n    {\n      \"kind\": \"source_map\",\n      \"spec\": {\n        \"urlPrefixes\": [\n          \"<string>\"\n        ],\n        \"username\": \"<string>\",\n        \"authType\": \"none\",\n        \"headers\": {\n          \"consectetur_951\": \"<string>\",\n          \"in_b9_\": \"<string>\"\n        },\n        \"secrets\": {\n          \"password\": \"<string>\",\n          \"bearerToken\": \"<string>\",\n          \"headers\": {\n            \"aliqua_177\": \"<string>\",\n            \"minima\": \"<string>\"\n          }\n        },\n        \"secretsRef\": {\n          \"id\": \"<string>\",\n          \"hash\": \"<string>\"\n        }\n      }\n    }\n  ],\n  \"signalToMetricsSettings\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"platform\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"is_not_one_of\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"<string>\",\n          \"interval\": \"0630802859M7527M33754037565d866601957h9090701d09925113Q\",\n          \"description\": \"<string>\",\n          \"keepResourceAttributes\": [\n            {\n              \"operator\": \"does_not_start_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"operator\": \"does_not_start_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"both\",\n        \"alternativeDatasetId\": \"<string>\"\n      }\n    }\n  ],\n  \"telemetryTransformationRuleSettings\": [\n    {\n      \"kind\": \"Dash0TelemetryTransformationRule\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"ui\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"signal\": \"logs\",\n        \"context\": \"profile\",\n        \"statements\": [\n          \"<string>\"\n        ],\n        \"display\": {\n          \"name\": \"<string>\"\n        },\n        \"conditions\": [\n          \"<string>\"\n        ]\n      }\n    }\n  ],\n  \"generativeAiEvaluationSettings\": [\n    {\n      \"kind\": \"Dash0GenerativeAiEvaluation\",\n      \"metadata\": {\n        \"name\": \"<string>\",\n        \"labels\": {\n          \"dash0.com/id\": \"<string>\",\n          \"dash0.com/origin\": \"<string>\",\n          \"dash0.com/version\": \"<string>\",\n          \"dash0.com/dataset\": \"<string>\",\n          \"dash0.com/source\": \"dash0-cli\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"<dateTime>\",\n          \"dash0.com/created-by\": \"<string>\",\n          \"dash0.com/updated-at\": \"<dateTime>\",\n          \"dash0.com/deleted-at\": \"<dateTime>\",\n          \"dash0.com/folder-path\": \"<string>\",\n          \"dash0.com/sharing\": \"<string>\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": \"<boolean>\",\n        \"display\": {\n          \"name\": \"<string>\",\n          \"description\": \"<string>\"\n        },\n        \"match\": {\n          \"filters\": [\n            {\n              \"key\": \"<string>\",\n              \"operator\": \"does_not_end_with\",\n              \"value\": \"<string>\",\n              \"values\": [\n                \"<string>\"\n              ]\n            }\n          ]\n        },\n        \"sample\": {\n          \"rate\": \"<number>\"\n        },\n        \"judge\": {\n          \"model\": \"standard\",\n          \"systemPrompt\": \"<string>\",\n          \"userPrompt\": \"<string>\",\n          \"output\": {\n            \"kind\": \"numeric\",\n            \"spec\": {\n              \"threshold\": \"<number>\"\n            }\n          },\n          \"allowPartialPrompt\": \"<boolean>\"\n        }\n      }\n    }\n  ],\n  \"signalControlMetering\": {\n    \"enforce\": \"<boolean>\"\n  },\n  \"observedPatterns\": [\n    {\n      \"dataset\": \"<string>\",\n      \"extractorType\": \"<string>\",\n      \"scopeKey\": \"<string>\",\n      \"template\": \"<string>\"\n    }\n  ]\n}",
+                      "createdAt": "2026-10-21T19:54:58.000Z",
+                      "updatedAt": "2026-10-21T19:54:58.000Z",
+                      "uid": "35240-fb3e9183-8494-47d0-88af-b6482924eb43"
+                    },
+                    {
+                      "id": "7e0626f7-b7cb-44e2-bc43-4896b42c07fd",
+                      "name": "The caller's `If-None-Match` matches the current representation, so no\nbody is returned. A client that sends no `If-None-Match` never receives\nthis status.\n",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/edge/settings",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "edge",
+                            "settings"
+                          ]
+                        }
+                      },
+                      "status": "Not Modified",
+                      "code": 304,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "Validator of the unchanged representation.",
+                            "type": "text/plain"
+                          },
+                          "key": "ETag",
+                          "value": "<string>"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:54:58.000Z",
+                      "updatedAt": "2026-10-21T19:54:58.000Z",
+                      "uid": "35240-7e0626f7-b7cb-44e2-bc43-4896b42c07fd"
+                    },
+                    {
+                      "id": "618dc2d4-206d-46a8-aaab-cef46e11ee84",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/edge/settings",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "edge",
+                            "settings"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:54:58.000Z",
+                      "updatedAt": "2026-10-21T19:54:58.000Z",
+                      "uid": "35240-618dc2d4-206d-46a8-aaab-cef46e11ee84"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:54:58.000Z",
+                  "updatedAt": "2026-10-21T19:54:58.000Z",
+                  "uid": "35240-9a11b257-8996-4ac3-93c2-59fd8b720cf2"
                 }
               ],
-              "body": "{\n  \"technicalID\": \"string\",\n  \"signalControlEdge\": {\n    \"enabled\": false\n  },\n  \"datasetSettings\": [\n    {\n      \"slug\": \"WcJe\",\n      \"name\": \"string\",\n      \"tracing\": {\n        \"retention\": \"120d\",\n        \"convertSpanEventsToLogRecords\": false\n      },\n      \"logging\": {\n        \"retention\": \"30d\"\n      },\n      \"metrics\": {\n        \"retention\": \"120d\"\n      },\n      \"profiling\": {\n        \"retention\": \"120d\"\n      },\n      \"webEvents\": {\n        \"retention\": \"390d\"\n      },\n      \"semanticConventionUpgrades\": \"string\",\n      \"telemetryFilters\": [\n        {\n          \"context\": \"log\",\n          \"condition\": \"string\",\n          \"apiVersion\": \"v1alpha1\",\n          \"id\": \"d043b855-cb8b-b968-496f-226b0e4823ef\",\n          \"origin\": \"string\",\n          \"source\": \"ui\",\n          \"enabled\": true,\n          \"name\": \"string\",\n          \"filter\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        {\n          \"context\": \"datapoint\",\n          \"condition\": \"string\",\n          \"apiVersion\": \"v1alpha2\",\n          \"id\": \"6559be50-af28-ebf9-147d-f398caec396b\",\n          \"origin\": \"string\",\n          \"source\": \"ui\",\n          \"enabled\": false,\n          \"name\": \"string\",\n          \"filter\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        }\n      ],\n      \"ipAddresses\": {\n        \"endUserIpAddressStorageStrategy\": \"anonymize\"\n      },\n      \"geoLocation\": {\n        \"endUserGeoLocationStorageStrategy\": \"up_to_city\"\n      },\n      \"version\": 3680,\n      \"preferred\": true,\n      \"createdAt\": \"1999-06-07T23:35:19.685Z\",\n      \"updatedAt\": \"1983-11-21T20:55:49.213Z\",\n      \"permissions\": [\n        {\n          \"actions\": [\n            \"dataset:createCheckRule\",\n            \"dataset:write\"\n          ],\n          \"teamId\": \"string\",\n          \"userId\": \"string\",\n          \"role\": \"string\"\n        },\n        {\n          \"actions\": [\n            \"dataset:createCheckRule\",\n            \"dataset:write\"\n          ],\n          \"teamId\": \"string\",\n          \"userId\": \"string\",\n          \"role\": \"string\"\n        }\n      ],\n      \"permittedActions\": [\n        \"dataset:createSyntheticCheck\",\n        \"dataset:createRecordingRuleGroup\"\n      ]\n    },\n    {\n      \"slug\": \"Pz5AuE\",\n      \"name\": \"string\",\n      \"tracing\": {\n        \"retention\": \"60d\",\n        \"convertSpanEventsToLogRecords\": false\n      },\n      \"logging\": {\n        \"retention\": \"210d\"\n      },\n      \"metrics\": {\n        \"retention\": \"210d\"\n      },\n      \"profiling\": {\n        \"retention\": \"120d\"\n      },\n      \"webEvents\": {\n        \"retention\": \"90d\"\n      },\n      \"semanticConventionUpgrades\": \"string\",\n      \"telemetryFilters\": [\n        {\n          \"context\": \"datapoint\",\n          \"condition\": \"string\",\n          \"apiVersion\": \"v1alpha1\",\n          \"id\": \"978738cb-1353-90e0-d387-6fa47dcf2250\",\n          \"origin\": \"string\",\n          \"source\": \"operator\",\n          \"enabled\": true,\n          \"name\": \"string\",\n          \"filter\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        {\n          \"context\": \"datapoint\",\n          \"condition\": \"string\",\n          \"apiVersion\": \"v1alpha1\",\n          \"id\": \"66acc06e-6263-82e9-58d3-fa5090145bd4\",\n          \"origin\": \"string\",\n          \"source\": \"ui\",\n          \"enabled\": true,\n          \"name\": \"string\",\n          \"filter\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        }\n      ],\n      \"ipAddresses\": {\n        \"endUserIpAddressStorageStrategy\": \"anonymize\"\n      },\n      \"geoLocation\": {\n        \"endUserGeoLocationStorageStrategy\": \"do_not_store\"\n      },\n      \"version\": 9259,\n      \"preferred\": true,\n      \"createdAt\": \"1962-10-22T21:38:10.854Z\",\n      \"updatedAt\": \"1970-06-23T20:44:04.607Z\",\n      \"permissions\": [\n        {\n          \"actions\": [\n            \"dataset:createCheckRule\",\n            \"dataset:read\"\n          ],\n          \"teamId\": \"string\",\n          \"userId\": \"string\",\n          \"role\": \"string\"\n        },\n        {\n          \"actions\": [\n            \"dataset:delete\",\n            \"dataset:createSyntheticCheck\"\n          ],\n          \"teamId\": \"string\",\n          \"userId\": \"string\",\n          \"role\": \"string\"\n        }\n      ],\n      \"permittedActions\": [\n        \"dataset:createAgent0Automation\",\n        \"dataset:createRecordingRuleGroup\"\n      ]\n    }\n  ],\n  \"timeSeriesAggregationSettings\": [\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"api\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1963-11-12T14:11:11.652Z\",\n          \"dash0.com/updated-at\": \"1953-08-20T08:51:37.936Z\",\n          \"dash0.com/deleted-at\": \"1989-07-05T07:19:27.673Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"454470w62548ms3719397m7430h7197Q\",\n          \"delay\": \"20s\",\n          \"staleAfter\": \"862633021w92799426974Q09d\"\n        },\n        \"priority\": 139,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"drop_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": \"drop_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"kind\": \"Dash0TimeSeriesAggregation\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1964-01-03T20:53:31.278Z\",\n          \"dash0.com/updated-at\": \"1984-08-03T22:54:15.134Z\",\n          \"dash0.com/deleted-at\": \"2024-03-17T06:54:33.047Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"match\": {\n          \"metricNameMatcher\": {\n            \"operator\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"value\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"values\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"otherFilters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"sample\": {\n          \"interval\": \"38577061ms\",\n          \"delay\": \"20s\",\n          \"staleAfter\": \"236330406y868187w6w10253825Q2h14961M90d\"\n        },\n        \"priority\": 4620,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"attributeModifications\": [\n          {\n            \"kind\": \"drop_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"kind\": \"drop_attributes\",\n            \"spec\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"samplingSettings\": [\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"ui\",\n          \"custom\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"conditions\": {\n          \"kind\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"spec\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"rateLimit\": {\n          \"rate\": 7909\n        }\n      }\n    },\n    {\n      \"kind\": \"Dash0Sampling\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\",\n          \"custom\": {\n            \"key_0\": \"string\"\n          }\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"conditions\": {\n          \"kind\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"spec\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"rateLimit\": {\n          \"rate\": 9374\n        }\n      }\n    }\n  ],\n  \"sourceMapSettings\": [\n    {\n      \"kind\": \"source_map\",\n      \"spec\": {\n        \"urlPrefixes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"username\": \"string\",\n        \"headers\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"secrets\": {\n          \"password\": \"string\",\n          \"bearerToken\": \"string\",\n          \"headers\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\"\n          }\n        },\n        \"secretsRef\": {\n          \"id\": \"string\",\n          \"hash\": \"string\"\n        }\n      }\n    },\n    {\n      \"kind\": \"source_map\",\n      \"spec\": {\n        \"urlPrefixes\": [\n          \"string\",\n          \"string\"\n        ],\n        \"username\": \"string\",\n        \"headers\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        },\n        \"secrets\": {\n          \"password\": \"string\",\n          \"bearerToken\": \"string\",\n          \"headers\": {\n            \"key_0\": \"string\",\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          }\n        },\n        \"secretsRef\": {\n          \"id\": \"string\",\n          \"hash\": \"string\"\n        }\n      }\n    }\n  ],\n  \"signalToMetricsSettings\": [\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"api\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"2001-05-17T15:30:53.568Z\",\n          \"dash0.com/updated-at\": \"1981-03-14T20:04:28.453Z\",\n          \"dash0.com/deleted-at\": \"1956-05-30T19:47:23.959Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"spans\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"262m\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"alternative\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    },\n    {\n      \"kind\": \"Dash0SignalToMetrics\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"2010-02-09T12:16:56.256Z\",\n          \"dash0.com/updated-at\": \"2018-12-30T23:03:03.235Z\",\n          \"dash0.com/deleted-at\": \"2019-11-23T09:21:40.996Z\",\n          \"dash0.com/folder-path\": \"string\",\n          \"dash0.com/sharing\": \"string\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"match\": {\n          \"signal\": \"logs\",\n          \"filters\": [\n            {\n              \"key\": \"service.name\",\n              \"operator\": \"is\",\n              \"value\": \"foo\"\n            }\n          ]\n        },\n        \"output\": {\n          \"name\": \"string\",\n          \"interval\": \"91347306m9261s066323M14610231896h3403954h4389283094h49h8955s8006951ms\",\n          \"description\": \"string\",\n          \"keepResourceAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"keepSignalAttributes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"targetDatasetMode\": \"original\",\n        \"alternativeDatasetId\": \"string\"\n      }\n    }\n  ],\n  \"telemetryTransformationRuleSettings\": [\n    {\n      \"kind\": \"Dash0TelemetryTransformationRule\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"2022-02-23T21:20:48.734Z\",\n          \"dash0.com/updated-at\": \"1984-08-13T04:42:32.789Z\",\n          \"dash0.com/deleted-at\": \"1966-12-26T13:41:18.889Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": true,\n        \"signal\": \"metrics\",\n        \"context\": \"log\",\n        \"statements\": [\n          \"string\",\n          \"string\"\n        ],\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"conditions\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    },\n    {\n      \"kind\": \"Dash0TelemetryTransformationRule\",\n      \"metadata\": {\n        \"name\": \"string\",\n        \"labels\": {\n          \"dash0.com/id\": \"string\",\n          \"dash0.com/origin\": \"string\",\n          \"dash0.com/version\": \"string\",\n          \"dash0.com/dataset\": \"string\",\n          \"dash0.com/source\": \"operator\"\n        },\n        \"annotations\": {\n          \"dash0.com/created-at\": \"1968-02-19T08:36:00.171Z\",\n          \"dash0.com/updated-at\": \"2016-03-22T03:32:35.396Z\",\n          \"dash0.com/deleted-at\": \"2000-03-23T09:59:10.723Z\"\n        }\n      },\n      \"spec\": {\n        \"enabled\": false,\n        \"signal\": \"traces\",\n        \"context\": \"datapoint\",\n        \"statements\": [\n          \"string\",\n          \"string\"\n        ],\n        \"display\": {\n          \"name\": \"string\"\n        },\n        \"conditions\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    }\n  ],\n  \"observedPatterns\": [\n    {\n      \"dataset\": \"string\",\n      \"extractorType\": \"string\",\n      \"scopeKey\": \"string\",\n      \"template\": \"string\"\n    },\n    {\n      \"dataset\": \"string\",\n      \"extractorType\": \"string\",\n      \"scopeKey\": \"string\",\n      \"template\": \"string\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "4acd444b-572e-451c-a6cf-c6c119713a1a",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "edge",
-                    "settings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 5090,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "c0afed7b-bba8-46d5-a623-baae5216a70c",
+              "createdAt": "2026-10-21T19:54:58.000Z",
+              "updatedAt": "2026-10-21T19:54:58.000Z",
+              "uid": "35240-c0afed7b-bba8-46d5-a623-baae5216a70c"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "3aa58cd8-e1b8-4d02-b4ae-3a60d450ef79",
+          "createdAt": "2026-10-21T19:54:58.000Z",
+          "updatedAt": "2026-10-21T19:54:58.000Z",
+          "uid": "35240-3aa58cd8-e1b8-4d02-b4ae-3a60d450ef79"
         }
       ],
-      "event": []
+      "id": "4f229670-9f65-41e0-a029-ba587be87322",
+      "createdAt": "2026-10-21T19:54:58.000Z",
+      "updatedAt": "2026-10-21T19:54:58.000Z",
+      "uid": "35240-4f229670-9f65-41e0-a029-ba587be87322"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "c1400c17-ebc3-45de-aa78-b8fc59f70dd0",
-    "name": "Dash0 Edge Collectors API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

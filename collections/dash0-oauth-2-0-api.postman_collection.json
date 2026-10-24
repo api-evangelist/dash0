@@ -1,1165 +1,1237 @@
 {
+  "info": {
+    "_postman_id": "0235b970-d73a-42ac-9f2b-0d53a90dc19d",
+    "name": "Dash0 OAuth 2.0 API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:10.000Z",
+    "updatedAt": "2026-10-21T19:56:11.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-0235b970-d73a-42ac-9f2b-0d53a90dc19d"
+  },
   "item": [
     {
-      "id": "b37b71d6-5543-458c-8beb-88aa8aa3ced0",
-      "name": "OAuth 2.0",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": ".well-known",
       "item": [
         {
-          "id": "ed03fb84-7e23-461e-8547-8555e594cf76",
-          "name": "OAuth 2.0 Authorization Endpoint (Unauthenticated)",
-          "request": {
-            "name": "OAuth 2.0 Authorization Endpoint (Unauthenticated)",
-            "description": {
-              "content": "Unauthenticated authorization endpoint (RFC 6749 section 3.1). Validates the client,\nredirect URI, PKCE parameters, and scopes. Creates a pending authorization request\nand always redirects to the consent UI.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "oauth",
-                "authorize"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "response_type",
-                  "value": "<string>",
-                  "description": "(Required) Must be \"code\" for the authorization code flow."
-                },
-                {
-                  "disabled": false,
-                  "key": "client_id",
-                  "value": "<string>",
-                  "description": "(Required) The client identifier obtained during registration."
-                },
-                {
-                  "disabled": false,
-                  "key": "redirect_uri",
-                  "value": "<uri>",
-                  "description": "(Required) Must match one of the client's registered redirect URIs."
-                },
-                {
-                  "disabled": false,
-                  "key": "scope",
-                  "value": "<string>",
-                  "description": "Space-separated list of requested scopes."
-                },
-                {
-                  "disabled": false,
-                  "key": "state",
-                  "value": "<string>",
-                  "description": "Opaque value for CSRF protection, returned unchanged in the redirect."
-                },
-                {
-                  "disabled": false,
-                  "key": "code_challenge",
-                  "value": "<string>",
-                  "description": "(Required) PKCE code challenge (RFC 7636)."
-                },
-                {
-                  "disabled": false,
-                  "key": "code_challenge_method",
-                  "value": "<string>",
-                  "description": "(Required) Must be \"S256\"."
-                },
-                {
-                  "disabled": false,
-                  "key": "prompt",
-                  "value": "<string>",
-                  "description": "Space-separated list of prompt directives. Supported value: \"consent\".\n"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "oauth-authorization-server",
+          "item": [
             {
-              "id": "54b9c1f6-dd9c-4223-b165-c741762de836",
-              "name": "Always redirects to the consent UI with authorization_request_id and\nclient metadata as query parameters.\n",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "authorize"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "response_type",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "client_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "redirect_uri",
-                      "value": "<uri>"
-                    },
-                    {
-                      "key": "scope",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "state",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "code_challenge",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "code_challenge_method",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "prompt",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
+              "name": "OAuth 2.0 Authorization Server Metadata",
+              "id": "9635948d-4c37-46ca-a087-a7312b9d7b8e",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
               },
-              "status": "Found",
-              "code": 302,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "419bd241-a81f-477d-af13-7f1c83b7d7a1",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "authorize"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "response_type",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "client_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "redirect_uri",
-                      "value": "<uri>"
-                    },
-                    {
-                      "key": "scope",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "state",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "code_challenge",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "code_challenge_method",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "prompt",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
+              "request": {
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "c869569d-b139-4213-9ce4-7cefc54da6db",
-          "name": "OAuth 2.0 Authorization Server Metadata",
-          "request": {
-            "name": "OAuth 2.0 Authorization Server Metadata",
-            "description": {
-              "content": "Returns the OAuth 2.0 Authorization Server Metadata document (RFC 8414).\nClients use this endpoint to discover authorization server capabilities\nand endpoint locations.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                ".well-known",
-                "oauth-authorization-server"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "4ffb0035-18e6-406e-a422-221bbafd589f",
-              "name": "Authorization server metadata document.",
-              "originalRequest": {
                 "url": {
+                  "raw": "{{baseUrl}}/.well-known/oauth-authorization-server",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     ".well-known",
                     "oauth-authorization-server"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns the OAuth 2.0 Authorization Server Metadata document (RFC 8414).\nClients use this endpoint to discover authorization server capabilities\nand endpoint locations."
               },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "5ba5be10-7355-4d34-86c4-f290ab7799e7",
+                  "name": "Authorization server metadata document.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/.well-known/oauth-authorization-server",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        ".well-known",
+                        "oauth-authorization-server"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"issuer\": \"<uri>\",\n  \"authorization_endpoint\": \"<uri>\",\n  \"token_endpoint\": \"<uri>\",\n  \"response_types_supported\": [\n    \"code\",\n    \"code\"\n  ],\n  \"registration_endpoint\": \"<uri>\",\n  \"revocation_endpoint\": \"<uri>\",\n  \"introspection_endpoint\": \"<uri>\",\n  \"scopes_supported\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"grant_types_supported\": [\n    \"authorization_code\",\n    \"refresh_token\"\n  ],\n  \"code_challenge_methods_supported\": [\n    \"S256\",\n    \"S256\"\n  ],\n  \"token_endpoint_auth_methods_supported\": [\n    \"none\",\n    \"none\"\n  ],\n  \"userinfo_endpoint\": \"<uri>\"\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-5ba5be10-7355-4d34-86c4-f290ab7799e7"
+                },
+                {
+                  "id": "64310e1d-76f1-40bb-b077-1799012962c2",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/.well-known/oauth-authorization-server",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        ".well-known",
+                        "oauth-authorization-server"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-64310e1d-76f1-40bb-b077-1799012962c2"
                 }
               ],
-              "body": "{\n  \"issuer\": \"http://MhvtXQJSJUOJqXVu.frkGjtUu5a,iQFKyuH5ik3eqWla+\",\n  \"authorization_endpoint\": \"https://DgBgzcInTSe.nylkvpV8zXOqY-e5+azUsiY-wAqtoh-N1EyAscmfkPLWop7zaRQ0U46f1lGpq.PDOlqd+\",\n  \"token_endpoint\": \"https://EQwfRXhvcavHOOdUzJvTi.fyjoJOr,7OS+7WkzN4GBeQaTyCLe5sqhGhgM,ZOFCByXMMVZV.GJHLZqOvt-z\",\n  \"response_types_supported\": [\n    \"code\",\n    \"code\"\n  ],\n  \"registration_endpoint\": \"https://fspecsbioT.dxwee064rxGbQ.FwCxFxBP3G2TqHyqS\",\n  \"revocation_endpoint\": \"https://roqjFuyiAyMwAiEt.mwzcyT7fIgA7dbsQYLoUsEhXuawB5oQVrIdiBLKi8PjJd\",\n  \"introspection_endpoint\": \"http://dzdunTjQHNOxCdXpaXVtHpjnfjKbQiaN.wfaThSEa3AqPNjCs9UqBvF2jiMI,Ve2jtqje1loFcRtdtnkcGPvufSlP.7bcNnGN77\",\n  \"scopes_supported\": [\n    \"string\",\n    \"string\"\n  ],\n  \"grant_types_supported\": [\n    \"refresh_token\",\n    \"authorization_code\"\n  ],\n  \"code_challenge_methods_supported\": [\n    \"S256\",\n    \"S256\"\n  ],\n  \"token_endpoint_auth_methods_supported\": [\n    \"none\",\n    \"none\"\n  ],\n  \"userinfo_endpoint\": \"https://qjkjjZQSflNEu.wbmWuGeSkcVjnMrlb8JwjdjdHt\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b99f071e-9a6e-4b21-9a01-fc83c039b2aa",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    ".well-known",
-                    "oauth-authorization-server"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-9635948d-4c37-46ca-a087-a7312b9d7b8e"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "56931d39-a512-45ee-a1ef-f84c8f4305a2",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-56931d39-a512-45ee-a1ef-f84c8f4305a2"
         },
         {
-          "id": "5c3f9d97-a067-4818-8f1b-88eb62eb9f47",
-          "name": "OAuth 2.0 Protected Resource Metadata",
-          "request": {
-            "name": "OAuth 2.0 Protected Resource Metadata",
-            "description": {
-              "content": "Returns the OAuth 2.0 Protected Resource Metadata document (RFC 9728).\nMCP clients use this endpoint to discover which authorization server(s)\ncan issue tokens accepted by this resource server.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                ".well-known",
-                "oauth-protected-resource"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "oauth-protected-resource",
+          "item": [
             {
-              "id": "9dcaf39c-4a67-4f75-99e0-57a0a727171d",
-              "name": "Protected resource metadata document.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    ".well-known",
-                    "oauth-protected-resource"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+              "name": "OAuth 2.0 Protected Resource Metadata",
+              "id": "9ae34264-194d-44ef-8b5c-e64c2d235792",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"resource\": \"http://BVZXjWcC.zzpdhacdoO6VRWxY0iTKRdpMDqBjDtajxlhib+v8.6aUsx\",\n  \"authorization_servers\": [\n    \"https://HCZTGTqQthIxEGxkeJ.owqcusxXMcl+oegW2xzaM\",\n    \"https://tDeETIKekGRtMMVvhLKCjwnZkeWUIAi.fxlX.s2w.y6\"\n  ],\n  \"scopes_supported\": [\n    \"string\",\n    \"string\"\n  ],\n  \"bearer_methods_supported\": [\n    \"string\",\n    \"string\"\n  ],\n  \"resource_documentation\": \"https://lPRSzZzUpTmaNrXuLWMGUlXrdrlwU.gvaRTnl2UIM47Z.EcUgPmHu6iS,KpOfv7QbnGLp\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e0104077-598c-44b9-847d-bf19d3a7864f",
-              "name": "In case any error happens.",
-              "originalRequest": {
                 "url": {
+                  "raw": "{{baseUrl}}/.well-known/oauth-protected-resource",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     ".well-known",
                     "oauth-protected-resource"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Returns the OAuth 2.0 Protected Resource Metadata document (RFC 9728).\nMCP clients use this endpoint to discover which authorization server(s)\ncan issue tokens accepted by this resource server."
               },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
+              "response": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "7ae116a5-a4f6-46f7-80eb-1d2ee77995ad",
+                  "name": "Protected resource metadata document.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/.well-known/oauth-protected-resource",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        ".well-known",
+                        "oauth-protected-resource"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"resource\": \"<uri>\",\n  \"authorization_servers\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"scopes_supported\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"bearer_methods_supported\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"resource_documentation\": \"<uri>\"\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-7ae116a5-a4f6-46f7-80eb-1d2ee77995ad"
+                },
+                {
+                  "id": "50a2cff1-7d8e-441e-9932-51c7e0133495",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/.well-known/oauth-protected-resource",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        ".well-known",
+                        "oauth-protected-resource"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-50a2cff1-7d8e-441e-9932-51c7e0133495"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-9ae34264-194d-44ef-8b5c-e64c2d235792"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "c08aecc1-0111-48e2-8079-b25017bd9373",
-          "name": "Register a new OAuth client",
-          "request": {
-            "name": "Register a new OAuth client",
-            "description": {
-              "content": "Dynamic Client Registration endpoint (RFC 7591). Allows clients to register\nthemselves and obtain a client_id for use in the authorization code flow.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "oauth",
-                "register"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"response_types\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"token_endpoint_auth_method\": \"<string>\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "9e2d6c3d-2f26-4e2e-b91e-6a4dfa540eb5",
-              "name": "Client successfully registered.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "register"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"authorization_code\",\n    \"refresh_token\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"client_id\": \"string\",\n  \"client_name\": \"string\",\n  \"redirect_uris\": [\n    \"http://bdoRbWiLWYFqQGJtGkloFUWAyNHkIkaN.uhbJynbAre-G-RuxOp.chubjQqjlZ0Oif3nhVgkBDXdEjnFANOm4TeEnQ807BUGN\",\n    \"https://xgBuq.nlckW22CLQWke.IRVr.QYIwVFRGWzFsrmIg-hn\"\n  ],\n  \"registration_access_token\": \"string\",\n  \"grant_types\": [\n    \"authorization_code\",\n    \"authorization_code\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"string\",\n  \"client_uri\": \"https://AScAL.sexiehuBVmeL5CUsQdxPC\",\n  \"logo_uri\": \"https://yGuMjlluAiMdWzsxHuHXZjzDb.qmfG2ii0jpmvsnBes8jOy\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "384c9696-ebad-4c2d-a0fd-cd2bcb6fce6b",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "register"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"authorization_code\",\n    \"refresh_token\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f15ce268-c141-448f-851e-8d53c7abfa6a",
-          "name": "OAuth 2.0 Token Revocation",
-          "request": {
-            "name": "OAuth 2.0 Token Revocation",
-            "description": {
-              "content": "Token revocation endpoint (RFC 7009). Revokes an access or refresh token.\nThe server responds with HTTP 200 regardless of whether the token was valid,\nto prevent token scanning attacks.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "oauth",
-                "revoke"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/x-www-form-urlencoded"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "disabled": false,
-                  "key": "token",
-                  "value": "<string>",
-                  "description": "(Required) The token to be revoked."
-                },
-                {
-                  "disabled": false,
-                  "key": "token_type_hint",
-                  "value": "<string>",
-                  "description": "Hint about the type of the token being revoked. Helps the server optimize lookup.\n"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "dd2b013a-e2dd-470c-85b9-8e2d1887f32f",
-              "name": "Token revocation request processed. Returns 200 regardless of whether the token was valid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "revoke"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) The token to be revoked.",
-                        "type": "text/plain"
-                      },
-                      "key": "token",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Hint about the type of the token being revoked. Helps the server optimize lookup.\n",
-                        "type": "text/plain"
-                      },
-                      "key": "token_type_hint",
-                      "value": "access_token"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "31c99f73-f00f-47d9-98d6-cf367ac1124b",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "revoke"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) The token to be revoked.",
-                        "type": "text/plain"
-                      },
-                      "key": "token",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Hint about the type of the token being revoked. Helps the server optimize lookup.\n",
-                        "type": "text/plain"
-                      },
-                      "key": "token_type_hint",
-                      "value": "access_token"
-                    }
-                  ]
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "f6cbff57-22a1-4823-b689-87a453ce1f4c",
-          "name": "OAuth 2.0 Token Endpoint",
-          "request": {
-            "name": "OAuth 2.0 Token Endpoint",
-            "description": {
-              "content": "Token endpoint (RFC 6749 section 3.2). Exchanges an authorization code for\naccess and refresh tokens (authorization_code grant), or exchanges a refresh\ntoken for new tokens (refresh_token grant).\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "oauth",
-                "token"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/x-www-form-urlencoded"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "urlencoded",
-              "urlencoded": [
-                {
-                  "disabled": false,
-                  "key": "grant_type",
-                  "value": "<string>",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "key": "code",
-                  "value": "<string>",
-                  "description": "The authorization code (required for authorization_code grant)."
-                },
-                {
-                  "disabled": false,
-                  "key": "redirect_uri",
-                  "value": "<uri>",
-                  "description": "Must match the redirect_uri used in the authorization request (required for authorization_code grant)."
-                },
-                {
-                  "disabled": false,
-                  "key": "client_id",
-                  "value": "<string>",
-                  "description": "The client identifier."
-                },
-                {
-                  "disabled": false,
-                  "key": "code_verifier",
-                  "value": "<string>",
-                  "description": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636)."
-                },
-                {
-                  "disabled": false,
-                  "key": "refresh_token",
-                  "value": "<string>",
-                  "description": "The refresh token (required for refresh_token grant)."
-                },
-                {
-                  "disabled": false,
-                  "key": "scope",
-                  "value": "<string>",
-                  "description": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes."
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "251f7645-b59e-4e3b-809c-b93ab2d86109",
-              "name": "Tokens issued successfully.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "grant_type",
-                      "value": "refresh_token"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The authorization code (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "code",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "redirect_uri",
-                      "value": "<uri>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The client identifier.",
-                        "type": "text/plain"
-                      },
-                      "key": "client_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
-                        "type": "text/plain"
-                      },
-                      "key": "code_verifier",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The refresh token (required for refresh_token grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "refresh_token",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
-                        "type": "text/plain"
-                      },
-                      "key": "scope",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"access_token\": \"string\",\n  \"token_type\": \"Bearer\",\n  \"expires_in\": 5472,\n  \"refresh_token\": \"string\",\n  \"scope\": \"string\",\n  \"dataset_restriction\": \"unrestricted\",\n  \"datasets\": [\n    \"string\",\n    \"string\"\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "85cf3cad-0f41-4275-9b94-460808cd3979",
-              "name": "Token request failed (invalid grant, expired code, etc.).",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "grant_type",
-                      "value": "refresh_token"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The authorization code (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "code",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "redirect_uri",
-                      "value": "<uri>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The client identifier.",
-                        "type": "text/plain"
-                      },
-                      "key": "client_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
-                        "type": "text/plain"
-                      },
-                      "key": "code_verifier",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The refresh token (required for refresh_token grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "refresh_token",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
-                        "type": "text/plain"
-                      },
-                      "key": "scope",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": \"string\",\n  \"error_description\": \"string\",\n  \"error_uri\": \"http://TteGcUPCDcqjJOqGLVa.ukyc42dQdK19oKRTPlBjAzbWbYtILsqoZ\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1f1bcbd7-a698-48bd-883a-d4752b6a7267",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "oauth",
-                    "token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "urlencoded",
-                  "urlencoded": [
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "(Required) ",
-                        "type": "text/plain"
-                      },
-                      "key": "grant_type",
-                      "value": "refresh_token"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The authorization code (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "code",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "redirect_uri",
-                      "value": "<uri>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The client identifier.",
-                        "type": "text/plain"
-                      },
-                      "key": "client_id",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
-                        "type": "text/plain"
-                      },
-                      "key": "code_verifier",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "The refresh token (required for refresh_token grant).",
-                        "type": "text/plain"
-                      },
-                      "key": "refresh_token",
-                      "value": "<string>"
-                    },
-                    {
-                      "disabled": false,
-                      "description": {
-                        "content": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
-                        "type": "text/plain"
-                      },
-                      "key": "scope",
-                      "value": "<string>"
-                    }
-                  ]
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 4432,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "e0645179-84a9-46b7-be64-e3ecf32cb44b",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-e0645179-84a9-46b7-be64-e3ecf32cb44b"
         }
       ],
-      "event": []
+      "id": "2391b39a-ea14-4cd4-b4dd-b751cc8a9b5a",
+      "createdAt": "2026-10-21T19:56:11.000Z",
+      "updatedAt": "2026-10-21T19:56:11.000Z",
+      "uid": "35240-2391b39a-ea14-4cd4-b4dd-b751cc8a9b5a"
+    },
+    {
+      "name": "oauth",
+      "item": [
+        {
+          "name": "authorize",
+          "item": [
+            {
+              "name": "OAuth 2.0 Authorization Endpoint (Unauthenticated)",
+              "id": "75821ea6-b942-46c8-88a5-b0c29deba09a",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/oauth/authorize?response_type=<string>&client_id=<string>&redirect_uri=<uri>&scope=<string>&state=<string>&code_challenge=<string>&code_challenge_method=<string>&prompt=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "authorize"
+                  ],
+                  "query": [
+                    {
+                      "description": "(Required) Must be \"code\" for the authorization code flow.",
+                      "key": "response_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) The client identifier obtained during registration.",
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) Must match one of the client's registered redirect URIs.",
+                      "key": "redirect_uri",
+                      "value": "<uri>"
+                    },
+                    {
+                      "description": "Space-separated list of requested scopes.",
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Opaque value for CSRF protection, returned unchanged in the redirect.",
+                      "key": "state",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) PKCE code challenge (RFC 7636).",
+                      "key": "code_challenge",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) Must be \"S256\".",
+                      "key": "code_challenge_method",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Space-separated list of prompt directives. Supported value: \"consent\".\n",
+                      "key": "prompt",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "description": "Unauthenticated authorization endpoint (RFC 6749 section 3.1). Validates the client,\nredirect URI, PKCE parameters, and scopes. Creates a pending authorization request\nand always redirects to the consent UI."
+              },
+              "response": [
+                {
+                  "id": "94845e4c-4668-4a90-84f9-cc9a0c879a2a",
+                  "name": "Always redirects to the consent UI with authorization_request_id and\nclient metadata as query parameters.\n",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/authorize?response_type=<string>&client_id=<string>&redirect_uri=<uri>&scope=<string>&state=<string>&code_challenge=<string>&code_challenge_method=<string>&prompt=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "authorize"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) Must be \"code\" for the authorization code flow.",
+                          "key": "response_type",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The client identifier obtained during registration.",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) Must match one of the client's registered redirect URIs.",
+                          "key": "redirect_uri",
+                          "value": "<uri>"
+                        },
+                        {
+                          "description": "Space-separated list of requested scopes.",
+                          "key": "scope",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Opaque value for CSRF protection, returned unchanged in the redirect.",
+                          "key": "state",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) PKCE code challenge (RFC 7636).",
+                          "key": "code_challenge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) Must be \"S256\".",
+                          "key": "code_challenge_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Space-separated list of prompt directives. Supported value: \"consent\".\n",
+                          "key": "prompt",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Found",
+                  "code": 302,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-94845e4c-4668-4a90-84f9-cc9a0c879a2a"
+                },
+                {
+                  "id": "b9e94338-b3fa-48d1-b0f6-3650e05434a9",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/authorize?response_type=<string>&client_id=<string>&redirect_uri=<uri>&scope=<string>&state=<string>&code_challenge=<string>&code_challenge_method=<string>&prompt=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "authorize"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) Must be \"code\" for the authorization code flow.",
+                          "key": "response_type",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The client identifier obtained during registration.",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) Must match one of the client's registered redirect URIs.",
+                          "key": "redirect_uri",
+                          "value": "<uri>"
+                        },
+                        {
+                          "description": "Space-separated list of requested scopes.",
+                          "key": "scope",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Opaque value for CSRF protection, returned unchanged in the redirect.",
+                          "key": "state",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) PKCE code challenge (RFC 7636).",
+                          "key": "code_challenge",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) Must be \"S256\".",
+                          "key": "code_challenge_method",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Space-separated list of prompt directives. Supported value: \"consent\".\n",
+                          "key": "prompt",
+                          "value": "<string>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-b9e94338-b3fa-48d1-b0f6-3650e05434a9"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-75821ea6-b942-46c8-88a5-b0c29deba09a"
+            }
+          ],
+          "id": "321fb9e8-4470-49dc-9144-e30418134575",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-321fb9e8-4470-49dc-9144-e30418134575"
+        },
+        {
+          "name": "register",
+          "item": [
+            {
+              "name": "Register a new OAuth client",
+              "id": "2799219a-2dd7-4ae2-bc5b-c8ede21d7bb9",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"authorization_code\",\n    \"authorization_code\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/oauth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "register"
+                  ]
+                },
+                "description": "Dynamic Client Registration endpoint (RFC 7591). Allows clients to register\nthemselves and obtain a client_id for use in the authorization code flow."
+              },
+              "response": [
+                {
+                  "id": "aaa01232-de82-4cda-85a6-72e7d9f55db2",
+                  "name": "Client successfully registered.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"authorization_code\",\n    \"authorization_code\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"client_id\": \"<string>\",\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"registration_access_token\": \"<string>\",\n  \"grant_types\": [\n    \"authorization_code\",\n    \"authorization_code\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-aaa01232-de82-4cda-85a6-72e7d9f55db2"
+                },
+                {
+                  "id": "d46ab46f-079c-44e9-bc4a-458123ca540a",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"client_name\": \"<string>\",\n  \"redirect_uris\": [\n    \"<uri>\",\n    \"<uri>\"\n  ],\n  \"grant_types\": [\n    \"authorization_code\",\n    \"authorization_code\"\n  ],\n  \"response_types\": [\n    \"code\",\n    \"code\"\n  ],\n  \"token_endpoint_auth_method\": \"none\",\n  \"scope\": \"<string>\",\n  \"client_uri\": \"<uri>\",\n  \"logo_uri\": \"<uri>\"\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/register",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "register"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-d46ab46f-079c-44e9-bc4a-458123ca540a"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-2799219a-2dd7-4ae2-bc5b-c8ede21d7bb9"
+            }
+          ],
+          "id": "0d451cbc-d0ab-4d0c-b3fc-bdefc3540030",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-0d451cbc-d0ab-4d0c-b3fc-bdefc3540030"
+        },
+        {
+          "name": "revoke",
+          "item": [
+            {
+              "name": "OAuth 2.0 Token Revocation",
+              "id": "653f6866-79e5-494d-b275-59a88b4b353a",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "description": "(Required) The token to be revoked.",
+                      "key": "token",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "(Required) The identifier of the client the token was issued to. RFC 7009 section 2.1 requires the\nrevocation request to be authenticated as that client, so a token issued to a different\nclient is left untouched (the response is still 200).\n",
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "- `access_token`: An OAuth 2.0 access token.\n- `refresh_token`: An OAuth 2.0 refresh token.\n",
+                      "key": "token_type_hint",
+                      "value": "refresh_token"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/oauth/revoke",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "revoke"
+                  ]
+                },
+                "description": "Token revocation endpoint (RFC 7009). Revokes an access or refresh token.\nThe server responds with HTTP 200 regardless of whether the token was valid,\nto prevent token scanning attacks."
+              },
+              "response": [
+                {
+                  "id": "8bdb1b6d-4bc9-4ab6-9044-1d3966e6f35e",
+                  "name": "Token revocation request processed. Returns 200 regardless of whether the token was valid.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The token to be revoked.",
+                          "key": "token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The identifier of the client the token was issued to. RFC 7009 section 2.1 requires the\nrevocation request to be authenticated as that client, so a token issued to a different\nclient is left untouched (the response is still 200).\n",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "- `access_token`: An OAuth 2.0 access token.\n- `refresh_token`: An OAuth 2.0 refresh token.\n",
+                          "key": "token_type_hint",
+                          "value": "refresh_token"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/revoke",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "revoke"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "text",
+                  "header": [],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-8bdb1b6d-4bc9-4ab6-9044-1d3966e6f35e"
+                },
+                {
+                  "id": "479a9573-bdbf-49a4-9506-c04a0bd5a17d",
+                  "name": "Revocation request failed (RFC 7009 section 2.2.1). Error presentation follows\nRFC 6749 section 5.2 \u2014 e.g. missing or empty `client_id` \u2192 `invalid_request`.\n",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The token to be revoked.",
+                          "key": "token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The identifier of the client the token was issued to. RFC 7009 section 2.1 requires the\nrevocation request to be authenticated as that client, so a token issued to a different\nclient is left untouched (the response is still 200).\n",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "- `access_token`: An OAuth 2.0 access token.\n- `refresh_token`: An OAuth 2.0 refresh token.\n",
+                          "key": "token_type_hint",
+                          "value": "refresh_token"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/revoke",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "revoke"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"error_description\": \"<string>\",\n  \"error_uri\": \"<uri>\"\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-479a9573-bdbf-49a4-9506-c04a0bd5a17d"
+                },
+                {
+                  "id": "742c25d9-8cb8-4a0f-9c66-4f0a342c87d1",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) The token to be revoked.",
+                          "key": "token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "(Required) The identifier of the client the token was issued to. RFC 7009 section 2.1 requires the\nrevocation request to be authenticated as that client, so a token issued to a different\nclient is left untouched (the response is still 200).\n",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "- `access_token`: An OAuth 2.0 access token.\n- `refresh_token`: An OAuth 2.0 refresh token.\n",
+                          "key": "token_type_hint",
+                          "value": "refresh_token"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/revoke",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "revoke"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-742c25d9-8cb8-4a0f-9c66-4f0a342c87d1"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-653f6866-79e5-494d-b275-59a88b4b353a"
+            }
+          ],
+          "id": "9d71fb32-93ef-46dd-a992-d414ae478ec1",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-9d71fb32-93ef-46dd-a992-d414ae478ec1"
+        },
+        {
+          "name": "token",
+          "item": [
+            {
+              "name": "OAuth 2.0 Token Endpoint",
+              "id": "8c5bf64e-42d7-4286-958d-7f553a32839d",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "description": "(Required) - `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).\n- `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).\n",
+                      "key": "grant_type",
+                      "value": "authorization_code"
+                    },
+                    {
+                      "description": "The authorization code (required for authorization_code grant).",
+                      "key": "code",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
+                      "key": "redirect_uri",
+                      "value": "<uri>"
+                    },
+                    {
+                      "description": "The client identifier.",
+                      "key": "client_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
+                      "key": "code_verifier",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "The refresh token (required for refresh_token grant).",
+                      "key": "refresh_token",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
+                      "key": "scope",
+                      "value": "<string>"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/oauth/token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ]
+                },
+                "description": "Token endpoint (RFC 6749 section 3.2). Exchanges an authorization code for\naccess and refresh tokens (authorization_code grant), or exchanges a refresh\ntoken for new tokens (refresh_token grant)."
+              },
+              "response": [
+                {
+                  "id": "cadf2ab0-4909-4efe-b76c-b991c2b119be",
+                  "name": "Tokens issued successfully.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) - `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).\n- `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).\n",
+                          "key": "grant_type",
+                          "value": "authorization_code"
+                        },
+                        {
+                          "description": "The authorization code (required for authorization_code grant).",
+                          "key": "code",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
+                          "key": "redirect_uri",
+                          "value": "<uri>"
+                        },
+                        {
+                          "description": "The client identifier.",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
+                          "key": "code_verifier",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The refresh token (required for refresh_token grant).",
+                          "key": "refresh_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
+                          "key": "scope",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"access_token\": \"<string>\",\n  \"token_type\": \"<string>\",\n  \"expires_in\": \"<long>\",\n  \"refresh_token\": \"<string>\",\n  \"scope\": \"<string>\",\n  \"dataset_restriction\": \"unrestricted\",\n  \"datasets\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-cadf2ab0-4909-4efe-b76c-b991c2b119be"
+                },
+                {
+                  "id": "572babfc-32d1-4697-ad6d-6cad26eb1bfd",
+                  "name": "Token request failed (invalid grant, expired code, etc.).",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) - `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).\n- `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).\n",
+                          "key": "grant_type",
+                          "value": "authorization_code"
+                        },
+                        {
+                          "description": "The authorization code (required for authorization_code grant).",
+                          "key": "code",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
+                          "key": "redirect_uri",
+                          "value": "<uri>"
+                        },
+                        {
+                          "description": "The client identifier.",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
+                          "key": "code_verifier",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The refresh token (required for refresh_token grant).",
+                          "key": "refresh_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
+                          "key": "scope",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": \"<string>\",\n  \"error_description\": \"<string>\",\n  \"error_uri\": \"<uri>\"\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-572babfc-32d1-4697-ad6d-6cad26eb1bfd"
+                },
+                {
+                  "id": "6b54ff58-b0e4-4d3e-b252-073efb049746",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "description": "(Required) - `authorization_code`: The standard authorization code grant (RFC 6749 section 4.1).\n- `refresh_token`: Exchange a refresh token for new tokens (RFC 6749 section 6).\n",
+                          "key": "grant_type",
+                          "value": "authorization_code"
+                        },
+                        {
+                          "description": "The authorization code (required for authorization_code grant).",
+                          "key": "code",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Must match the redirect_uri used in the authorization request (required for authorization_code grant).",
+                          "key": "redirect_uri",
+                          "value": "<uri>"
+                        },
+                        {
+                          "description": "The client identifier.",
+                          "key": "client_id",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "PKCE code verifier (required for authorization_code grant). All public clients must use PKCE (RFC 7636).",
+                          "key": "code_verifier",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "The refresh token (required for refresh_token grant).",
+                          "key": "refresh_token",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Space-separated list of requested scopes. For refresh_token grant, must be equal to or a subset of the originally granted scopes.",
+                          "key": "scope",
+                          "value": "<string>"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/oauth/token",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "oauth",
+                        "token"
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:11.000Z",
+                  "updatedAt": "2026-10-21T19:56:11.000Z",
+                  "uid": "35240-6b54ff58-b0e4-4d3e-b252-073efb049746"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:11.000Z",
+              "updatedAt": "2026-10-21T19:56:11.000Z",
+              "uid": "35240-8c5bf64e-42d7-4286-958d-7f553a32839d"
+            }
+          ],
+          "id": "5aa566c0-891f-4ed3-bff3-bbb7934b3ba5",
+          "createdAt": "2026-10-21T19:56:11.000Z",
+          "updatedAt": "2026-10-21T19:56:11.000Z",
+          "uid": "35240-5aa566c0-891f-4ed3-bff3-bbb7934b3ba5"
+        }
+      ],
+      "id": "f06b2847-3250-425e-b97c-921959be87a0",
+      "createdAt": "2026-10-21T19:56:11.000Z",
+      "updatedAt": "2026-10-21T19:56:11.000Z",
+      "uid": "35240-f06b2847-3250-425e-b97c-921959be87a0"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "1fa063b3-13cf-4e5a-9674-2e1e1ca71099",
-    "name": "Dash0 Edge Collectors OAuth 2.0 API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

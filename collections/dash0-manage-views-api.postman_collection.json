@@ -1,932 +1,1000 @@
 {
+  "info": {
+    "_postman_id": "2394075d-3e96-4423-873e-58502b8966b3",
+    "name": "Dash0 Manage Views API",
+    "description": "## Selecting a dataset\n\nEndpoints that operate on a single dataset take it from the `dataset` query parameter, or from the `Dash0-Dataset` request header when the query parameter is absent. When both are present the query parameter wins.\n\nIf neither is given, the request falls back to the organization's `default` dataset \u2014 a token that is restricted to specific datasets is rejected with `403 Forbidden` in that case, so always select a dataset explicitly when using a dataset-restricted token.\n\n## Resource origins\n\nMost resources take an optional `metadata.labels[\"dash0.com/origin\"]`. It is a stable identifier you choose for a resource you manage as code, so your Terraform configuration, Kubernetes manifests, CLI scripts or your own tooling can address the same resource on every apply without having to store the id Dash0 generated.\n\nAn origin is unique per organization, not per dataset. Two resources of the same type in one organization cannot share an origin, even when they live in different datasets. If you want what is really the same rule in several datasets, put the dataset in the origin, for example `probabilistic-request-sampling-sandbox` and `probabilistic-request-sampling-nonprod`. The Dash0 Kubernetes operator does the same with the origins it generates. A duplicate origin is rejected with `400`.\n\nYou cannot change an origin. Dash0 records it when the resource is created and ignores it on later updates, so you can read a resource, edit it and send it back without stripping the label out first.\n\nEndpoints with an `{originOrId}` path parameter take either identifier. A value that is not a UUID is read as an origin. A `PUT` to an origin that does not exist yet creates the resource with that origin, so you can apply the same manifest repeatedly.\n\n## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:03.000Z",
+    "updatedAt": "2026-10-21T19:56:03.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-2394075d-3e96-4423-873e-58502b8966b3"
+  },
   "item": [
     {
-      "id": "7ff1fb4a-c957-45a3-b23d-a0ba137b407e",
-      "name": "Manage Views",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "api",
       "item": [
         {
-          "id": "caf75c93-ab2a-4ebe-8738-86765dba9d55",
-          "name": "Delete a specific view by origin or id.",
-          "request": {
-            "name": "Delete a specific view by origin or id.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "views",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) View origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "auth": null
-          },
-          "response": [
+          "name": "import",
+          "item": [
             {
-              "id": "a0e30c90-6c2f-4aab-b084-6d989694d2a5",
-              "name": "Delete a specific view.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
-                },
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
+              "name": "view",
+              "item": [
                 {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "name": "Import a view",
+                  "id": "8eb503cf-d5bd-4f9f-9373-ed32d177082e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/import/view?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "import",
+                        "view"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ]
+                    },
+                    "description": "This endpoint allows you **to import an existing view** into your organization. It's intended for one-time migrations rather than ongoing view management.\nUnlike the standard API, this endpoint supports importing views **with full editability**, allowing you to modify views that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported view state.\nImporting a view without an id will create a new view and return the created asset with a generated id.\nImporting a view with an existing id (metadata>dash0Extensions>id) will override the corresponding view definition. In case there is no view with the given id a new view will be created."
+                  },
+                  "response": [
+                    {
+                      "id": "2f017ece-0af8-4fde-9ba1-4092017fa254",
+                      "name": "The imported view.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/view?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "view"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-2f017ece-0af8-4fde-9ba1-4092017fa254"
+                    },
+                    {
+                      "id": "691c38b1-97fe-47e3-89a0-717773c036fb",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/import/view?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "import",
+                            "view"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-691c38b1-97fe-47e3-89a0-717773c036fb"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-8eb503cf-d5bd-4f9f-9373-ed32d177082e"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "356a34ba-1730-4834-b759-535842557046",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "DELETE",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "043d8ca0-1aa3-4ab1-bd3b-eb6d1712ae74",
+              "createdAt": "2026-10-21T19:56:03.000Z",
+              "updatedAt": "2026-10-21T19:56:03.000Z",
+              "uid": "35240-043d8ca0-1aa3-4ab1-bd3b-eb6d1712ae74"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "19a07963-52ed-4876-aac8-5657c207efe1",
+          "createdAt": "2026-10-21T19:56:03.000Z",
+          "updatedAt": "2026-10-21T19:56:03.000Z",
+          "uid": "35240-19a07963-52ed-4876-aac8-5657c207efe1"
         },
         {
-          "id": "f13efd25-c2fe-4dbf-b9fe-53c20f8e72e4",
-          "name": "Receive a specific view by its origin or id.",
-          "request": {
-            "name": "Receive a specific view by its origin or id.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "views",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) View origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
+          "name": "views",
+          "item": [
             {
-              "id": "eb5acbac-3d91-49a2-b902-f405307d65e3",
-              "name": "Receive a specific view.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "{originOrId}",
+              "item": [
+                {
+                  "name": "Delete a specific view by origin or id",
+                  "id": "95493dac-5316-45da-baa0-c3c826bb2d46",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "5d28c417-c6e5-4db9-9965-e889f6350f94",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) View origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
                     {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
+                      "id": "b6e49717-79b3-4ecf-beaa-fa7ee189ddc1",
+                      "name": "Delete a specific view.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "text",
+                      "header": [],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-b6e49717-79b3-4ecf-beaa-fa7ee189ddc1"
+                    },
+                    {
+                      "id": "34f21369-cab7-4635-8a2d-7585ca671ccf",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "DELETE",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-34f21369-cab7-4635-8a2d-7585ca671ccf"
                     }
                   ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-95493dac-5316-45da-baa0-c3c826bb2d46"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
+                {
+                  "name": "Receive a specific view by its origin or id",
+                  "id": "bbd56715-d3ff-4184-9869-d1a37260b43e",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "4f123a45-d9e6-495f-a9a0-3bc4f37b0f46",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) View origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "4e5d6bb9-9380-4b8d-8cad-197577e94759",
+                      "name": "Receive a specific view.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-4e5d6bb9-9380-4b8d-8cad-197577e94759"
+                    },
+                    {
+                      "id": "b28a09a9-8f57-46bc-9d62-3796e2fd1131",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-b28a09a9-8f57-46bc-9d62-3796e2fd1131"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-bbd56715-d3ff-4184-9869-d1a37260b43e"
+                },
+                {
+                  "name": "Update or insert a specific view by its origin or id",
+                  "id": "c0823828-424a-49dc-a85c-bd830906fa72",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views",
+                        ":originOrId"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "22a01db6-8f88-4dd9-a826-79bb72100fdf",
+                          "key": "originOrId",
+                          "value": "<string>",
+                          "description": "(Required) View origin or id."
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "6dea60e1-313a-4880-bffc-6da940addd83",
+                      "name": "Update a specific view.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-6dea60e1-313a-4880-bffc-6da940addd83"
+                    },
+                    {
+                      "id": "4968cd5e-4a1d-4167-b5d0-426dfe092601",
+                      "name": "In case any error happens.",
+                      "originalRequest": {
+                        "method": "PUT",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/api/views/:originOrId?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "views",
+                            ":originOrId"
+                          ],
+                          "query": [
+                            {
+                              "key": "dataset",
+                              "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "originOrId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                      "createdAt": "2026-10-21T19:56:03.000Z",
+                      "updatedAt": "2026-10-21T19:56:03.000Z",
+                      "uid": "35240-4968cd5e-4a1d-4167-b5d0-426dfe092601"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-c0823828-424a-49dc-a85c-bd830906fa72"
+                }
+              ],
+              "id": "c2407b43-d36b-4391-9257-e37c9de158d0",
+              "createdAt": "2026-10-21T19:56:03.000Z",
+              "updatedAt": "2026-10-21T19:56:03.000Z",
+              "uid": "35240-c2407b43-d36b-4391-9257-e37c9de158d0"
+            },
+            {
+              "name": "Receive a list of views",
+              "id": "b1c2db87-43f7-4967-8bb3-7dc0d025d680",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
                 "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "f1522ee9-ea2e-45ed-98c9-2b203b5644d3",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
-                },
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "5a7e8230-5a60-41f1-8af1-0e8f2effc0e7",
-          "name": "Update or insert a specific view by its origin or id.",
-          "request": {
-            "name": "Update or insert a specific view by its origin or id.",
-            "description": {},
-            "url": {
-              "path": [
-                "api",
-                "views",
-                ":originOrId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "originOrId",
-                  "description": "(Required) View origin or id."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "37b144be-50ce-4a01-bb95-e8fa560a055d",
-              "name": "Update a specific view.",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
+                  "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c2ac4e8b-e37f-4037-9a5e-6b8a49ca4b42",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views",
-                    ":originOrId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "originOrId",
-                      "description": "(Required) View origin or id."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PUT",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "42cb1a1a-7813-482b-ab31-fe181b10b82c",
-          "name": "Receive a list of views",
-          "request": {
-            "name": "Receive a list of views",
-            "description": {
-              "content": "Receive a list of your organization views",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "views"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": null
-          },
-          "response": [
-            {
-              "id": "c2deb0c9-233e-4541-b21b-2902011d2aa9",
-              "name": "Receive a list of views.",
-              "originalRequest": {
-                "url": {
                   "path": [
                     "api",
                     "views"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "DolDSfaAiAL2"
+                      "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                    }
+                  ]
+                },
+                "description": "Receive a list of your organization views"
+              },
+              "response": [
+                {
+                  "id": "aeb0e23d-7615-4f9c-83c6-57e975a4c2ea",
+                  "name": "Receive a list of views.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "[\n  {\n    \"id\": \"<string>\",\n    \"dataset\": \"<string>\",\n    \"type\": \"services\",\n    \"origin\": \"<string>\",\n    \"name\": \"<string>\"\n  },\n  {\n    \"id\": \"<string>\",\n    \"dataset\": \"<string>\",\n    \"type\": \"gcp_cloud_sql_instances\",\n    \"origin\": \"<string>\",\n    \"name\": \"<string>\"\n  }\n]",
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-aeb0e23d-7615-4f9c-83c6-57e975a4c2ea"
                 },
+                {
+                  "id": "2cd7d7d9-f6a3-4412-b94b-06f6cdbffae5",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-2cd7d7d9-f6a3-4412-b94b-06f6cdbffae5"
+                }
+              ],
+              "createdAt": "2026-10-21T19:56:03.000Z",
+              "updatedAt": "2026-10-21T19:56:03.000Z",
+              "uid": "35240-b1c2db87-43f7-4967-8bb3-7dc0d025d680"
+            },
+            {
+              "name": "Create a view",
+              "id": "ddc87f7f-1c88-4539-bae7-86382c73ab9b",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "POST",
                 "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "[\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"type\": \"web_events\",\n    \"origin\": \"string\",\n    \"name\": \"string\"\n  },\n  {\n    \"id\": \"string\",\n    \"dataset\": \"string\",\n    \"type\": \"resources\",\n    \"origin\": \"string\",\n    \"name\": \"string\"\n  }\n]",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "e35813f5-3c8d-45e1-b1da-c60994f76e50",
-              "name": "In case any error happens.",
-              "originalRequest": {
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
                 "url": {
+                  "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "api",
                     "views"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
                       "key": "dataset",
-                      "value": "DolDSfaAiAL2"
+                      "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                    }
+                  ]
+                },
+                "description": "Create a view."
+              },
+              "response": [
+                {
+                  "id": "43012df7-bca3-440e-aa8c-c664e409fcff",
+                  "name": "The created view.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-43012df7-bca3-440e-aa8c-c664e409fcff"
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
+                  "id": "ecb6fba8-d17c-4b1a-bcda-c0a70ed2aa32",
+                  "name": "In case any error happens.",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"dash0-cli\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_run_services\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:write\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"does_not_start_with\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"is_not_one_of\",\n        \"value\": \"<string>\",\n        \"values\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"direction\": \"ascending\"\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/operations/red\",\n          \"resources/k8s-deployments/replicas\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_errors_percentage\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"logging/*/stacked_bar\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"linear\",\n        \"metric\": \"spans_duration_p50\",\n        \"renderer\": \"resources/k8s-jobs/executions\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"hide\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"showSyntheticServices\": \"<boolean>\",\n      \"showIndirectServices\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/api/views?dataset=_ipJE_ctNtqN1rk-1x3ZJJ5F",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "views"
+                      ],
+                      "query": [
+                        {
+                          "key": "dataset",
+                          "value": "_ipJE_ctNtqN1rk-1x3ZJJ5F"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"error\": {\n    \"code\": \"<integer>\",\n    \"message\": \"<string>\",\n    \"type\": \"<string>\",\n    \"traceId\": \"<string>\"\n  }\n}",
+                  "createdAt": "2026-10-21T19:56:03.000Z",
+                  "updatedAt": "2026-10-21T19:56:03.000Z",
+                  "uid": "35240-ecb6fba8-d17c-4b1a-bcda-c0a70ed2aa32"
                 }
               ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:56:03.000Z",
+              "updatedAt": "2026-10-21T19:56:03.000Z",
+              "uid": "35240-ddc87f7f-1c88-4539-bae7-86382c73ab9b"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "465f0bee-f3a3-41b4-b4de-549678558372",
-          "name": "Create a view",
-          "request": {
-            "name": "Create a view",
-            "description": {
-              "content": "Create a view.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "views"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "f698bd7b-8e6e-4f47-bff7-f57481642994",
-              "name": "The created view.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bc6126cc-b77d-419f-b7d8-c2b981c1a7d1",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "views"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "63421208-442f-4801-98b0-30ba9fbc098a",
-          "name": "Import a view",
-          "request": {
-            "name": "Import a view",
-            "description": {
-              "content": "This endpoint allows you **to import an existing view** into your organization. It's intended for one-time migrations rather than ongoing view management.\nUnlike the standard API, this endpoint supports importing views **with full editability**, allowing you to modify views that were previously created elsewhere.\n**Note:**\nThis endpoint is **not recommended for Infrastructure-as-Code (IaC)** workflows. Using it in IaC scenarios can cause configuration drift and inconsistencies between your source configuration and the imported view state.\nImporting a view without an id will create a new view and return the created asset with a generated id.\nImporting a view with an existing id (metadata>dash0Extensions>id) will override the corresponding view definition. In case there is no view with the given id a new view will be created.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "api",
-                "import",
-                "view"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "dataset",
-                  "value": "<string>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"labels\": {\n      \"dash0.com/id\": \"<string>\",\n      \"dash0.com/origin\": \"<string>\",\n      \"dash0.com/version\": \"<string>\",\n      \"dash0.com/dataset\": \"<string>\",\n      \"dash0.com/source\": \"<string>\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"<dateTime>\",\n      \"dash0.com/folder-path\": \"<string>\",\n      \"dash0.com/sharing\": \"<string>\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"<string>\",\n    \"display\": {\n      \"name\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      },\n      {\n        \"actions\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"teamId\": \"<string>\",\n        \"userId\": \"<string>\",\n        \"role\": \"<string>\"\n      }\n    ],\n    \"groupBy\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"key\": \"<string>\",\n        \"operator\": \"<string>\",\n        \"value\": \"<string>\",\n        \"values\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        },\n        {\n          \"key\": \"<string>\",\n          \"label\": \"<string>\",\n          \"colSize\": \"<string>\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      },\n      {\n        \"renderers\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"yAxisScale\": \"<string>\",\n        \"metric\": \"<string>\",\n        \"renderer\": \"<string>\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"<string>\",\n      \"externalServices\": \"<string>\",\n      \"selectedMetric\": \"<string>\",\n      \"particles\": \"<boolean>\",\n      \"nodeSizing\": \"<boolean>\",\n      \"expandedGroups\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    \"query\": \"<string>\",\n    \"serviceName\": \"<string>\"\n  }\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "136ed8ef-25cf-45e3-8e93-c944b4b5693f",
-              "name": "The imported view.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "import",
-                    "view"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"kind\": \"Dash0View\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"userdefined\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1998-03-18T01:49:39.559Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"failed_checks\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:write\",\n          \"views:write\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:delete\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-stateful-sets/red\",\n          \"logging/*/stacked_bar\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"traces-explorer/*/red\"\n      },\n      {\n        \"renderers\": [\n          \"resources/k8s-namespaces/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_total\",\n        \"renderer\": \"resources/k8s-pods/status\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"flow\",\n      \"externalServices\": \"group\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": true,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "2fb16115-825a-44d9-b4c9-6ea5f921a43e",
-              "name": "In case any error happens.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "api",
-                    "import",
-                    "view"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "dataset",
-                      "value": "DolDSfaAiAL2"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"kind\": \"<string>\",\n  \"metadata\": {\n    \"name\": \"string\",\n    \"labels\": {\n      \"dash0.com/id\": \"string\",\n      \"dash0.com/origin\": \"string\",\n      \"dash0.com/version\": \"string\",\n      \"dash0.com/dataset\": \"string\",\n      \"dash0.com/source\": \"external\"\n    },\n    \"annotations\": {\n      \"dash0.com/deleted-at\": \"1985-06-25T20:50:00.338Z\",\n      \"dash0.com/folder-path\": \"string\",\n      \"dash0.com/sharing\": \"string\"\n    }\n  },\n  \"spec\": {\n    \"type\": \"gcp_cloud_storage\",\n    \"display\": {\n      \"name\": \"string\",\n      \"description\": \"string\"\n    },\n    \"permissions\": [\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      },\n      {\n        \"actions\": [\n          \"views:read\",\n          \"views:delete\"\n        ],\n        \"teamId\": \"string\",\n        \"userId\": \"string\",\n        \"role\": \"string\"\n      }\n    ],\n    \"groupBy\": [\n      \"string\",\n      \"string\"\n    ],\n    \"filter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"implicitFilter\": [\n      {\n        \"key\": \"service.name\",\n        \"operator\": \"is\",\n        \"value\": \"foo\"\n      }\n    ],\n    \"table\": {\n      \"columns\": [\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        },\n        {\n          \"key\": \"string\",\n          \"label\": \"string\",\n          \"colSize\": \"string\"\n        }\n      ],\n      \"sort\": [\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"key\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"direction\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ]\n    },\n    \"visualizations\": [\n      {\n        \"renderers\": [\n          \"resources/k8s-replica-sets/red\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_duration_p75\",\n        \"renderer\": \"resources/k8s-deployments/replicas\"\n      },\n      {\n        \"renderers\": [\n          \"traces-explorer/*/outliers\",\n          \"resources/k8s-stateful-sets/red\"\n        ],\n        \"yAxisScale\": \"log10\",\n        \"metric\": \"spans_errors_rate\",\n        \"renderer\": \"resources/names/red\"\n      }\n    ],\n    \"serviceMapProperties\": {\n      \"layout\": \"force\",\n      \"externalServices\": \"all\",\n      \"selectedMetric\": \"string\",\n      \"particles\": true,\n      \"nodeSizing\": false,\n      \"expandedGroups\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"query\": \"string\",\n    \"serviceName\": \"string\"\n  }\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"error\": {\n    \"code\": 3112,\n    \"message\": \"string\",\n    \"traceId\": \"string\"\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "98bb4742-7cf0-4b4c-981e-e3f8df2734da",
+          "createdAt": "2026-10-21T19:56:03.000Z",
+          "updatedAt": "2026-10-21T19:56:03.000Z",
+          "uid": "35240-98bb4742-7cf0-4b4c-981e-e3f8df2734da"
         }
       ],
-      "event": []
+      "id": "86e372f2-068f-43c5-943e-80220c7f973e",
+      "createdAt": "2026-10-21T19:56:03.000Z",
+      "updatedAt": "2026-10-21T19:56:03.000Z",
+      "uid": "35240-86e372f2-068f-43c5-943e-80220c7f973e"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://api.eu-west-1.aws.dash0.com",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://api.eu-west-1.aws.dash0.com"
     }
-  ],
-  "info": {
-    "_postman_id": "f48e4a73-098c-4a55-b812-729e0f77eacb",
-    "name": "Dash0 Edge Collectors Manage Views API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "## Request body size limit\n\nMost API endpoints enforce a maximum request body size of 256KB. Bulk\nendpoints accept a larger body size per request to accommodate batched\npayloads.\n\nRequests exceeding the applicable limit are rejected with a\n`413 Content Too Large` response.\n",
-      "type": "text/plain"
-    }
-  }
+  ]
 }
